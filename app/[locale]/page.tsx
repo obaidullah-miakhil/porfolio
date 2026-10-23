@@ -229,7 +229,7 @@ export default async function HomePage({
               <h2 className="text-step-28 font-bold text-[var(--text)]">
                 {tSections('teaching')}
               </h2>
-              <div className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]">
+              <div className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-4">
                 <ul className="space-y-3 text-step-15 text-[var(--text)] list-disc ps-5">
                   {profile.teachingAndService.map((item) => (
                     <li key={item}>
@@ -237,6 +237,20 @@ export default async function HomePage({
                     </li>
                   ))}
                 </ul>
+
+                <div className="pt-3 border-t border-[var(--border)]">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-step-13 text-[var(--muted)]">Supervised Projects:</span>
+                    <span className="text-step-13 font-bold text-[var(--accent)]">150+ Projects</span>
+                  </div>
+                  <Link
+                    href="/projects#supervised-projects"
+                    className="group/link mt-2 inline-flex items-center gap-1.5 text-step-13 font-medium text-[var(--accent)] hover:underline"
+                  >
+                    <span>View supervised student cohort</span>
+                    <ArrowRight className="w-3.5 h-3.5 rtl-flip transition-transform duration-200 group-hover/link:translate-x-0.5" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -294,6 +308,31 @@ export default async function HomePage({
                 <WebsiteCard key={site.slug} site={site} />
               ))}
               {selectedMlRepo && <RepoCard repo={selectedMlRepo} />}
+            </div>
+
+            {/* Supervised Student Projects (150+ Projects) Highlight */}
+            <div className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-wrap items-center justify-between gap-4">
+              <div className="space-y-1 max-w-[650px]">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="text-step-18 font-bold text-[var(--text)] m-0">
+                    150+ Supervised Student Projects
+                  </h3>
+                  <span className="px-2 py-0.5 rounded-[4px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px] font-semibold border border-emerald-500/30">
+                    Live Deployed Websites
+                  </span>
+                </div>
+                <p className="text-step-13 text-[var(--muted)] m-0 leading-relaxed">
+                  Every semester, student engineering teams build and deploy full-stack websites, GUI tools, and software platforms under my supervision.
+                </p>
+              </div>
+
+              <Link
+                href="/projects#supervised-projects"
+                className="btn-interactive inline-flex items-center gap-1.5 h-9 px-4 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-[var(--accent)] font-medium text-step-13 hover:border-[var(--accent)] whitespace-nowrap"
+              >
+                <span>Explore Student Projects</span>
+                <ArrowRight className="w-3.5 h-3.5 rtl-flip" />
+              </Link>
             </div>
           </div>
         </Reveal>

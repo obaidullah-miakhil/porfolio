@@ -6,6 +6,7 @@ import { Reveal } from '@/components/Reveal';
 import { profile } from '@/content/profile';
 import { buildPageMetadata } from '@/lib/seo';
 import { GitHubIcon } from '@/components/BrandIcons';
+import { SupervisedProjectsSection } from '@/components/SupervisedProjectsSection';
 import { ExternalLink } from 'lucide-react';
 
 export async function generateMetadata({
@@ -104,6 +105,11 @@ export default async function ProjectsPage({
             ))}
           </div>
         </section>
+      </Reveal>
+
+      {/* Supervised Student Projects (150+ Projects) */}
+      <Reveal>
+        <SupervisedProjectsSection />
       </Reveal>
     </div>
   );

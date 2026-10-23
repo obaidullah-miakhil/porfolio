@@ -106,6 +106,16 @@ export interface WebsiteProjectItem {
   mobileImage: string;
 }
 
+import {
+  supervisedStudentProjects,
+  SUPERVISED_PROJECTS_TOTAL_COUNT,
+  SUPERVISED_PROJECTS_SUMMARY,
+  type SupervisedStudentProject,
+  type SupervisedStudentMember,
+} from './supervisedProjects';
+
+export type { SupervisedStudentProject, SupervisedStudentMember };
+
 const G_BOOSTING = 'grad' + 'ient boosting/XGBoost';
 
 export const profile = {
@@ -362,6 +372,7 @@ export const profile = {
       dates: 'Jul 2025 – present',
       points: [
         'Teaches labs for Object-Oriented Programming, Data Structures & Algorithms, Introduction to Computer Technology and Artificial Intelligence; runs the AI lab in Python, with students implementing algorithms from first principles.',
+        'Supervised 150+ student semester projects across diverse domains; instituted a rigorous requirement pushing every student team to build, present, and deploy at least one professional live website or software system each semester.',
       ],
     },
     {
@@ -446,7 +457,7 @@ export const profile = {
   ] as ExperienceItem[],
 
   teachingAndService: [
-    'Lab Engineer & OOP instructor, PAF-IAST, 2025–present',
+    'Lab Engineer & OOP instructor, PAF-IAST, 2025–present (Supervised 150+ hands-on student projects with deployed web platforms)',
     'Teaching Assistant, PAF-IAST, 2025',
     'BI trainer, KPITB, 2026 (144 hours, 50+ participants)',
     'AI Conference & Expo representative, PAF-IAST, 2024–present',
@@ -705,6 +716,10 @@ export const profile = {
       mobileImage: '/projects/swift-bulk-traders-mobile.webp',
     },
   ] as WebsiteProjectItem[],
+
+  supervisedProjectsTotal: SUPERVISED_PROJECTS_TOTAL_COUNT,
+  supervisedProjectsSummary: SUPERVISED_PROJECTS_SUMMARY,
+  supervisedStudentProjects,
 };
 
 export function getFeaturedPublication(): PublicationItem {
