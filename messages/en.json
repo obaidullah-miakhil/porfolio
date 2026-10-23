@@ -1,0 +1,129 @@
+{
+  "meta": {
+    "homeTitle": "Obaidullah Miakhil — AI Engineer & ML Researcher",
+    "homeDescription": "Obaidullah Miakhil is an AI engineer and machine learning researcher working on medical AI, deep learning and NLP. Open to PhD and AI/ML roles.",
+    "researchTitle": "Research & Publications",
+    "researchDescription": "Research by Obaidullah Miakhil on healthcare insurance claim denial prediction (Frontiers in Health Services, Scopus Q1), intracranial hemorrhage deep learning, and multilingual NLP & LLMs.",
+    "projectsTitle": "Projects",
+    "projectsDescription": "Machine learning repositories, software engineering projects on GitHub, and web applications built by Obaidullah Miakhil.",
+    "cvTitle": "CV",
+    "cvDescription": "Curriculum vitae of Obaidullah Miakhil, prospective PhD candidate in NLP and LLMs, MS Artificial Intelligence at PAF-IAST."
+  },
+  "nav": {
+    "skipToContent": "Skip to content",
+    "research": "Research",
+    "projects": "Projects",
+    "cv": "CV",
+    "contact": "Contact",
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "language": "Language",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark"
+  },
+  "hero": {
+    "roleLine": "AI Engineer & Machine Learning Researcher",
+    "subLine": "Medical AI · Deep Learning · NLP & LLMs — Islamabad, Pakistan",
+    "viewingAs": "Viewing as:",
+    "audienceResearch": "Research",
+    "audienceIndustry": "Industry",
+    "researchSummary": "I'm an MS Artificial Intelligence student at PAF-IAST (CGPA 4.00/4.00) and a research engineer at the Sino-Park Centre of Artificial Intelligence. I build weakly-supervised and uncertainty-aware deep learning systems for medical imaging, and I'm looking for a PhD position in NLP and large language models, especially low-resource and multilingual NLP and trustworthy AI.",
+    "industrySummary": "I'm an AI engineer who ships machine learning systems end to end: from processing large DICOM and insurance-claims datasets to deploying LLM chatbots and web apps. I'm a co-author of a peer-reviewed paper on claim-denial prediction, and I'm open to AI/ML engineering and applied research roles.",
+    "downloadAcademicCv": "Download academic CV",
+    "downloadResume": "Download résumé",
+    "emailMe": "Email me"
+  },
+  "featuredPublication": {
+    "eyebrow": "Latest publication",
+    "journalLine": "Frontiers in Health Services, vol. 6, article 1927175 · Published 14 Oct 2026",
+    "resultLine": "Two-stage framework on 678,881 U.S. claim lines: PR-AUC 0.777 vs a no-skill baseline of 0.330; ROC-AUC 0.865.",
+    "readPaper": "Read paper",
+    "copyCitation": "Copy citation",
+    "copied": "Copied"
+  },
+  "about": {
+    "title": "About",
+    "paragraph1": "I work at the intersection of medical imaging, applied machine learning, and language models. At the Sino-Park Centre of Artificial Intelligence (SPCAI) and PAF-IAST in Pakistan, I develop two-stage deep learning pipelines for intracranial hemorrhage localization on RSNA DICOM scans and teach undergraduate computer science and AI laboratories in Python.",
+    "paragraph2": "My bachelor's thesis on predicting healthcare insurance claim denials grew into a peer-reviewed article in Frontiers in Health Services (Scopus Q1), evaluated on 678,881 U.S. claim lines. As a native speaker of Pashto and Dari who also works in English and Urdu, I am preparing for PhD research in low-resource and multilingual NLP, retrieval-augmented generation, and calibrated uncertainty quantification for trustworthy language models.",
+    "factLocationLabel": "Based in",
+    "factLocationValue": "Islamabad, Pakistan",
+    "factLanguagesLabel": "Languages",
+    "factLanguagesValue": "Pashto, Dari (native), English, Urdu (C1)",
+    "factOpenToLabel": "Open to",
+    "factOpenToValue": "PhD positions (NLP/LLMs) and AI/ML roles"
+  },
+  "sections": {
+    "research": "Research",
+    "publications": "Publications",
+    "experience": "Experience",
+    "teaching": "Teaching",
+    "projects": "Projects",
+    "education": "Education",
+    "contact": "Contact",
+    "awards": "Awards",
+    "talks": "Conferences & workshops",
+    "certifications": "Certifications",
+    "skills": "Skills",
+    "languages": "Languages",
+    "allResearch": "All research & publications",
+    "allProjects": "All projects",
+    "fullCv": "Full CV"
+  },
+  "researchPage": {
+    "heading": "Research",
+    "intro": "Multilingual AI researcher (native Pashto and Dari, fluent English and Urdu) with hands-on experience in weakly-supervised deep learning, LLM-based applications and uncertainty-aware models for high-stakes decision support. Target PhD areas: natural language processing and large language models, especially low-resource and multilingual NLP, retrieval-augmented generation, and trustworthy / explainable AI — carrying over calibrated uncertainty quantification and weak supervision from current work to make language models more reliable in real deployments.",
+    "publicationsHeading": "Publications & manuscripts",
+    "projectsHeading": "Research projects",
+    "talksHeading": "Talks, workshops & conferences",
+    "teachingHeading": "Teaching & service",
+    "supervisorLabel": "Supervisor:",
+    "keywordsLabel": "Keywords:"
+  },
+  "projectsPage": {
+    "heading": "Projects",
+    "intro": "Open-source machine learning repositories, network and computer-vision web applications, and production websites.",
+    "githubBlockTitle": "Code on GitHub",
+    "githubBlockSubtitle": "Public repositories covering machine learning pipelines, Flask web apps, and computer vision.",
+    "publicReposLabel": "public repositories",
+    "viewGithubProfile": "View GitHub profile",
+    "repositoriesHeading": "Repositories",
+    "websitesHeading": "Websites built",
+    "visitSite": "Visit site",
+    "viewRepository": "View repository",
+    "starsLabel": "stars",
+    "roleLabel": "Role:"
+  },
+  "cvPage": {
+    "heading": "Curriculum vitae",
+    "subtitle": "Prospective PhD candidate in NLP & LLMs · AI Engineer & Machine Learning Researcher",
+    "printCv": "Print CV",
+    "thesisLabel": "Thesis:",
+    "courseworkLabel": "Coursework:",
+    "verifyCertificate": "Verify certificate"
+  },
+  "contact": {
+    "heading": "Contact",
+    "lead": "The fastest way to reach me is email or WhatsApp. I usually reply within a day.",
+    "primaryEmailLabel": "Primary email",
+    "academicEmailLabel": "Academic email",
+    "whatsappLabel": "WhatsApp",
+    "linkedinLabel": "LinkedIn",
+    "githubLabel": "GitHub",
+    "huggingfaceLabel": "Hugging Face",
+    "scholarLabel": "Google Scholar",
+    "copyEmail": "Copy email",
+    "copiedEmail": "Copied",
+    "chatOnWhatsapp": "Chat on WhatsApp"
+  },
+  "footer": {
+    "alsoWrittenAs": "Also written as Ubaidullah Miakhil, Obaidullah Myakhail, عبیدالله میاخیل",
+    "glyphCheckLabel": "Vazirmatn script verification:"
+  },
+  "notFound": {
+    "heading": "Page not found",
+    "body": "The page you requested does not exist.",
+    "backHome": "Back to home"
+  }
+}

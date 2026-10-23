@@ -1,0 +1,466 @@
+# Build Prompt — Portfolio Website for Obaidullah Miakhil
+
+You are a senior front-end engineer and product designer. Build, test and prepare for deployment a production-ready personal portfolio website for **Obaidullah Miakhil**, an AI engineer and machine learning researcher who is applying for **PhD positions (NLP / LLMs)** and **AI/ML engineering roles** at the same time. One site must serve both audiences.
+
+Read this whole document before writing code. Work in the phases listed in Section 15 and verify each phase before moving on.
+
+**Golden rule: use only the content in this document.** Do not invent metrics, dates, employers, testimonials, logos, client names, quotes, or "years of experience". Where something is marked `[PLACEHOLDER]`, leave a clearly marked TODO in the data file and render nothing for it until it is filled in.
+
+---
+
+## 1. Tech stack (decided — do not substitute)
+
+| Layer | Choice | Why |
+|---|---|---|
+| Framework | **Next.js 16.x (latest stable), App Router, TypeScript, React 19** | Static generation gives Google fully rendered HTML (a plain React/Vite SPA does not), built-in Metadata API, image optimisation, and native deployment on Vercel. Next.js runs on Node.js, so no separate Node/Express server is needed. |
+| Rendering | **Static Site Generation** for every page and locale (`generateStaticParams`). Only the GitHub repo data uses ISR (`revalidate = 86400`). | Fast first load, no cold starts, works on cheap devices. |
+| 3D | **three.js via @react-three/fiber**, plus only the specific `@react-three/drei` helpers you actually use. All geometry is procedural (generated in code). No GLTF/OBJ model files, no HDR environment maps, no textures. | Small, fast, and nothing downloaded except code. |
+| Styling | **Tailwind CSS v4** with design tokens defined as CSS variables. | Consistent tokens, tiny CSS output. |
+| i18n | **next-intl** with locale routing. | RTL support, per-locale metadata, hreflang. |
+| Theme | **next-themes** (`attribute="data-theme"`, `defaultTheme="system"`, `enableSystem`, `disableTransitionOnChange`). | System-automatic by default, no flash. |
+| Icons | `lucide-react` (UI icons, tree-shaken) + inline SVG brand icons for GitHub, LinkedIn, Google Scholar, Hugging Face, ORCID, WhatsApp. Monochrome only. | |
+| Analytics | `@vercel/analytics` and `@vercel/speed-insights`. | Lightweight, Vercel-native. |
+| Hosting | **Vercel**, custom domain `[PLACEHOLDER: YOUR_DOMAIN]`. | |
+
+Do **not** add: framer-motion/motion, GSAP, Lenis or any smooth-scroll/scroll-jacking library, jQuery, UI kits (MUI, Chakra, shadcn themes with gradients), particle libraries, Lottie, or any CMS. Animations are CSS transitions plus one small IntersectionObserver hook.
+
+---
+
+## 2. Design rules (non-negotiable)
+
+The site must look hand-designed by a careful person, not AI-generated.
+
+### 2.1 Hard bans
+- **No gradients anywhere**: no `linear-gradient`, `radial-gradient`, `conic-gradient`, no Tailwind `bg-gradient-*`/`from-*`/`via-*`/`to-*`, no gradient text, no gradient borders, no gradient in SVGs or shaders. Add a CI check: the build fails if the string `gradient` appears in `src/`, `app/` or any CSS output (the only exception is this rule's own check script).
+- No glassmorphism, `backdrop-blur`, neon glows, blurred colour blobs, noise overlays, or large drop shadows.
+- No emojis, no sparkle ✨ icons, no "Hi 👋 I'm", no typewriter text effect, no custom cursor/cursor followers, no loading splash screen, no full-screen particle background, no skill progress bars or percentages.
+- No stock illustrations or AI-generated images.
+
+### 2.2 One font
+Use **Vazirmatn** (variable font, SIL OFL) for everything: Latin, Pashto, Dari/Persian and Urdu. Its Latin glyphs come from Roboto, and it supports Pashto and Urdu characters. Self-host it via `next/font/local` (from the `vazirmatn` npm package or `@fontsource-variable/vazirmatn`), `display: swap`, preload the latin and arabic subsets. Use only weights 400, 500 and 700. No second font, no monospace font, no icon font.
+
+Type scale (fluid with `clamp`, keep to these six steps only): 13, 15, 17 (body), 22, 32, 48–64 (H1). Line height 1.6 for body, 1.15 for headings. Sentence case for all headings.
+
+Verify by rendering this test string in every locale that no glyph falls back to a system font: `ټ ډ ړ ږ ښ ګ ڼ ې ۍ ئ ے ں ٹ ڈ ڑ ۀ`.
+
+### 2.3 One colour theme
+One neutral palette plus **one accent colour: lapis blue** (a nod to Afghan lapis lazuli). Define as CSS variables and use nothing else.
+
+| Token | Light | Dark |
+|---|---|---|
+| `--bg` | `#FAFAF7` | `#0F1012` |
+| `--surface` | `#FFFFFF` | `#16171A` |
+| `--text` | `#141414` | `#EDEDEA` |
+| `--muted` | `#5C5C58` | `#A3A39E` |
+| `--border` | `#E4E3DE` | `#26272B` |
+| `--accent` | `#1E4BD2` | `#7C9BFF` |
+| `--accent-contrast` (text on accent) | `#FFFFFF` | `#0F1012` |
+
+All text must meet WCAG AA contrast against its background. Flat solid backgrounds only. The 3D scenes read these same variables and update when the theme changes.
+
+### 2.4 Layout and feel
+- Minimal and calm: max content width 1080px, generous whitespace (section padding 96px desktop / 64px mobile), left-aligned text (right-aligned in RTL), 12-column grid on desktop, single column on mobile.
+- 1px hairline borders in `--border`, one border radius everywhere (6px), no shadows except an optional 1px focus ring.
+- Motion is subtle: fade + 8px translate on scroll-in, 200–300ms, `ease-out`, each element animates once. All motion disabled under `prefers-reduced-motion: reduce`.
+- Buttons: primary = solid `--accent` with `--accent-contrast` text; secondary = 1px border, transparent fill. Same height and radius everywhere.
+- Links: `--accent` colour, underline on hover/focus.
+
+### 2.5 Copywriting rules
+- First person, short concrete sentences, real numbers from this document.
+- Banned words/phrases: passionate, leveraging, cutting-edge, seamless, delve, innovative solutions, journey, unlock, empower, synergy, world-class, "I am a highly motivated", "in today's fast-paced world".
+- Section titles are plain nouns: Research, Publications, Experience, Teaching, Projects, Education, Contact.
+
+---
+
+## 3. Site structure
+
+Keep the home page short and scannable; depth lives on sub-pages (this also gives Google more indexable pages).
+
+Routes (each exists for every locale):
+
+| Route | Purpose |
+|---|---|
+| `/` | Home: hero, featured publication, about, research highlights, selected projects, experience summary, contact |
+| `/research` | Research interests, all research projects, publications and manuscripts, talks |
+| `/projects` | All software projects, GitHub repos, websites built (with screenshots) |
+| `/cv` | Full CV as a clean HTML page (education, experience, teaching, awards, certifications, skills, languages) + PDF download buttons. Has a print stylesheet. |
+| `/not-found` | Simple 404 with a link home |
+
+### 3.1 Header (sticky, solid `--bg`, 1px bottom border)
+- Start side: text wordmark "Obaidullah Miakhil" (links home).
+- End side: nav (Research, Projects, CV, Contact), language switcher, theme toggle (System / Light / Dark, three-state, icon button with accessible label).
+- Mobile: nav collapses into a simple full-width sheet; language + theme controls stay visible.
+
+### 3.2 Home sections, in order
+
+**1. Hero**
+- H1: `Obaidullah Miakhil`
+- Role line: `AI Engineer & Machine Learning Researcher`
+- Sub-line: `Medical AI · Deep Learning · NLP & LLMs — Islamabad, Pakistan`
+- **Audience switch**: a small two-option segmented control labelled "Viewing as: Research | Industry". It changes the summary paragraph, the primary CTA and the order of highlight chips. It reads `?for=research` or `?for=industry` from the URL (so links can be shared directly), defaults to `research`, and remembers the last choice in localStorage (wrapped in try/catch). Both summaries are present in the server-rendered HTML (the inactive one visually hidden with `hidden` attribute after hydration is fine) so search engines see both.
+  - Research summary: "I'm an MS Artificial Intelligence student at PAF-IAST (CGPA 4.00/4.00) and a research engineer at the Sino-Park Centre of Artificial Intelligence. I build weakly-supervised and uncertainty-aware deep learning systems for medical imaging, and I'm looking for a PhD position in NLP and large language models, especially low-resource and multilingual NLP and trustworthy AI."
+  - Industry summary: "I'm an AI engineer who ships machine learning systems end to end: from processing large DICOM and insurance-claims datasets to deploying LLM chatbots and web apps. I'm a co-author of a peer-reviewed paper on claim-denial prediction, and I'm open to AI/ML engineering and applied research roles."
+  - Primary CTA: Research → "Download academic CV"; Industry → "Download résumé". Secondary CTA: "Email me".
+- Profile link row (icon + label): **GitHub (visually emphasised: listed first, uses accent colour, shows "github.com/obaidullah-miakhil")**, LinkedIn, Google Scholar, Hugging Face.
+- 3D hero object on the end side (see Section 5). On mobile it sits below the text at reduced height (max 280px).
+
+**2. Featured publication** (full-width bordered card, the most prominent block after the hero)
+- Eyebrow: "Latest publication"
+- Title (linked): *A machine learning framework for predicting healthcare insurance claim denials*
+- Authors with **Obaidullah Miakhil** in bold.
+- Journal line: *Frontiers in Health Services*, vol. 6, article 1927175 · Published 14 Oct 2026
+- Outline badges: `Peer-reviewed` · `Scopus Q1` · `Open access`
+- One-line result (from the paper): "Two-stage framework on 678,881 U.S. claim lines: PR-AUC 0.777 vs a no-skill baseline of 0.330; ROC-AUC 0.865."
+- Buttons: "Read paper" (DOI link), "Copy citation" (copies BibTeX to clipboard with a small "Copied" confirmation).
+
+**3. About** — profile photo (square, 6px radius) + two short paragraphs + a facts list: Based in Islamabad, Pakistan · Languages: Pashto, Dari (native), English, Urdu (C1) · Open to: PhD positions (NLP/LLMs) and AI/ML roles.
+
+**4. Research highlights** — research interests in one paragraph, then three compact cards (ICH thesis, STC-RNN, Federated learning) linking to `/research`. The second 3D scene lives here (Section 5).
+
+**5. Selected projects** — 4 items: GitHub highlight block + 2 websites with screenshots + 1 ML repo. "All projects →" link.
+
+**6. Experience** — the 5 most recent roles as a plain list (role, organisation, dates). "Full CV →" link.
+
+**7. Contact** — see Section 7.
+
+**Footer** — © {current year} Obaidullah Miakhil · small line: "Also written as Ubaidullah Miakhil, Obaidullah Myakhail, عبیدالله میاخیل" · links to GitHub, LinkedIn, Scholar, email.
+
+---
+
+## 4. Content (single source of truth)
+
+Put all of this in `src/content/profile.ts` as typed data (English). UI strings and translated text go in `messages/{en,ps,fa,ur}.json`. Proper nouns, paper titles, journal names, model names and metrics stay in English in every locale.
+
+### 4.1 Identity and links
+- Name: **Obaidullah Miakhil** (given name: Obaidullah, family name: Miakhil)
+- Native script: Pashto/Dari `عبیدالله میاخیل`, Urdu `عبیداللہ میاخیل` `[confirm spelling]`
+- Location: Islamabad, Pakistan (do not publish a street address)
+- Email (primary): obaidullah.miakhil.khan@gmail.com
+- Email (academic): obaidullah.miakhil@paf-iast.edu.pk
+- WhatsApp / phone: +92 318 9175285 → `https://wa.me/923189175285?text=` + URL-encoded "Hi Obaidullah, I found your portfolio and would like to connect."
+- GitHub: https://github.com/obaidullah-miakhil
+- LinkedIn: https://www.linkedin.com/in/obaidullah-miakhil-b28a16248/
+- Hugging Face: https://huggingface.co/Obaidullahmiakhil
+- Google Scholar: `[PLACEHOLDER: SCHOLAR_URL]`
+- ORCID: `[PLACEHOLDER: ORCID_URL — optional]`
+- Profile photo: `public/images/obaidullah-miakhil.jpg` (provided by the owner). Alt text: "Obaidullah Miakhil, AI engineer and machine learning researcher".
+- CV files: `public/cv/Obaidullah-Miakhil-Academic-CV.pdf` and `public/cv/Obaidullah-Miakhil-Resume.pdf` `[provided by owner]`
+
+### 4.2 Research interests
+Multilingual AI researcher (native Pashto and Dari, fluent English and Urdu) with hands-on experience in weakly-supervised deep learning, LLM-based applications and uncertainty-aware models for high-stakes decision support. Target PhD areas: natural language processing and large language models, especially **low-resource and multilingual NLP**, **retrieval-augmented generation**, and **trustworthy / explainable AI** — carrying over calibrated uncertainty quantification and weak supervision from current work to make language models more reliable in real deployments.
+
+### 4.3 Publications and manuscripts
+1. **Published (featured)** — Jadoon, M. M., **Miakhil, O.**, Chakari, N. R., Qureshi, M. B., Ullah, I., Ahmed Haider, S., & Ur Rehman, M. (2026). *A machine learning framework for predicting healthcare insurance claim denials.* Frontiers in Health Services, 6, 1927175. DOI: 10.3389/frhs.2026.1927175. Link: https://www.frontiersin.org/articles/10.3389/frhs.2026.1927175. Original research, peer-reviewed, open access (CC BY). Received 3 Jul 2026, accepted 28 Sep 2026, published 14 Oct 2026. Funded by EPSRC IAA project SISSTEM. Journal indexing: Scopus/SJR Q1 (label exactly "Scopus Q1").
+   - Plain summary for the research page (2–3 sentences): A two-stage system that first flags insurance claim lines likely to be denied (Random Forest over 26 features) and then suggests the most likely denial reason code, alongside a rule-based pre-submission scrubber. Evaluated on 678,881 professional claim lines from a U.S. payer (2017–2024) with a temporal, claim-grouped held-out split: PR-AUC 0.777 against a no-skill baseline of 0.330, ROC-AUC 0.865, with SHAP-based explanations.
+   - Keywords: claim denial prediction, class imbalance, random forest, explainable AI, health insurance claims, revenue cycle management.
+   - BibTeX:
+     ```
+     @article{jadoon2026claimdenial,
+       title   = {A machine learning framework for predicting healthcare insurance claim denials},
+       author  = {Jadoon, Muhammad Mohsin and Miakhil, Obaidullah and Chakari, Noor Rahman and Qureshi, Muhammad Bilal and Ullah, Ihsan and Ahmed Haider, Sami and Ur Rehman, Masood},
+       journal = {Frontiers in Health Services},
+       volume  = {6},
+       pages   = {1927175},
+       year    = {2026},
+       doi     = {10.3389/frhs.2026.1927175}
+     }
+     ```
+2. **Under revision** — Miakhil, O. *STC-RNN: Seasonal-Trend-Coupled Recurrent Neural Network for Financial Time-Series Forecasting.* Target: IEEE conference/journal. `[confirm status]`
+3. **Under revision / in preparation** — Miakhil, O. *Weakly-Supervised Localization and Subtype Categorization of Intracranial Hemorrhage: A Two-Stage Cascade Architecture.* (MS thesis work, PAF-IAST.) `[confirm status]`
+4. **Conference abstract (submitted)** — Miakhil, O. (2026). *Two-Stage AI System for ICH Detection: Reducing Radiology Turnaround Time from 38 to 21 Minutes.* RSNA 2026 Annual Meeting. `[confirm: accepted / presented?]`
+
+Render statuses as small outline labels. Never label anything other than item 1 as "published".
+
+### 4.4 Research projects
+- **Weakly-supervised ICH detection (MS thesis), 2025–present** — Two-stage cascade: a binary "gatekeeper" model followed by a subtype specialist. RSNA DICOM preprocessing with HU windowing, patient-level stratified splits, EfficientNet-B2 + BiLSTM, Focal Loss, MC Dropout uncertainty with an abstain policy for clinical safety, Grad-CAM++ localisation evaluated by IoU on the BHX dataset. Supervisor: Dr. Muhammad Mohsin Khan Jadoon.
+- **STC-RNN: financial time-series forecasting, 2025** — Seasonal-Trend-Coupled RNN compared with vanilla RNN and LSTM on KSE-100 and S&P 500; GARCH-ARMA data-generating process, periodogram-based season detection, Diebold-Mariano tests with Benjamini-Hochberg FDR correction.
+- **AI-based insurance claim denial prediction (BS thesis), 2024** — Became the published paper above; rule-based claim scrubber and integration with a claim-management system.
+- **Federated learning for Gleason grade classification, 2024** — EfficientNet-B0 with FedProx on the PANDA prostate dataset, trained on Kaggle T4×2, checkpoints on Hugging Face.
+
+### 4.5 Experience (reverse chronological)
+| Role | Organisation | Location | Dates | Points |
+|---|---|---|---|---|
+| Research Engineer | Sino-Park Centre of Artificial Intelligence (SPCAI) | Haripur, Pakistan | Jul 2025 – present | Weakly-supervised ICH localisation and subtype classification; uncertainty-driven abstain policies for clinical safety; processing large-scale RSNA DICOM data. Supervisor: Dr. Mohsin Jadoon. |
+| Lab Engineer | Dept. of Computer Science, PAF-IAST | Haripur, Pakistan | Jul 2025 – present | Teaches labs for Object-Oriented Programming, Data Structures & Algorithms, Introduction to Computer Technology and Artificial Intelligence; runs the AI lab in Python, with students implementing algorithms from first principles. |
+| Professional BI Trainer | Khyber Pakhtunkhwa Information Technology Board (KPITB) | Haripur, Pakistan | Jun 2026 – Sep 2026 | Delivered a 144-hour Business Intelligence workshop with Power BI to 50+ graduates; about 80% hands-on. |
+| Apprentice, LLM chatbot | SPCAI | Haripur, Pakistan | Jun 2025 – Aug 2025 | Built an LLM-based chatbot that answers university admission questions end to end. |
+| Teaching Assistant | PAF-IAST | Haripur, Pakistan | Jan 2025 – Jun 2025 | Project Management and Project Management Tools: grading quizzes and assignments, preparing course material, liaising between students and faculty. |
+| Generative AI Intern | Insafdaar | Abbottabad, Pakistan | Jul 2024 – Sep 2024 | Generative AI solutions for legal-domain problems in a team of AI interns. |
+| AI Researcher (Intern) | Cube Healthcare | Michigan, USA (remote) | Jun 2024 – Aug 2024 `[confirm month]` | Predictive model for insurance claim denial, a rule-based claim scrubber, and ML integration with claim-management systems. |
+| Software Developer (Intern) | ByteEdge Software Solutions | Jalalabad, Afghanistan | Jul 2024 – Aug 2024 | Hospital management system in ASP.NET. |
+| Software Application Developer (Intern) | PAF-IAST Software Cell | Haripur, Pakistan | Jul 2023 – Aug 2023 | Windows applications for an LMS with SQL Server; CMS features in ASP.NET/.NET. |
+| CMS Developer (Intern) | PAF-IAST | Haripur, Pakistan | Apr 2022 – Jun 2022 | Customised Moodle for university needs. |
+
+### 4.6 Teaching and service (for `/cv` and a short block on `/research`)
+- Lab Engineer & OOP instructor, PAF-IAST, 2025–present
+- Teaching Assistant, PAF-IAST, 2025
+- BI trainer, KPITB, 2026 (144 hours, 50+ participants)
+- AI Conference & Expo representative, PAF-IAST, 2024–present
+- Student mentor, PAF-IAST Software Cell, 2023–present
+
+### 4.7 Education
+- **M.S. Artificial Intelligence**, PAF-IAST (Pak-Austria Fachhochschule: Institute of Applied Sciences and Technology), Haripur — expected Feb 2027. CGPA 4.00/4.00 after two semesters. Thesis: *Weakly-Supervised Localization and Subtype Categorization of Intracranial Hemorrhage: A Two-Stage Cascade Architecture* (Supervisor: Dr. Muhammad Mohsin Khan Jadoon). Coursework: Advanced Machine Learning, Advanced Deep Learning, Advanced Digital Image Processing, Time Series Analysis; final semester includes Advanced NLP.
+- **B.S. Computer Science**, PAF-IAST, 2021–2025. CGPA 3.16/4.00, 132 credits. Thesis: *AI-Based Prediction of Insurance Claim Denials & Management*. Studied on the HEC Allama Iqbal Scholarship.
+- **High School Diploma**, Taayef Private High School, Jalalabad, Afghanistan, 2019 — 92.98%.
+
+### 4.8 Awards
+- 2021 — Allama Iqbal Scholarship for Afghan Students, Higher Education Commission (HEC) Pakistan; competitive, exam-based; funded the BS at PAF-IAST.
+- 2023 — Winner, Robo Tech 01 competition, PAF-IAST.
+- 2019 — Kankor national examination, Afghanistan: merit-based placement into BS Computer Science (Ministry of Higher Education).
+
+### 4.9 Talks, workshops, conferences
+- Abstract submitted: "Two-Stage AI System for ICH Detection", RSNA 2026 Annual Meeting.
+- Research Methodologies Workshop, University of Salford (UK), Dec 2025.
+- Embedding Sustainability in Research & Practices, University of Salford (UK), Nov 2025.
+- Artificial Intelligence Conference and Expo 2024, PAF-IAST, May 2024.
+
+### 4.10 Certifications
+- Google Advanced Data Analytics Specialization — Google/Coursera, 2025 — https://www.coursera.org/account/accomplishments/specialization/7H2L868OZG7Z
+- Fundamentals to Become a Machine Learning Engineer — LinkedIn Learning, 2025
+- The Nuts and Bolts of Machine Learning — Google/Coursera, 2024 — https://www.coursera.org/account/accomplishments/verify/TJIB3WGNJA3E
+- Build Your Generative AI Productivity Skills — Microsoft/LinkedIn, 2024
+- Google Project Management Professional Certificate — Google/Coursera, 2023 — https://www.coursera.org/account/accomplishments/specialization/certificate/V4PD79SYBR22
+- Fundamentals of Digital Marketing — Google, 2023
+
+### 4.11 Skills (render as grouped plain text tags — no bars, no percentages)
+- **ML / AI**: Machine learning, deep learning, NLP fundamentals, LLM applications, generative AI, time-series forecasting, federated learning, uncertainty quantification (MC Dropout), explainability (Grad-CAM/Grad-CAM++, SHAP), weak supervision
+- **Medical imaging**: DICOM processing, HU windowing, RSNA datasets, weakly-supervised localisation
+- **Languages & frameworks**: Python, PyTorch, TensorFlow, Keras, scikit-learn, Flask, SQL, MATLAB, C#, C++, ASP.NET
+- **Data & tools**: Data analysis and visualisation, Power BI, SQL Server, Moodle, Git
+- **Spoken languages**: Pashto (native), Dari/Persian (native), English (C1), Urdu (C1)
+
+### 4.12 Software projects
+GitHub projects (show repo name, one-line description, primary language, stars — fetched at build time, see Section 8):
+- **Emotion Detector** (Mar 2025) — Flask backend for real-time facial emotion detection via webcam, responsive HTML/CSS/JS front end. https://github.com/obaidullah-miakhil/emotion_detector_v1
+- **Network Scanner** (Jun 2024) — Flask web app that scans and lists devices and connections on a network. https://github.com/obaidullah-miakhil/Network-scanner
+- **Predicting Flight Delays** — Random Forest classifier for delays over 15 minutes; 84% accuracy on an 80/20 split; notes on class imbalance and next steps (gradient boosting/XGBoost). https://github.com/obaidullah-miakhil/Predicting-Flight-Delays
+- **Naive Bayes and Advanced Models in ML** (Oct 2024) — Teaching notebook covering EDA, Naive Bayes, Random Forest, SVM, dimensionality reduction and evaluation. https://github.com/obaidullah-miakhil/Naive-Bayes-and-Advanced-Models-in-ML
+
+Websites built (show a screenshot of the first page, a "Visit site" link, and role):
+- **Capital Import Export** — https://www.capitalimpoexpo.com — Layout and UI/UX design, product showcase and service pages, ongoing maintenance (Hostinger website builder).
+- **Swift Bulk Traders** — https://swiftbulktraders.com — Layout, product listings, contact forms, ongoing content updates (Hostinger website builder).
+
+External links open in a new tab with `rel="noopener noreferrer"`.
+
+---
+
+## 5. 3D scenes
+
+Two scenes in total, never more than one WebGL canvas mounted at a time. All geometry is generated in code.
+
+### 5.1 Hero object — "faceted form"
+- An icosahedron (detail 4) whose vertices are displaced by 3D simplex noise in a custom vertex shader, so it slowly "breathes" between shapes. Flat-shaded facets (compute normals per face with `dFdx`/`dFdy` in the fragment shader) so the surface shows discrete facet tones — **no smooth gradient shading, no fog, no bloom, no environment map**.
+- Material colour = `--accent`; one directional light + one low ambient light. Optionally overlay the same geometry as a thin wireframe in `--text` at 15% opacity.
+- Motion: slow rotation (~0.05 rad/s), pointer parallax tilt (max 8°, damped), noise amplitude eases down as the user scrolls past the hero.
+- Size: about 420px on desktop, 260px on mobile.
+
+### 5.2 Research scene — "attention grid"
+- A 14×14 `InstancedMesh` of small cubes on a plane, viewed at an isometric angle. Heights animate like a moving heat-map (a nod to Grad-CAM attention maps). Cubes use `--accent`; the base plane uses `--border`. Only animates while in view.
+
+### 5.3 Performance rules for 3D (mandatory)
+- **Poster first**: render a static inline SVG of the faceted form immediately (part of the HTML, no JS). The canvas loads later and cross-fades over it. The poster is what shows for low-end devices, reduced motion, no WebGL, and while loading.
+- Load the 3D bundle with `next/dynamic` (`ssr: false`), only after `requestIdleCallback` (fallback `setTimeout` 1500ms) **and** only when the scene's container is within 200px of the viewport.
+- Skip the canvas entirely (keep the poster) if any of: `prefers-reduced-motion: reduce`, `navigator.connection.saveData`, `navigator.deviceMemory <= 4`, `navigator.hardwareConcurrency <= 4`, WebGL unavailable, or a quick first-frames FPS probe averages under 30 fps (then unmount and show the poster).
+- Canvas settings: `dpr={[1, 1.5]}`, `antialias` only when DPR is 1, `powerPreference: "low-power"`, `frameloop="demand"` with an invalidate loop that stops when the canvas is off-screen (IntersectionObserver) or the tab is hidden (`visibilitychange`).
+- Dispose geometries/materials on unmount. Canvas is `aria-hidden="true"` and not focusable.
+
+---
+
+## 6. Languages (i18n)
+
+- Locales: `en` (default), `ps` (Pashto), `fa` (Persian/Dari), `ur` (Urdu).
+- URL strategy: English at `/`, others at `/ps`, `/fa`, `/ur` (next-intl `localePrefix: "as-needed"`). Do not auto-redirect based on browser language; default is English.
+- Switcher labels (each in its own script): `English`, `پښتو`, `دری / فارسی`, `اردو`. Switching keeps the user on the equivalent page. The choice is remembered (cookie).
+- `<html lang>` and `dir` set per locale: `ps`, `fa`, `ur` are `dir="rtl"`. Use CSS logical properties only (`margin-inline-start`, `padding-inline`, `inset-inline-end`, `text-align: start`) so the layout mirrors correctly. Mirror directional icons (arrows) in RTL; do not mirror brand logos or the 3D scenes.
+- Translate all UI strings and narrative text (summaries, about, role descriptions). Keep in English: names of people, organisations, paper/thesis titles, journal names, model and dataset names, metric values, URLs.
+- Dates via `Intl.DateTimeFormat` for the locale (month + year).
+- Mark every non-English string file with a header comment: "Machine-drafted — to be reviewed by the owner (native Pashto/Dari, fluent Urdu)".
+- Each locale has its own translated `<title>`, description and OG image text.
+
+---
+
+## 7. Contact and WhatsApp
+
+### 7.1 Contact section (home + anchor `#contact`)
+- Heading: "Contact"
+- One line: "The fastest way to reach me is email or WhatsApp. I usually reply within a day."
+- Rows (icon + label + value, each a link): primary email (mailto), academic email (mailto), WhatsApp, LinkedIn, **GitHub**, Google Scholar.
+- Copy-to-clipboard button next to each email.
+- Two buttons: "Download academic CV", "Download résumé".
+- No contact form (nothing to spam, no backend to maintain).
+
+### 7.2 Floating WhatsApp button
+- Fixed at the bottom on the inline-end side (right in LTR, left in RTL), 16px from the edges, 52px circle, solid `--accent` background with a monochrome WhatsApp glyph in `--accent-contrast` (stay within the single-colour theme — do not use WhatsApp green).
+- `aria-label="Chat on WhatsApp"`, visible tooltip on hover/focus, opens the `wa.me` link from 4.1 in a new tab.
+- Hides itself while the Contact section is in view, and never covers the theme/language controls or the mobile menu. Respects safe-area insets on iOS.
+
+---
+
+## 8. GitHub highlight
+
+GitHub must be prominent:
+- First icon in the hero link row, in accent colour, with the handle visible.
+- On `/projects` and the home "Selected projects" block, a bordered GitHub block at the top: avatar-free, text "Code on GitHub", handle, public repo count, and a primary "View GitHub profile" button.
+- Repo cards for the four repos in 4.12. Fetch name, description, language, stars and last-updated from `https://api.github.com/repos/{owner}/{repo}` at build time with `revalidate = 86400`. Optional `GITHUB_TOKEN` env var to avoid rate limits. If the API fails, fall back to the static data in `profile.ts` — the build must never fail because of GitHub.
+
+---
+
+## 9. Project screenshots
+
+Create `scripts/capture-screenshots.mjs` using Playwright (Chromium) + `sharp`:
+- For each website in 4.12: open the URL, wait for network idle + 1.5s, dismiss nothing, capture the first viewport at 1440×900 (deviceScaleFactor 1) and at 390×844 (mobile).
+- Save to `public/projects/{slug}-desktop.webp` and `{slug}-mobile.webp` (quality 80) plus AVIF versions.
+- Add an npm script `"screenshots": "node scripts/capture-screenshots.mjs"` and run it once. Commit the images (the site never takes screenshots at runtime).
+- Display with `next/image`, fixed aspect ratio (16:10 desktop) so there is no layout shift, 1px border, lazy-loaded. Alt text: "Home page of {site name}, built by Obaidullah Miakhil".
+
+---
+
+## 10. SEO (critical)
+
+Goal: rank first for the owner's name and its common misspellings, plus name + topic queries such as "Obaidullah Miakhil machine learning", "Obaidullah Miakhil deep learning", "Obaidullah Miakhil AI engineer", "Obaidullah Miakhil PhD".
+
+Use only white-hat methods. **No hidden text, no keyword stuffing, no doorway pages** — Google penalises these. Misspellings are covered through structured data and one visible "Also written as" line in the footer.
+
+### 10.1 Name variants
+Canonical: **Obaidullah Miakhil**. Use this list as `alternateName` in JSON-LD and in the `keywords` meta:
+Obaidullah Miakhil Khan, Obaid Ullah Miakhil, Ubaidullah Miakhil, Ubaid Ullah Miakhil, Obaidullah Myakhail, Obaidullah Miakhel, Obaidullah Miakheil, Obaidullah Mia Khil, Obaidullah Miyakhil, Obaidullah Mayakhil, Ubaidullah Mayakhel, Obaidulla Miakhil, O. Miakhil, عبیدالله میاخیل, عبیداللہ میاخیل.
+
+### 10.2 Per-page metadata (Next.js Metadata API)
+- `metadataBase` = `https://[YOUR_DOMAIN]`
+- Title template: `%s · Obaidullah Miakhil`
+- Home title (≤ 60 chars): `Obaidullah Miakhil — AI Engineer & ML Researcher`
+- Home description (≤ 155 chars): `Obaidullah Miakhil is an AI engineer and machine learning researcher working on medical AI, deep learning and NLP. Open to PhD and AI/ML roles.`
+- `/research`: `Research & Publications` — description mentions the Frontiers in Health Services paper, intracranial hemorrhage deep learning, and NLP/LLM interests.
+- `/projects`: `Projects` — machine learning projects, GitHub repositories and websites.
+- `/cv`: `CV` — "Curriculum vitae of Obaidullah Miakhil, prospective PhD candidate in NLP and LLMs, MS Artificial Intelligence at PAF-IAST."
+- Use the phrase **"prospective PhD candidate"** / "PhD applicant" (not "PhD candidate", which implies enrolment).
+- Keywords meta (low weight, but include): Obaidullah Miakhil, AI engineer, machine learning engineer, deep learning researcher, medical AI, intracranial hemorrhage detection, NLP, large language models, low-resource NLP, Pashto NLP, explainable AI, uncertainty quantification, claim denial prediction, PhD applicant artificial intelligence, Islamabad, Pakistan, PAF-IAST, plus the name variants.
+- Canonical URL on every page; `alternates.languages` for `en`, `ps`, `fa`, `ur` and `x-default` (English).
+- Open Graph: `type: "profile"`, `firstName`, `lastName`, locale-specific `og:locale`; Twitter `summary_large_image`.
+- OG images generated statically with `next/og` per locale and page: flat `--bg` background, name, role line, accent bar. Same font (load Vazirmatn into `ImageResponse`). No gradients.
+- `robots.ts` (allow all, link sitemap), `sitemap.ts` (all routes × locales with hreflang alternates), `manifest.ts`, favicon + apple-touch icon: an "OM" monogram in `--accent` on `--bg`.
+- Google Search Console verification via the `verification.google` metadata field: `[PLACEHOLDER: GSC_TOKEN]` (or DNS TXT — see Section 13).
+
+### 10.3 Structured data (JSON-LD, server-rendered)
+- Home: `ProfilePage` whose `mainEntity` is a `Person` with: `name`, `alternateName` (10.1), `givenName`, `familyName`, `jobTitle` ("AI Engineer & Machine Learning Researcher"), `description`, `image`, `url`, `email` (primary), `address` (Islamabad, PK), `nationality` omitted, `alumniOf` (PAF-IAST, Taayef Private High School), `affiliation` (SPCAI; PAF-IAST), `knowsLanguage` (ps, fa, en, ur), `knowsAbout` (machine learning, deep learning, medical imaging, natural language processing, large language models, explainable AI, uncertainty quantification), `award` (4.8), `sameAs` (GitHub, LinkedIn, Hugging Face, Google Scholar, ORCID when filled, Frontiers article author page if available).
+- Also a `WebSite` node with `name: "Obaidullah Miakhil"`, `alternateName` and `inLanguage`.
+- `/research`: `ScholarlyArticle` for the published paper (headline, author list in order with Obaidullah Miakhil linked to the Person `@id`, `datePublished` 2026-10-14, `isPartOf` Periodical "Frontiers in Health Services", `identifier` DOI, `sameAs` DOI URL, `license` CC BY 4.0).
+- Validate all JSON-LD with the Schema.org validator and Google's Rich Results Test (document results in the README).
+
+### 10.4 On-page
+- Exactly one `<h1>` per page containing the name on home; logical heading order.
+- The name "Obaidullah Miakhil" appears naturally in the hero, about, footer, image alt text and page titles — not repeated beyond that.
+- Descriptive link text (no "click here"), image filenames containing the name, `lang` attributes correct per locale.
+
+---
+
+## 11. Performance budget (must pass before deploy)
+
+- Lighthouse (mobile, simulated Moto G Power / slow 4G): **Performance ≥ 95, Accessibility 100, Best Practices 100, SEO 100** on `/`, `/research`, `/projects`, in both `en` and one RTL locale.
+- Core Web Vitals targets: LCP < 2.0 s, CLS < 0.05, INP < 200 ms.
+- First-load JS on `/` ≤ 120 KB gzipped **excluding** the lazily loaded 3D chunk. Report sizes with `@next/bundle-analyzer`.
+- Images: `next/image`, AVIF/WebP, explicit sizes, only the hero text is LCP (photo is not `priority`).
+- No layout shift from fonts (`size-adjust`/`adjustFontFallback`), from images (fixed aspect ratios) or from the 3D canvas (container reserves its size; poster shown first).
+- No third-party scripts besides Vercel Analytics/Speed Insights. No external font CDNs.
+- Test on a throttled low-end profile (4× CPU slowdown) and confirm scrolling stays smooth and the 3D falls back to the poster when it should.
+
+---
+
+## 12. Accessibility
+
+- Semantic landmarks (`header`, `nav`, `main`, `footer`), a "Skip to content" link, visible focus rings (2px `--accent`), full keyboard navigation for menu, switcher, theme toggle and copy buttons.
+- Theme toggle and language switcher have accessible names and announce state.
+- Respect `prefers-reduced-motion` everywhere (no scroll reveals, no 3D animation).
+- All images have meaningful alt text; decorative SVGs are `aria-hidden`.
+- Colour contrast AA in both themes; never use colour alone to convey status.
+
+---
+
+## 13. Deployment (Vercel + custom domain)
+
+1. Initialise a Git repo, push to GitHub (`obaidullah-miakhil/portfolio`).
+2. Import into Vercel (framework preset: Next.js). Optional env var: `GITHUB_TOKEN` (read-only, public repos).
+3. Project → Settings → Domains: add `[YOUR_DOMAIN]` and `www.[YOUR_DOMAIN]`; set the apex as primary and redirect `www` to it.
+4. At the domain registrar, create exactly the DNS records Vercel shows on that screen (an A record for the apex and a CNAME for `www`). Do not hard-code IPs from memory; use the values Vercel displays.
+5. Add the Google Search Console TXT record (Domain property), verify, then submit `https://[YOUR_DOMAIN]/sitemap.xml`. Do the same in Bing Webmaster Tools.
+6. Add security headers in `next.config.ts`: `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (camera, microphone, geolocation disabled), and a CSP that allows self, Vercel analytics and `api.github.com` (build-time only).
+
+Write a `README.md` covering: how to run locally, where to edit content (`src/content/profile.ts`, `messages/*.json`), how to replace the photo/CVs, how to re-run screenshots, how to deploy, and the post-launch SEO checklist in Section 16.
+
+---
+
+## 14. Project structure
+
+```
+app/
+  [locale]/
+    layout.tsx          // html lang/dir, fonts, theme + intl providers, header, footer, WhatsApp button
+    page.tsx            // home
+    research/page.tsx
+    projects/page.tsx
+    cv/page.tsx
+    opengraph-image.tsx
+  robots.ts
+  sitemap.ts
+  manifest.ts
+  not-found.tsx
+src/
+  content/profile.ts    // all data from Section 4 (typed)
+  components/           // Header, Footer, Hero, AudienceSwitch, FeaturedPublication, ProjectCard, RepoCard,
+                        // ExperienceList, ContactSection, WhatsAppButton, ThemeToggle, LocaleSwitcher, Reveal
+  three/                // HeroForm.tsx, AttentionGrid.tsx, SceneGate.tsx (capability + visibility gating), poster SVGs
+  lib/                  // seo.ts (metadata + JSON-LD builders), github.ts, device.ts
+  styles/globals.css    // tokens, base styles, @theme for Tailwind
+messages/en.json, ps.json, fa.json, ur.json
+public/images/obaidullah-miakhil.jpg
+public/cv/*.pdf
+public/projects/*.webp|avif
+scripts/capture-screenshots.mjs
+scripts/check-no-gradients.mjs
+```
+
+---
+
+## 15. Work plan
+
+1. **Scaffold**: Next.js 16 + TypeScript + Tailwind v4 + next-intl + next-themes; tokens; font; header/footer; locale + theme switching working in LTR and RTL.
+2. **Content**: `profile.ts` and English messages from Section 4; build all pages with real content, no 3D yet.
+3. **SEO**: metadata, JSON-LD, sitemap, robots, OG images; validate.
+4. **3D**: poster SVGs, gated canvas, both scenes, fallbacks.
+5. **Projects**: GitHub fetch with fallback; screenshot script run; images wired in.
+6. **Translations**: draft `ps`, `fa`, `ur`; check RTL layout on every page.
+7. **Quality pass**: Lighthouse, bundle analysis, accessibility audit, gradient check, low-end device test, broken-link check.
+8. **Deploy** to Vercel preview, then production with the custom domain.
+
+After each phase, run the app in the browser and screenshot desktop (1440px) and mobile (390px) in light and dark mode to check the result yourself.
+
+---
+
+## 16. Acceptance checklist (all must be true)
+
+- [ ] No occurrence of "gradient" in source or built CSS; one font (Vazirmatn) in the computed styles of every page.
+- [ ] Only the colour tokens in 2.3 are used.
+- [ ] Theme defaults to the system setting; manual Light/Dark/System toggle works with no flash on reload.
+- [ ] English default; Pashto, Dari/Persian and Urdu render RTL correctly with no fallback glyphs.
+- [ ] Featured publication card with "Scopus Q1", DOI link and copyable BibTeX is directly below the hero.
+- [ ] GitHub is visually emphasised in the hero and on the projects page.
+- [ ] Floating WhatsApp button works, sits on the correct side per direction, and hides over the contact section.
+- [ ] Both emails, LinkedIn, GitHub, Hugging Face and Scholar links work.
+- [ ] Website screenshots present for both client sites.
+- [ ] 3D shows on capable devices; poster shows on low-end/reduced-motion; canvas pauses off-screen.
+- [ ] Lighthouse targets in Section 11 met; first-load JS budget met.
+- [ ] JSON-LD validates; sitemap includes all locales with hreflang.
+- [ ] No invented content; all `[PLACEHOLDER]` items listed in the README.
+
+Post-launch SEO checklist for the owner (put in README): verify in Google Search Console and Bing; submit sitemap; add the site URL to LinkedIn (Contact info → Website), GitHub profile + a profile README, Google Scholar profile homepage, Hugging Face profile, ORCID, the university/SPCAI staff page if one exists, and the email signature. These backlinks are what make the name search rank quickly.
+
+---
+
+## 17. Placeholders to fill before launch
+
+- `[YOUR_DOMAIN]`
+- `[SCHOLAR_URL]` — Google Scholar profile
+- `[ORCID_URL]` — optional but recommended for PhD applications
+- `[GSC_TOKEN]` — Google Search Console verification
+- Profile photo file, academic CV PDF, résumé PDF
+- Status confirmations marked `[confirm …]` in Section 4
