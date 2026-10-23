@@ -150,3 +150,30 @@ export function WhatsAppIcon({
     </svg>
   );
 }
+
+export function ResearchGateIcon({
+  size = 18,
+  className = '',
+  ...props
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+      {...props}
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M7 8.5h4a2.5 2.5 0 0 1 0 5H7v-5z" />
+      <path d="M10.5 13.5L13 17" />
+      <path d="M17 12h-2.5v5H17" />
+    </svg>
+  );
+}

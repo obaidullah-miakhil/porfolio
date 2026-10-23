@@ -8,6 +8,7 @@ import {
   LinkedInIcon,
   HuggingFaceIcon,
   ScholarIcon,
+  ResearchGateIcon,
 } from './BrandIcons';
 import { SceneGate } from '@/three/SceneGate';
 import { Download, Mail } from 'lucide-react';
@@ -196,6 +197,18 @@ export function Hero() {
               >
                 <ScholarIcon size={17} />
                 <span>Google Scholar</span>
+              </a>
+            ) : null}
+
+            {profile.researchgateUrl ? (
+              <a
+                href={profile.researchgateUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap"
+              >
+                <ResearchGateIcon size={17} />
+                <span>ResearchGate</span>
               </a>
             ) : null}
 

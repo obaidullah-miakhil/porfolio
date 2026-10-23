@@ -75,7 +75,7 @@ export default async function ResearchPage({
                 className="p-6 sm:p-8 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-4"
               >
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-[4px] text-step-13 font-medium bg-[var(--accent-soft)] text-[var(--accent)]">
+                  <span className="px-2.5 py-0.5 rounded-[4px] text-step-13 font-medium border border-[var(--accent)] text-[var(--accent)]">
                     <bdi>{pub.status}</bdi>
                   </span>
                   {pub.badges?.map((badge) => (

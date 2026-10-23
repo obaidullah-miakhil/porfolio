@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import createNextIntlPlugin from 'next-intl/plugin';
+import withBundleAnalyzer from '@next/bundle-analyzer';
 import type { NextConfig } from 'next';
 
 // Ensure app/[locale] routes are always populated from src/routes and no URL-encoded %5Blocale%5D duplicate exists
@@ -53,6 +54,22 @@ ensureLocaleRoutesSynced();
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+const cspHeader = `
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: blob: https:;
+  font-src 'self' data:;
+  connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com https://api.github.com;
+  frame-ancestors 'none';
+  object-src 'none';
+  base-uri 'self';
+`.replace(/\s{2,}/g, ' ').trim();
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
@@ -70,10 +87,14 @@ const nextConfig: NextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
           },
+          {
+            key: 'Content-Security-Policy',
+            value: cspHeader,
+          },
         ],
       },
     ];
   },
 };
 
-export default withNextIntl(nextConfig);
+export default bundleAnalyzer(withNextIntl(nextConfig));

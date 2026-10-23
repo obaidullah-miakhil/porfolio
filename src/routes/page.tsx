@@ -1,15 +1,17 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Hero } from '@/components/Hero';
 import { FeaturedPublication } from '@/components/FeaturedPublication';
-import { RepoCard } from '@/components/ProjectCards';
+import { RepoCard, WebsiteCard } from '@/components/ProjectCards';
 import { ContactSection } from '@/components/ContactSection';
 import { Reveal } from '@/components/Reveal';
 import { Link } from '@/i18n/routing';
 import { getGitHubRepos } from '@/lib/github';
 import { profile, getRecentExperience } from '@/content/profile';
 import { buildPageMetadata, buildHomeJsonLd } from '@/lib/seo';
-import { ArrowRight } from 'lucide-react';
+import { GitHubIcon } from '@/components/BrandIcons';
+import { ArrowRight, ExternalLink } from 'lucide-react';
 
 export async function generateMetadata({
   params,
@@ -37,9 +39,11 @@ export default async function HomePage({
 
   const tAbout = await getTranslations({ locale, namespace: 'about' });
   const tSections = await getTranslations({ locale, namespace: 'sections' });
-  const { repos } = await getGitHubRepos();
+  const tProjects = await getTranslations({ locale, namespace: 'projectsPage' });
+  const { repos, publicRepoCount } = await getGitHubRepos();
   const recentExperience = getRecentExperience(5);
   const jsonLd = buildHomeJsonLd(locale);
+  const selectedMlRepo = repos[0];
 
   return (
     <div className="space-y-16 pb-16">
@@ -54,20 +58,33 @@ export default async function HomePage({
       {/* 2. Featured Publication */}
       <FeaturedPublication />
 
-      {/* 3. About + Key Facts */}
+      {/* 3. About — profile photo (square, 6px radius) + two short paragraphs + a facts list */}
       <section className="mx-auto max-w-[1160px] px-5 sm:px-8">
         <Reveal>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-10 border-t border-[var(--border)]">
-            <div className="lg:col-span-8 space-y-4">
-              <h2 className="text-step-28 font-bold text-[var(--text)]">
-                {tAbout('title')}
-              </h2>
-              <p className="text-step-15 text-[var(--text)] leading-relaxed max-w-[65ch]">
-                {tAbout('paragraph1')}
-              </p>
-              <p className="text-step-15 text-[var(--text)] leading-relaxed max-w-[65ch]">
-                {tAbout('paragraph2')}
-              </p>
+            <div className="lg:col-span-8 flex flex-col sm:flex-row items-start gap-6">
+              <div className="relative w-36 h-36 sm:w-44 sm:h-44 aspect-square shrink-0 rounded-[6px] border border-[var(--border)] overflow-hidden bg-[var(--surface)]">
+                <Image
+                  src={profile.profilePhoto}
+                  alt={profile.profilePhotoAlt}
+                  fill
+                  sizes="(max-width: 640px) 144px, 176px"
+                  className="object-cover object-top"
+                  loading="lazy"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <h2 className="text-step-28 font-bold text-[var(--text)]">
+                  {tAbout('title')}
+                </h2>
+                <p className="text-step-15 text-[var(--text)] leading-relaxed max-w-[65ch]">
+                  {tAbout('paragraph1')}
+                </p>
+                <p className="text-step-15 text-[var(--text)] leading-relaxed max-w-[65ch]">
+                  {tAbout('paragraph2')}
+                </p>
+              </div>
             </div>
 
             <div className="lg:col-span-4 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] p-6 space-y-4 self-start">
@@ -221,7 +238,7 @@ export default async function HomePage({
         </Reveal>
       </section>
 
-      {/* 6. Selected Projects (4 GitHub repos) */}
+      {/* 5. Selected Projects — 4 items: GitHub highlight block + 2 websites with screenshots + 1 ML repo */}
       <section className="mx-auto max-w-[1160px] px-5 sm:px-8">
         <Reveal>
           <div className="pt-10 border-t border-[var(--border)] space-y-6">
@@ -238,10 +255,40 @@ export default async function HomePage({
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {repos.map((repo) => (
-                <RepoCard key={repo.slug} repo={repo} />
+            {/* Item 1: Bordered GitHub highlight block */}
+            <div className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-wrap items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2.5">
+                  <GitHubIcon size={20} className="text-[var(--text)]" />
+                  <h3 className="text-step-22 font-bold text-[var(--text)]">
+                    {tProjects('githubBlockTitle')}
+                  </h3>
+                  <span className="text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]">
+                    {publicRepoCount} {tProjects('publicReposLabel')}
+                  </span>
+                </div>
+                <p className="text-step-15 text-[var(--muted)]">
+                  {tProjects('githubBlockSubtitle')}
+                </p>
+              </div>
+
+              <a
+                href={profile.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[6px] bg-[var(--accent)] text-white text-step-15 font-medium hover:opacity-95 transition-opacity"
+              >
+                <span>{tProjects('viewGithubProfile')}</span>
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+
+            {/* Items 2, 3, 4: 2 websites with screenshots + 1 ML repo */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {profile.websitesBuilt.map((site) => (
+                <WebsiteCard key={site.slug} site={site} />
               ))}
+              {selectedMlRepo && <RepoCard repo={selectedMlRepo} />}
             </div>
           </div>
         </Reveal>

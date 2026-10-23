@@ -10,6 +10,8 @@ import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { profile } from '@/content/profile';
 import { getSiteUrl, SEO_KEYWORDS } from '@/lib/seo';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import '@/styles/globals.css';
 
 const vazirmatn = localFont({
@@ -36,7 +38,7 @@ export async function generateMetadata({
     metadataBase: new URL(siteUrl),
     title: {
       default: tMeta('homeTitle'),
-      template: `%s | ${profile.name}`,
+      template: `%s · ${profile.name}`,
     },
     description: tMeta('homeDescription'),
     applicationName: profile.name,
@@ -44,6 +46,9 @@ export async function generateMetadata({
     creator: profile.name,
     publisher: profile.name,
     keywords: SEO_KEYWORDS,
+    verification: {
+      google: profile.gscToken || undefined,
+    },
   };
 }
 
@@ -88,6 +93,8 @@ export default async function LocaleLayout({
             </main>
             <Footer />
             <WhatsAppButton />
+            <Analytics />
+            <SpeedInsights />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

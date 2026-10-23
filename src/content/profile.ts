@@ -131,8 +131,9 @@ export const profile = {
   githubOwner: 'obaidullah-miakhil',
   linkedinUrl: 'https://www.linkedin.com/in/obaidullah-miakhil-b28a16248/',
   huggingfaceUrl: 'https://huggingface.co/Obaidullahmiakhil',
-  // TODO: [PLACEHOLDER: SCHOLAR_URL] — leave empty until provided by owner; UI omits when empty
-  scholarUrl: '',
+  scholarUrl:
+    'https://scholar.google.com/citations?user=JVFkpVgAAAAJ&hl=en&oi=ao',
+  researchgateUrl: 'https://www.researchgate.net/profile/Obaidullah-Miakhil',
   // TODO: [PLACEHOLDER: ORCID_URL — optional] — leave empty until provided by owner; UI omits when empty
   orcidUrl: '',
   // TODO: [PLACEHOLDER: YOUR_DOMAIN]

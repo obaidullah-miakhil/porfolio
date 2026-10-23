@@ -49,6 +49,16 @@ export function Footer() {
                 Google Scholar
               </a>
             ) : null}
+            {profile.researchgateUrl ? (
+              <a
+                href={profile.researchgateUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--accent)] hover:underline whitespace-nowrap"
+              >
+                ResearchGate
+              </a>
+            ) : null}
             <a
               href={`mailto:${profile.emailPrimary}`}
               className="text-[var(--accent)] hover:underline whitespace-nowrap"

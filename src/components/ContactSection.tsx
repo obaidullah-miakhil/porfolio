@@ -8,6 +8,7 @@ import {
   LinkedInIcon,
   HuggingFaceIcon,
   ScholarIcon,
+  ResearchGateIcon,
   WhatsAppIcon,
 } from './BrandIcons';
 import { Mail, Copy, Check, Download } from 'lucide-react';
@@ -205,7 +206,7 @@ export function ContactSection() {
             </a>
           </div>
 
-          {/* Google Scholar (only if populated) */}
+          {/* Google Scholar */}
           {profile.scholarUrl ? (
             <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3">
               <ScholarIcon size={16} className="text-[var(--muted)] shrink-0" />
@@ -216,9 +217,29 @@ export function ContactSection() {
                 href={profile.scholarUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-step-15 font-medium text-[var(--accent)] hover:underline"
+                dir="ltr"
+                className="text-step-15 font-medium text-[var(--accent)] hover:underline truncate"
               >
-                {profile.scholarUrl}
+                scholar.google.com/citations?user=JVFkpVgAAAAJ
+              </a>
+            </div>
+          ) : null}
+
+          {/* ResearchGate */}
+          {profile.researchgateUrl ? (
+            <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3">
+              <ResearchGateIcon size={16} className="text-[var(--muted)] shrink-0" />
+              <span className="text-step-15 text-[var(--muted)] w-32 shrink-0">
+                ResearchGate
+              </span>
+              <a
+                href={profile.researchgateUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                dir="ltr"
+                className="text-step-15 font-medium text-[var(--accent)] hover:underline truncate"
+              >
+                researchgate.net/profile/Obaidullah-Miakhil
               </a>
             </div>
           ) : null}

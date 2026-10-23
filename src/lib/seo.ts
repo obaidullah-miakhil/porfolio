@@ -133,6 +133,7 @@ export function buildHomeJsonLd(locale: string) {
     profile.huggingfaceUrl,
   ];
   if (profile.scholarUrl) sameAs.push(profile.scholarUrl);
+  if (profile.researchgateUrl) sameAs.push(profile.researchgateUrl);
   if (profile.orcidUrl) sameAs.push(profile.orcidUrl);
 
   return {

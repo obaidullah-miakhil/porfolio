@@ -153,7 +153,8 @@ select:focus-visible,
 }
 
 /* RTL Directional Icon Mirroring */
-[dir="rtl"] .rtl-mirror {
+[dir="rtl"] .rtl-mirror,
+[dir="rtl"] .rtl-flip {
   transform: scaleX(-1);
 }
 

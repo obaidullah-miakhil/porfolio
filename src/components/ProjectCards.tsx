@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import type { EnrichedGitHubRepo } from '@/lib/github';
 import type { WebsiteProjectItem } from '@/content/profile';
@@ -77,27 +78,16 @@ export function WebsiteCard({ site }: { site: WebsiteProjectItem }) {
 
   return (
     <article className="rounded-[6px] border border-[var(--border)] bg-[var(--surface)] overflow-hidden flex flex-col justify-between">
-      {/* 16:10 aspect ratio preview box */}
-      <div className="w-full aspect-[16/10] border-b border-[var(--border)] bg-[var(--bg)] flex flex-col justify-between p-5 select-none">
-        <div className="flex items-center justify-between gap-2 pb-3 border-b border-[var(--border)]">
-          <span className="text-step-13 font-medium text-[var(--text)] truncate">
-            {site.displayDomain}
-          </span>
-          <span className="text-step-13 text-[var(--muted)]">HTTPS</span>
-        </div>
-
-        <div className="my-auto py-4 flex flex-col gap-2">
-          <span className="text-step-22 font-bold text-[var(--text)]">
-            {site.name}
-          </span>
-          <div className="w-24 h-1 bg-[var(--accent)]" />
-        </div>
-
-        <div className="grid grid-cols-3 gap-2 pt-2">
-          <div className="h-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]" />
-          <div className="h-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]" />
-          <div className="h-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]" />
-        </div>
+      {/* 16:10 aspect ratio screenshot container */}
+      <div className="relative w-full aspect-[16/10] border-b border-[var(--border)] bg-[var(--bg)] overflow-hidden">
+        <Image
+          src={site.desktopImage}
+          alt={`Home page of ${site.name}, built by Obaidullah Miakhil`}
+          fill
+          sizes="(max-width: 768px) 100vw, 560px"
+          className="object-cover object-top transition-transform duration-300 hover:scale-[1.02]"
+          loading="lazy"
+        />
       </div>
 
       <div className="p-6 flex flex-col gap-3 flex-1 justify-between">
