@@ -92,7 +92,7 @@ async function runTests() {
   assert(ps.statusCode === 200, 'Pashto page returns HTTP 200');
   assert(ps.body.includes('lang="ps"'), 'Pashto page has lang="ps"');
   assert(ps.body.includes('dir="rtl"'), 'Pashto page has dir="rtl"');
-  assert(ps.body.includes('ټ ډ ړ ږ ښ ګ ڼ ې ۍ ئ ے ں ٹ ڈ ڑ ۀ'), 'Pashto page contains Vazirmatn glyph verification string');
+  assert(ps.body.includes('عبیدالله میاخیل'), 'Pashto page contains Pashto name string');
 
   const fa = await fetchPage('/fa');
   assert(fa.statusCode === 200, 'Dari page returns HTTP 200');

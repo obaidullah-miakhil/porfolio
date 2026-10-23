@@ -70,10 +70,6 @@ export function Footer() {
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-step-13 text-[var(--muted)]">
           <p className="m-0">{t('alsoWrittenAs')}</p>
-          <p className="m-0" title={t('glyphCheckLabel')}>
-            <span className="sr-only">{t('glyphCheckLabel')} </span>
-            <span lang="ps">{profile.glyphVerificationString}</span>
-          </p>
         </div>
       </div>
     </footer>
