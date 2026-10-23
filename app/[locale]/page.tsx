@@ -46,9 +46,11 @@ export default async function HomePage({
   const selectedMlRepo = repos[0];
 
   return (
-    <div className="space-y-16 pb-16">
+    <div className="space-y-16 pb-16" suppressHydrationWarning>
       <script
+        id="home-jsonld"
         type="application/ld+json"
+        suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
@@ -87,8 +89,11 @@ export default async function HomePage({
               </div>
             </div>
 
-            <div className="lg:col-span-4 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] p-6 space-y-4 self-start">
-              <div>
+            <div
+              className="lg:col-span-4 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] p-6 space-y-4 self-start"
+              suppressHydrationWarning
+            >
+              <div suppressHydrationWarning>
                 <div className="text-step-13 text-[var(--muted)]">
                   {tAbout('factLocationLabel')}
                 </div>
@@ -96,7 +101,7 @@ export default async function HomePage({
                   {tAbout('factLocationValue')}
                 </div>
               </div>
-              <div className="border-t border-[var(--border)] pt-3">
+              <div className="border-t border-[var(--border)] pt-3" suppressHydrationWarning>
                 <div className="text-step-13 text-[var(--muted)]">
                   {tAbout('factLanguagesLabel')}
                 </div>
@@ -104,7 +109,7 @@ export default async function HomePage({
                   {tAbout('factLanguagesValue')}
                 </div>
               </div>
-              <div className="border-t border-[var(--border)] pt-3">
+              <div className="border-t border-[var(--border)] pt-3" suppressHydrationWarning>
                 <div className="text-step-13 text-[var(--muted)]">
                   {tAbout('factOpenToLabel')}
                 </div>

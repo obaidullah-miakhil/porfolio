@@ -34,9 +34,14 @@ export default async function ResearchPage({
   const jsonLd = buildResearchJsonLd();
 
   return (
-    <div className="mx-auto max-w-[1160px] px-5 sm:px-8 py-12 sm:py-16 space-y-16">
+    <div
+      className="mx-auto max-w-[1160px] px-5 sm:px-8 py-12 sm:py-16 space-y-16"
+      suppressHydrationWarning
+    >
       <script
+        id="research-jsonld"
         type="application/ld+json"
+        suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 

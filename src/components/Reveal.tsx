@@ -53,6 +53,7 @@ export function Reveal({ children, className = '' }: RevealProps) {
       ref={ref}
       data-reveal={visible ? 'shown' : 'pending'}
       className={`reveal-section ${className}`}
+      suppressHydrationWarning
     >
       {children}
     </div>

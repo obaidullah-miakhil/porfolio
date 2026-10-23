@@ -76,7 +76,10 @@ export default async function LocaleLayout({
       className={vazirmatn.variable}
       suppressHydrationWarning
     >
-      <body className="min-h-screen flex flex-col bg-[var(--bg)] text-[var(--text)] antialiased">
+      <body
+        className="min-h-screen flex flex-col bg-[var(--bg)] text-[var(--text)] antialiased"
+        suppressHydrationWarning
+      >
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="system"
@@ -88,7 +91,7 @@ export default async function LocaleLayout({
               {tNav('skipToContent')}
             </a>
             <Header />
-            <main id="main-content" className="flex-1">
+            <main id="main-content" className="flex-1" suppressHydrationWarning>
               {children}
             </main>
             <Footer />

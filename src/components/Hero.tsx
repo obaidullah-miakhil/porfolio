@@ -61,7 +61,10 @@ export function Hero() {
   const activeAudienceData = profile.audienceContent[audience];
 
   return (
-    <section className="py-10 md:py-14 border-b border-[var(--border)]">
+    <section
+      className="py-10 md:py-14 border-b border-[var(--border)]"
+      suppressHydrationWarning
+    >
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
         {/* Start side: Typography, Audience Switch, CTAs, Links */}
         <div className="md:col-span-7 flex flex-col gap-4 text-start">
@@ -115,11 +118,12 @@ export function Hero() {
           </div>
 
           {/* Both summaries present in SSR HTML so search engines index both */}
-          <div>
+          <div suppressHydrationWarning>
             <p
               hidden={audience !== 'research'}
               data-testid="summary-research"
               className="text-step-17 text-[var(--text)] m-0"
+              suppressHydrationWarning
             >
               {t('researchSummary')}
             </p>
@@ -127,6 +131,7 @@ export function Hero() {
               hidden={audience !== 'industry'}
               data-testid="summary-industry"
               className="text-step-17 text-[var(--text)] m-0"
+              suppressHydrationWarning
             >
               {t('industrySummary')}
             </p>
