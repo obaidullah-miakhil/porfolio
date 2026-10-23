@@ -95,9 +95,9 @@ export function Hero() {
                 type="button"
                 onClick={() => handleSelectAudience('research')}
                 aria-pressed={audience === 'research'}
-                className={`px-3 py-1.5 rounded-[6px] text-step-13 font-medium transition-colors whitespace-nowrap cursor-pointer ${
+                className={`btn-interactive px-3 py-1.5 rounded-[6px] text-step-13 font-medium whitespace-nowrap cursor-pointer ${
                   audience === 'research'
-                    ? 'bg-[var(--accent)] text-[var(--accent-contrast)]'
+                    ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-xs'
                     : 'text-[var(--text)] hover:text-[var(--accent)]'
                 }`}
               >
@@ -107,9 +107,9 @@ export function Hero() {
                 type="button"
                 onClick={() => handleSelectAudience('industry')}
                 aria-pressed={audience === 'industry'}
-                className={`px-3 py-1.5 rounded-[6px] text-step-13 font-medium transition-colors whitespace-nowrap cursor-pointer ${
+                className={`btn-interactive px-3 py-1.5 rounded-[6px] text-step-13 font-medium whitespace-nowrap cursor-pointer ${
                   audience === 'industry'
-                    ? 'bg-[var(--accent)] text-[var(--accent-contrast)]'
+                    ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-xs'
                     : 'text-[var(--text)] hover:text-[var(--accent)]'
                 }`}
               >
@@ -123,7 +123,7 @@ export function Hero() {
             <p
               hidden={audience !== 'research'}
               data-testid="summary-research"
-              className="text-step-17 text-[var(--text)] m-0"
+              className="text-step-17 text-[var(--text)] m-0 leading-relaxed"
               suppressHydrationWarning
             >
               {t('researchSummary')}
@@ -131,7 +131,7 @@ export function Hero() {
             <p
               hidden={audience !== 'industry'}
               data-testid="summary-industry"
-              className="text-step-17 text-[var(--text)] m-0"
+              className="text-step-17 text-[var(--text)] m-0 leading-relaxed"
               suppressHydrationWarning
             >
               {t('industrySummary')}
@@ -139,11 +139,11 @@ export function Hero() {
           </div>
 
           {/* Highlight points (ordered by selected audience) */}
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-step-13 text-[var(--muted)]">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-step-13 text-[var(--muted)]">
             {activeAudienceData.highlights.map((item, idx) => (
               <React.Fragment key={item}>
                 {idx > 0 && <span aria-hidden="true">·</span>}
-                <span>{item}</span>
+                <span className="hover:text-[var(--text)] transition-colors duration-150">{item}</span>
               </React.Fragment>
             ))}
           </div>
@@ -153,9 +153,9 @@ export function Hero() {
             <a
               href={activeAudienceData.primaryCtaHref}
               download
-              className="inline-flex items-center gap-2 h-11 px-5 rounded-[6px] bg-[var(--accent)] text-[var(--accent-contrast)] font-medium text-step-15 hover:opacity-95 transition-opacity whitespace-nowrap"
+              className="btn-interactive group inline-flex items-center gap-2 h-11 px-5 rounded-[6px] bg-[var(--accent)] text-[var(--accent-contrast)] font-medium text-step-15 hover:opacity-95 whitespace-nowrap"
             >
-              <Download className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <Download className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-y-0.5" aria-hidden="true" />
               <span>
                 {audience === 'research'
                   ? t('downloadAcademicCv')
@@ -165,9 +165,9 @@ export function Hero() {
 
             <a
               href={`mailto:${profile.emailPrimary}`}
-              className="inline-flex items-center gap-2 h-11 px-5 rounded-[6px] border border-[var(--border)] bg-transparent text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium text-step-15 transition-colors whitespace-nowrap"
+              className="btn-interactive group inline-flex items-center gap-2 h-11 px-5 rounded-[6px] border border-[var(--border)] bg-transparent text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium text-step-15 whitespace-nowrap"
             >
-              <Mail className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <Mail className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
               <span>{t('emailMe')}</span>
             </a>
           </div>
@@ -178,7 +178,7 @@ export function Hero() {
               href={profile.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-medium text-[var(--accent)] hover:underline whitespace-nowrap"
+              className="inline-flex items-center gap-2 font-medium text-[var(--accent)] hover:underline whitespace-nowrap transition-transform duration-150 hover:-translate-y-0.5"
             >
               <GitHubIcon size={18} />
               <span dir="ltr">{profile.githubHandle}</span>
@@ -188,7 +188,7 @@ export function Hero() {
               href={profile.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap transition-transform duration-150 hover:-translate-y-0.5"
             >
               <LinkedInIcon size={17} />
               <span>LinkedIn</span>
@@ -199,7 +199,7 @@ export function Hero() {
                 href={profile.scholarUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap transition-transform duration-150 hover:-translate-y-0.5"
               >
                 <ScholarIcon size={17} />
                 <span>Google Scholar</span>
@@ -211,7 +211,7 @@ export function Hero() {
                 href={profile.researchgateUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap transition-transform duration-150 hover:-translate-y-0.5"
               >
                 <ResearchGateIcon size={17} />
                 <span>ResearchGate</span>
@@ -222,7 +222,7 @@ export function Hero() {
               href={profile.huggingfaceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap transition-transform duration-150 hover:-translate-y-0.5"
             >
               <HuggingFaceIcon size={17} />
               <span>Hugging Face</span>

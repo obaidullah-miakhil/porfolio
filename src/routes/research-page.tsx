@@ -74,19 +74,26 @@ export default async function ResearchPage({
           </h2>
 
           <div className="space-y-5">
-            {profile.publications.map((pub) => (
+            {profile.publications.map((pub, idx) => (
               <article
                 key={pub.id}
-                className="p-6 sm:p-8 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-4"
+                className={`card-interactive group p-6 sm:p-8 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-4 ${
+                  idx === 0
+                    ? 'border-s-4 border-s-[var(--accent)]'
+                    : 'border-s-2 border-s-[var(--border)]'
+                }`}
               >
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-[4px] text-step-13 font-medium border border-[var(--accent)] text-[var(--accent)]">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[4px] text-step-13 font-medium border border-[var(--accent)] text-[var(--accent)]">
+                    {idx === 0 && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] pulse-dot inline-block" aria-hidden="true" />
+                    )}
                     <bdi>{pub.status}</bdi>
                   </span>
                   {pub.badges?.map((badge) => (
                     <span
                       key={badge}
-                      className="px-2.5 py-0.5 rounded-[4px] text-step-13 border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
+                      className="tag-pill px-2.5 py-0.5 rounded-[4px] text-step-13 border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
                     >
                       <bdi>{badge}</bdi>
                     </span>
@@ -96,13 +103,13 @@ export default async function ResearchPage({
                   </span>
                 </div>
 
-                <h3 className="text-step-22 font-bold text-[var(--text)]">
+                <h3 className="text-step-22 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-200">
                   {pub.url ? (
                     <a
                       href={pub.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="hover:text-[var(--accent)] hover:underline transition-colors"
+                      className="hover:underline"
                     >
                       <bdi>{pub.title}</bdi>
                     </a>
@@ -113,7 +120,7 @@ export default async function ResearchPage({
 
                 <p className="text-step-15 text-[var(--muted)]">
                   <bdi>
-                    {pub.authors.map((author, idx) => {
+                    {pub.authors.map((author, authorIdx) => {
                       const isMe = author.includes('Miakhil');
                       return (
                         <span key={author}>
@@ -124,7 +131,7 @@ export default async function ResearchPage({
                           ) : (
                             author
                           )}
-                          {idx < pub.authors.length - 1 ? ', ' : ''}
+                          {authorIdx < pub.authors.length - 1 ? ', ' : ''}
                         </span>
                       );
                     })}
@@ -145,7 +152,7 @@ export default async function ResearchPage({
                 </p>
 
                 {pub.summary && (
-                  <p className="text-step-15 text-[var(--text)] max-w-[65ch]">
+                  <p className="text-step-15 text-[var(--text)] max-w-[65ch] leading-relaxed">
                     <bdi>{pub.summary}</bdi>
                   </p>
                 )}
@@ -158,7 +165,7 @@ export default async function ResearchPage({
                     {pub.keywords.map((kw) => (
                       <span
                         key={kw}
-                        className="text-step-13 px-2 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
+                        className="tag-pill text-step-13 px-2 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
                       >
                         <bdi>{kw}</bdi>
                       </span>
@@ -172,17 +179,17 @@ export default async function ResearchPage({
                       href={pub.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)] hover:underline"
+                      className="group/btn inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)] hover:underline"
                     >
                       <span>{tPub('readPaper')}</span>
-                      <ExternalLink className="w-4 h-4" />
+                      <ExternalLink className="w-4 h-4 transition-transform duration-200 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 rtl-flip" />
                     </a>
                     {pub.doi && (
                       <a
                         href={`https://doi.org/${pub.doi}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-step-13 text-[var(--muted)] hover:text-[var(--accent)] hover:underline"
+                        className="text-step-13 text-[var(--muted)] hover:text-[var(--accent)] hover:underline transition-colors duration-150"
                       >
                         <bdi>DOI: {pub.doi}</bdi>
                       </a>
@@ -209,11 +216,11 @@ export default async function ResearchPage({
             {profile.researchProjects.map((proj) => (
               <article
                 key={proj.id}
-                className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-4"
+                className="card-interactive group p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-4"
               >
                 <div className="space-y-2">
                   <div className="flex items-baseline justify-between gap-2">
-                    <h3 className="text-step-22 font-bold text-[var(--text)]">
+                    <h3 className="text-step-22 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-200">
                       <bdi>{proj.title}</bdi>
                     </h3>
                     <span className="text-step-13 text-[var(--muted)] shrink-0">
@@ -225,7 +232,7 @@ export default async function ResearchPage({
                       {tRes('supervisorLabel')} <bdi>{proj.supervisor}</bdi>
                     </p>
                   )}
-                  <p className="text-step-15 text-[var(--text)]">
+                  <p className="text-step-15 text-[var(--text)] leading-relaxed">
                     <bdi>{proj.description}</bdi>
                   </p>
                 </div>
@@ -234,7 +241,7 @@ export default async function ResearchPage({
                   {proj.metricsOrMethods.map((m) => (
                     <span
                       key={m}
-                      className="text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
+                      className="tag-pill text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
                     >
                       <bdi>{m}</bdi>
                     </span>

@@ -50,7 +50,7 @@ export default async function ProjectsPage({
 
       {/* GitHub Profile Banner */}
       <Reveal>
-        <div className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-wrap items-center justify-between gap-4">
+        <div className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
               <GitHubIcon size={20} className="text-[var(--text)]" />
@@ -70,10 +70,10 @@ export default async function ProjectsPage({
             href={profile.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[6px] bg-[var(--accent)] text-white text-step-15 font-medium hover:opacity-95 transition-opacity"
+            className="btn-interactive group inline-flex items-center gap-2 px-4 py-2.5 rounded-[6px] bg-[var(--accent)] text-white text-step-15 font-medium hover:opacity-95"
           >
             <span>{tProjects('viewGithubProfile')}</span>
-            <ExternalLink className="w-4 h-4" />
+            <ExternalLink className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl-flip" />
           </a>
         </div>
       </Reveal>

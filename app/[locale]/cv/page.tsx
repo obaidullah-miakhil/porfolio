@@ -66,18 +66,18 @@ export default async function CvPage({
             <a
               href={profile.academicCvPath}
               download
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[6px] bg-[var(--accent)] text-white text-step-15 font-medium hover:opacity-95 transition-opacity"
+              className="btn-interactive group inline-flex items-center gap-2 px-4 py-2.5 rounded-[6px] bg-[var(--accent)] text-white text-step-15 font-medium hover:opacity-95"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-4 h-4 transition-transform duration-200 group-hover:translate-y-0.5" />
               <span>{tHero('downloadAcademicCv')}</span>
             </a>
 
             <a
               href={profile.resumePath}
               download
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] text-step-15 font-medium hover:border-[var(--accent)] transition-colors"
+              className="btn-interactive group inline-flex items-center gap-2 px-4 py-2.5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] text-step-15 font-medium hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-4 h-4 transition-transform duration-200 group-hover:translate-y-0.5" />
               <span>{tHero('downloadResume')}</span>
             </a>
 
@@ -100,7 +100,7 @@ export default async function CvPage({
             {profile.education.map((edu) => (
               <div
                 key={edu.id}
-                className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-2"
+                className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-2"
               >
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h3 className="text-step-18 font-bold text-[var(--text)]">
@@ -160,7 +160,7 @@ export default async function CvPage({
             {profile.publications.map((pub) => (
               <div
                 key={pub.id}
-                className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-2"
+                className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-2"
               >
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h3 className="text-step-18 font-bold text-[var(--text)]">
@@ -210,7 +210,7 @@ export default async function CvPage({
             {profile.experience.map((exp) => (
               <div
                 key={exp.id}
-                className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-2"
+                className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-2"
               >
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h3 className="text-step-18 font-bold text-[var(--text)]">
@@ -225,7 +225,7 @@ export default async function CvPage({
                     {exp.organisation} · {exp.location}
                   </bdi>
                 </p>
-                <ul className="space-y-1 text-step-15 text-[var(--text)] list-disc ps-5">
+                <ul className="mt-2 space-y-1 text-step-15 text-[var(--text)] list-disc ps-5">
                   {exp.points.map((pt) => (
                     <li key={pt}>
                       <bdi>{pt}</bdi>
@@ -252,7 +252,7 @@ export default async function CvPage({
             {profile.skills.map((group) => (
               <div
                 key={group.categoryKey}
-                className="p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-3"
+                className="card-interactive p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-3"
               >
                 <h3 className="text-step-15 font-bold text-[var(--text)]">
                   <bdi>{group.categoryLabel}</bdi>
@@ -261,7 +261,7 @@ export default async function CvPage({
                   {group.items.map((item) => (
                     <span
                       key={item}
-                      className="text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
+                      className="tag-pill text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
                     >
                       <bdi>{item}</bdi>
                     </span>
@@ -277,7 +277,7 @@ export default async function CvPage({
       <Reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Awards */}
-          <section className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-3">
+          <section className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-3">
             <h2 className="text-step-18 font-bold text-[var(--text)] border-b border-[var(--border)] pb-2">
               {tSections('awards')}
             </h2>
@@ -301,7 +301,7 @@ export default async function CvPage({
           </section>
 
           {/* Conferences & Workshops */}
-          <section className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-3">
+          <section className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-3">
             <h2 className="text-step-18 font-bold text-[var(--text)] border-b border-[var(--border)] pb-2">
               {tSections('talks')}
             </h2>
@@ -322,7 +322,7 @@ export default async function CvPage({
           </section>
 
           {/* Certifications */}
-          <section className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-3">
+          <section className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-3">
             <h2 className="text-step-18 font-bold text-[var(--text)] border-b border-[var(--border)] pb-2">
               {tSections('certifications')}
             </h2>

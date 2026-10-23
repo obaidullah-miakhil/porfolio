@@ -52,9 +52,9 @@ export function ContactSection() {
           <p className="text-step-17 text-[var(--muted)] m-0">{t('lead')}</p>
         </div>
 
-        <div className="border border-[var(--border)] rounded-[6px] bg-[var(--surface)] divide-y divide-[var(--border)]">
+        <div className="border border-[var(--border)] rounded-[6px] bg-[var(--surface)] divide-y divide-[var(--border)] overflow-hidden">
           {/* Primary email */}
-          <div className="p-4 sm:px-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="p-4 sm:px-6 flex flex-wrap items-center justify-between gap-3 hover:bg-[var(--bg)]/60 transition-colors duration-200">
             <div className="flex items-center gap-3 min-w-0">
               <Mail
                 className="w-4 h-4 text-[var(--muted)] shrink-0"
@@ -75,12 +75,12 @@ export function ContactSection() {
               type="button"
               onClick={() => copyText('primary', profile.emailPrimary)}
               aria-label={`${t('copyEmail')} (${profile.emailPrimary})`}
-              className="inline-flex items-center gap-1.5 h-8 px-3 rounded-[6px] border border-[var(--border)] text-step-13 text-[var(--text)] hover:border-[var(--accent)] transition-colors cursor-pointer shrink-0"
+              className="btn-interactive inline-flex items-center gap-1.5 h-8 px-3 rounded-[6px] border border-[var(--border)] text-step-13 text-[var(--text)] hover:border-[var(--accent)] transition-colors cursor-pointer shrink-0"
             >
               {copiedKey === 'primary' ? (
                 <>
                   <Check
-                    className="w-3.5 h-3.5 text-[var(--accent)]"
+                    className="w-3.5 h-3.5 text-[var(--accent)] animate-in zoom-in-75 duration-150"
                     aria-hidden="true"
                   />
                   <span>{t('copiedEmail')}</span>
@@ -95,7 +95,7 @@ export function ContactSection() {
           </div>
 
           {/* Academic email */}
-          <div className="p-4 sm:px-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="p-4 sm:px-6 flex flex-wrap items-center justify-between gap-3 hover:bg-[var(--bg)]/60 transition-colors duration-200">
             <div className="flex items-center gap-3 min-w-0">
               <Mail
                 className="w-4 h-4 text-[var(--muted)] shrink-0"
@@ -116,12 +116,12 @@ export function ContactSection() {
               type="button"
               onClick={() => copyText('academic', profile.emailAcademic)}
               aria-label={`${t('copyEmail')} (${profile.emailAcademic})`}
-              className="inline-flex items-center gap-1.5 h-8 px-3 rounded-[6px] border border-[var(--border)] text-step-13 text-[var(--text)] hover:border-[var(--accent)] transition-colors cursor-pointer shrink-0"
+              className="btn-interactive inline-flex items-center gap-1.5 h-8 px-3 rounded-[6px] border border-[var(--border)] text-step-13 text-[var(--text)] hover:border-[var(--accent)] transition-colors cursor-pointer shrink-0"
             >
               {copiedKey === 'academic' ? (
                 <>
                   <Check
-                    className="w-3.5 h-3.5 text-[var(--accent)]"
+                    className="w-3.5 h-3.5 text-[var(--accent)] animate-in zoom-in-75 duration-150"
                     aria-hidden="true"
                   />
                   <span>{t('copiedEmail')}</span>
@@ -136,7 +136,7 @@ export function ContactSection() {
           </div>
 
           {/* WhatsApp */}
-          <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3">
+          <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3 hover:bg-[var(--bg)]/60 transition-colors duration-200">
             <WhatsAppIcon size={16} className="text-[var(--muted)] shrink-0" />
             <span className="text-step-15 text-[var(--muted)] w-32 shrink-0">
               {t('whatsappLabel')}
@@ -153,7 +153,7 @@ export function ContactSection() {
           </div>
 
           {/* GitHub */}
-          <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3">
+          <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3 hover:bg-[var(--bg)]/60 transition-colors duration-200">
             <GitHubIcon size={16} className="text-[var(--accent)] shrink-0" />
             <span className="text-step-15 text-[var(--muted)] w-32 shrink-0">
               {t('githubLabel')}
@@ -170,7 +170,7 @@ export function ContactSection() {
           </div>
 
           {/* LinkedIn */}
-          <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3">
+          <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3 hover:bg-[var(--bg)]/60 transition-colors duration-200">
             <LinkedInIcon size={16} className="text-[var(--muted)] shrink-0" />
             <span className="text-step-15 text-[var(--muted)] w-32 shrink-0">
               {t('linkedinLabel')}
@@ -187,7 +187,7 @@ export function ContactSection() {
           </div>
 
           {/* Hugging Face */}
-          <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3">
+          <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3 hover:bg-[var(--bg)]/60 transition-colors duration-200">
             <HuggingFaceIcon
               size={16}
               className="text-[var(--muted)] shrink-0"
@@ -208,7 +208,7 @@ export function ContactSection() {
 
           {/* Google Scholar */}
           {profile.scholarUrl ? (
-            <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3">
+            <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3 hover:bg-[var(--bg)]/60 transition-colors duration-200">
               <ScholarIcon size={16} className="text-[var(--muted)] shrink-0" />
               <span className="text-step-15 text-[var(--muted)] w-32 shrink-0">
                 {t('scholarLabel')}
@@ -227,7 +227,7 @@ export function ContactSection() {
 
           {/* ResearchGate */}
           {profile.researchgateUrl ? (
-            <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3">
+            <div className="p-4 sm:px-6 flex flex-wrap items-center gap-3 hover:bg-[var(--bg)]/60 transition-colors duration-200">
               <ResearchGateIcon size={16} className="text-[var(--muted)] shrink-0" />
               <span className="text-step-15 text-[var(--muted)] w-32 shrink-0">
                 ResearchGate
@@ -250,18 +250,18 @@ export function ContactSection() {
           <a
             href={profile.academicCvPath}
             download
-            className="inline-flex items-center gap-2 h-11 px-5 rounded-[6px] bg-[var(--accent)] text-[var(--accent-contrast)] font-medium text-step-15 hover:opacity-95 transition-opacity whitespace-nowrap"
+            className="btn-interactive group inline-flex items-center gap-2 h-11 px-5 rounded-[6px] bg-[var(--accent)] text-[var(--accent-contrast)] font-medium text-step-15 hover:opacity-95 whitespace-nowrap"
           >
-            <Download className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <Download className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-y-0.5" aria-hidden="true" />
             <span>{tHero('downloadAcademicCv')}</span>
           </a>
 
           <a
             href={profile.resumePath}
             download
-            className="inline-flex items-center gap-2 h-11 px-5 rounded-[6px] border border-[var(--border)] bg-transparent text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium text-step-15 transition-colors whitespace-nowrap"
+            className="btn-interactive group inline-flex items-center gap-2 h-11 px-5 rounded-[6px] border border-[var(--border)] bg-transparent text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium text-step-15 transition-colors whitespace-nowrap"
           >
-            <Download className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <Download className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-y-0.5" aria-hidden="true" />
             <span>{tHero('downloadResume')}</span>
           </a>
         </div>

@@ -65,13 +65,13 @@ export default async function HomePage({
         <Reveal>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-10 border-t border-[var(--border)]">
             <div className="lg:col-span-8 flex flex-col sm:flex-row items-start gap-6">
-              <div className="relative w-36 h-36 sm:w-44 sm:h-44 aspect-square shrink-0 rounded-[6px] border border-[var(--border)] overflow-hidden bg-[var(--surface)]">
+              <div className="group card-interactive relative w-36 h-36 sm:w-44 sm:h-44 aspect-square shrink-0 rounded-[6px] border border-[var(--border)] overflow-hidden bg-[var(--surface)]">
                 <Image
                   src={profile.profilePhoto}
                   alt={profile.profilePhotoAlt}
                   fill
                   sizes="(max-width: 640px) 144px, 176px"
-                  className="object-cover object-top"
+                  className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
                   loading="lazy"
                 />
               </div>
@@ -90,7 +90,7 @@ export default async function HomePage({
             </div>
 
             <div
-              className="lg:col-span-4 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] p-6 space-y-4 self-start"
+              className="card-interactive lg:col-span-4 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] p-6 space-y-4 self-start"
               suppressHydrationWarning
             >
               <div suppressHydrationWarning>
@@ -132,10 +132,10 @@ export default async function HomePage({
               </h2>
               <Link
                 href="/research"
-                className="inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)] hover:underline"
+                className="group inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)] hover:underline"
               >
                 <span>{tSections('allResearch')}</span>
-                <ArrowRight className="w-4 h-4 rtl-flip" />
+                <ArrowRight className="w-4 h-4 rtl-flip transition-transform duration-200 group-hover:translate-x-1" />
               </Link>
             </div>
 
@@ -143,18 +143,18 @@ export default async function HomePage({
               {profile.researchProjects.map((proj) => (
                 <article
                   key={proj.id}
-                  className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-4"
+                  className="card-interactive group p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-4"
                 >
                   <div className="space-y-2">
                     <div className="flex items-baseline justify-between gap-2">
-                      <h3 className="text-step-22 font-bold text-[var(--text)]">
+                      <h3 className="text-step-22 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-200">
                         <bdi>{proj.title}</bdi>
                       </h3>
                       <span className="text-step-13 text-[var(--muted)] shrink-0">
                         <bdi>{proj.period}</bdi>
                       </span>
                     </div>
-                    <p className="text-step-15 text-[var(--text)]">
+                    <p className="text-step-15 text-[var(--text)] leading-relaxed">
                       <bdi>{proj.description}</bdi>
                     </p>
                   </div>
@@ -163,7 +163,7 @@ export default async function HomePage({
                     {proj.metricsOrMethods.map((m) => (
                       <span
                         key={m}
-                        className="text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
+                        className="tag-pill text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
                       >
                         <bdi>{m}</bdi>
                       </span>
@@ -187,10 +187,10 @@ export default async function HomePage({
                 </h2>
                 <Link
                   href="/cv"
-                  className="inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)] hover:underline"
+                  className="group inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)] hover:underline"
                 >
                   <span>{tSections('fullCv')}</span>
-                  <ArrowRight className="w-4 h-4 rtl-flip" />
+                  <ArrowRight className="w-4 h-4 rtl-flip transition-transform duration-200 group-hover:translate-x-1" />
                 </Link>
               </div>
 
@@ -198,7 +198,7 @@ export default async function HomePage({
                 {recentExperience.map((exp) => (
                   <div
                     key={exp.id}
-                    className="p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]"
+                    className="card-interactive p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]"
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <h3 className="text-step-18 font-bold text-[var(--text)]">
@@ -229,7 +229,7 @@ export default async function HomePage({
               <h2 className="text-step-28 font-bold text-[var(--text)]">
                 {tSections('teaching')}
               </h2>
-              <div className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]">
+              <div className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]">
                 <ul className="space-y-3 text-step-15 text-[var(--text)] list-disc ps-5">
                   {profile.teachingAndService.map((item) => (
                     <li key={item}>
@@ -253,15 +253,15 @@ export default async function HomePage({
               </h2>
               <Link
                 href="/projects"
-                className="inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)] hover:underline"
+                className="group inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)] hover:underline"
               >
                 <span>{tSections('allProjects')}</span>
-                <ArrowRight className="w-4 h-4 rtl-flip" />
+                <ArrowRight className="w-4 h-4 rtl-flip transition-transform duration-200 group-hover:translate-x-1" />
               </Link>
             </div>
 
             {/* Item 1: Bordered GitHub highlight block */}
-            <div className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-wrap items-center justify-between gap-4">
+            <div className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-wrap items-center justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5">
                   <GitHubIcon size={20} className="text-[var(--text)]" />
@@ -281,10 +281,10 @@ export default async function HomePage({
                 href={profile.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[6px] bg-[var(--accent)] text-white text-step-15 font-medium hover:opacity-95 transition-opacity"
+                className="btn-interactive group inline-flex items-center gap-2 px-4 py-2.5 rounded-[6px] bg-[var(--accent)] text-white text-step-15 font-medium hover:opacity-95"
               >
                 <span>{tProjects('viewGithubProfile')}</span>
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl-flip" />
               </a>
             </div>
 
@@ -311,13 +311,13 @@ export default async function HomePage({
               {profile.education.map((edu) => (
                 <div
                   key={edu.id}
-                  className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-3"
+                  className="card-interactive group p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-3"
                 >
                   <div className="space-y-1.5">
-                    <span className="text-step-13 text-[var(--accent)] font-medium">
+                    <span className="text-step-13 text-[var(--accent)] font-semibold">
                       <bdi>{edu.dates}</bdi>
                     </span>
-                    <h3 className="text-step-18 font-bold text-[var(--text)]">
+                    <h3 className="text-step-18 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-200">
                       <bdi>{edu.degree}</bdi>
                     </h3>
                     <p className="text-step-13 text-[var(--muted)]">

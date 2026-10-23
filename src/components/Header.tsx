@@ -20,7 +20,7 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[var(--bg)] border-b border-[var(--border)]">
+    <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[var(--bg)]/85 border-b border-[var(--border)] transition-colors duration-200">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:start-2 focus:z-50 focus:px-4 focus:py-2 focus:rounded-[6px] focus:bg-[var(--accent)] focus:text-[var(--accent-contrast)] text-step-13 font-medium"
@@ -32,7 +32,7 @@ export function Header() {
         {/* Start side: wordmark */}
         <Link
           href="/"
-          className="text-step-17 font-bold text-[var(--text)] hover:text-[var(--accent)] transition-colors whitespace-nowrap shrink-0"
+          className="text-step-17 font-bold text-[var(--text)] hover:text-[var(--accent)] transition-colors duration-200 whitespace-nowrap shrink-0"
         >
           Obaidullah Miakhil
         </Link>
@@ -51,13 +51,16 @@ export function Header() {
                   key={item.href}
                   href={item.href}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`whitespace-nowrap shrink-0 transition-colors hover:text-[var(--accent)] hover:underline ${
+                  className={`relative py-1 whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-[var(--accent)] ${
                     isActive
-                      ? 'text-[var(--accent)] font-medium underline'
+                      ? 'text-[var(--accent)] font-semibold'
                       : 'text-[var(--text)]'
                   }`}
                 >
-                  {item.label}
+                  <span>{item.label}</span>
+                  {isActive ? (
+                    <span className="absolute -bottom-1 start-0 end-0 h-[2px] rounded-full bg-[var(--accent)]" />
+                  ) : null}
                 </Link>
               );
             })}
@@ -73,7 +76,7 @@ export function Header() {
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav-sheet"
               aria-label={mobileMenuOpen ? t('closeMenu') : t('menu')}
-              className="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-[6px] border border-[var(--border)] text-[var(--text)] hover:border-[var(--accent)] transition-colors cursor-pointer"
+              className="md:hidden btn-interactive inline-flex items-center justify-center w-9 h-9 rounded-[6px] border border-[var(--border)] text-[var(--text)] hover:border-[var(--accent)] transition-colors cursor-pointer"
             >
               {mobileMenuOpen ? (
                 <X className="w-4 h-4" aria-hidden="true" />
@@ -90,7 +93,7 @@ export function Header() {
         <nav
           id="mobile-nav-sheet"
           aria-label="Mobile navigation"
-          className="md:hidden w-full bg-[var(--bg)] border-b border-[var(--border)] px-4 py-4"
+          className="md:hidden w-full bg-[var(--bg)] border-b border-[var(--border)] px-4 py-4 animate-in fade-in duration-150"
         >
           <ul className="flex flex-col gap-3 m-0 p-0 list-none">
             {navItems.map((item) => {
@@ -101,9 +104,9 @@ export function Header() {
                   <Link
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`block py-2 text-step-17 ${
+                    className={`block py-2 text-step-17 transition-colors ${
                       isActive
-                        ? 'text-[var(--accent)] font-medium underline'
+                        ? 'text-[var(--accent)] font-semibold underline'
                         : 'text-[var(--text)] hover:text-[var(--accent)]'
                     }`}
                   >
