@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev -p 3000 -H 0.0.0.0",
+    "dev": "node scripts/dev.mjs",
     "prebuild": "node scripts/sync-locale-routes.mjs",
     "build": "next build && node scripts/check-no-gradients.mjs",
     "start": "next start -p 3000 -H 0.0.0.0",
