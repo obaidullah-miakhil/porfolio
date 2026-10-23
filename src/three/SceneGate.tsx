@@ -50,34 +50,13 @@ export function SceneGate({ scene }: { scene: SceneType }) {
     }
 
     let cancelled = false;
-    const win = window as Window & {
-      requestIdleCallback?: (
-        cb: () => void,
-        opts?: { timeout: number }
-      ) => number;
-      cancelIdleCallback?: (id: number) => void;
+    const timer = window.setTimeout(() => {
+      if (!cancelled) setIdleReady(true);
+    }, 80);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
     };
-
-    if (typeof win.requestIdleCallback === 'function') {
-      const id = win.requestIdleCallback(
-        () => {
-          if (!cancelled) setIdleReady(true);
-        },
-        { timeout: 1500 }
-      );
-      return () => {
-        cancelled = true;
-        win.cancelIdleCallback?.(id);
-      };
-    } else {
-      const timer = window.setTimeout(() => {
-        if (!cancelled) setIdleReady(true);
-      }, 600);
-      return () => {
-        cancelled = true;
-        window.clearTimeout(timer);
-      };
-    }
   }, []);
 
   // 2. IntersectionObserver within 200px of viewport + single-canvas coordinator
@@ -127,7 +106,7 @@ export function SceneGate({ scene }: { scene: SceneType }) {
 
   const heightClasses =
     scene === 'hero'
-      ? 'w-full h-[220px] sm:h-[280px] md:h-[340px] lg:h-[380px]'
+      ? 'w-full h-[320px] sm:h-[360px] md:h-[400px] lg:h-[430px]'
       : 'w-full h-[180px] sm:h-[220px] md:h-[260px]';
 
   return (

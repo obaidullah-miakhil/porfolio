@@ -93,9 +93,9 @@ export function WebsiteCard({ site }: { site: WebsiteProjectItem }) {
       {/* Browser chrome header bar */}
       <div className="flex items-center justify-between px-3.5 py-2 bg-[var(--bg)] border-b border-[var(--border)] select-none">
         <div className="flex items-center gap-1.5" aria-hidden="true">
-          <span className="w-2.5 h-2.5 rounded-full bg-[var(--border)] inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[var(--border)] inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[var(--border)] inline-block" />
+          <span className="w-2.5 h-2.5 rounded-full bg-rose-400/80 inline-block" />
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-400/80 inline-block" />
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80 inline-block" />
         </div>
         <span className="text-step-13 text-[var(--muted)] font-mono text-[11px] truncate max-w-[200px]" dir="ltr">
           {site.displayDomain}

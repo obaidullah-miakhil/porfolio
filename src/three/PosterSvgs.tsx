@@ -9,72 +9,76 @@ export function FacetedFormPoster() {
     >
       <svg
         viewBox="0 0 360 360"
-        className="w-[220px] h-[220px] md:w-[320px] md:h-[320px]"
+        className="w-[240px] h-[240px] md:w-[320px] md:h-[320px]"
         aria-hidden="true"
       >
-        {/* Attention Gimbal Rings (Q, K, V) */}
+        {/* Left & Right Hemisphere Cortical Lobes Silhouette */}
+        <path
+          d="M175,65 C130,65 90,95 85,150 C80,195 105,245 140,275 C160,290 175,295 175,295 C175,295 175,65 175,65 Z"
+          fill="var(--accent)"
+          fillOpacity="0.06"
+          stroke="var(--accent)"
+          strokeOpacity="0.3"
+          strokeWidth="1.2"
+          strokeDasharray="4 3"
+        />
+        <path
+          d="M185,65 C230,65 270,95 275,150 C280,195 255,245 220,275 C200,290 185,295 185,295 C185,295 185,65 185,65 Z"
+          fill="var(--accent)"
+          fillOpacity="0.06"
+          stroke="var(--accent)"
+          strokeOpacity="0.3"
+          strokeWidth="1.2"
+          strokeDasharray="4 3"
+        />
+
+        {/* Multilingual Attention Rings (Q, K, V) */}
         <ellipse
           cx="180"
           cy="180"
-          rx="140"
+          rx="155"
           ry="55"
           fill="none"
           stroke="var(--accent)"
-          strokeOpacity="0.32"
+          strokeOpacity="0.35"
           strokeWidth="1.5"
-          transform="rotate(-25 180 180)"
+          transform="rotate(-20 180 180)"
         />
         <ellipse
           cx="180"
           cy="180"
-          rx="150"
-          ry="60"
+          rx="145"
+          ry="65"
           fill="none"
           stroke="var(--accent)"
-          strokeOpacity="0.25"
+          strokeOpacity="0.22"
           strokeWidth="1.2"
-          transform="rotate(45 180 180)"
-        />
-        <ellipse
-          cx="180"
-          cy="180"
-          rx="130"
-          ry="80"
-          fill="none"
-          stroke="var(--accent)"
-          strokeOpacity="0.2"
-          strokeWidth="1"
-          transform="rotate(85 180 180)"
+          transform="rotate(40 180 180)"
         />
 
-        {/* Synaptic connection network lines */}
-        <g stroke="var(--accent)" strokeOpacity="0.28" strokeWidth="1">
-          <line x1="180" y1="180" x2="110" y2="130" />
-          <line x1="180" y1="180" x2="250" y2="130" />
-          <line x1="180" y1="180" x2="140" y2="240" />
-          <line x1="180" y1="180" x2="220" y2="240" />
-          <line x1="180" y1="180" x2="90" y2="190" />
-          <line x1="180" y1="180" x2="270" y2="190" />
-          <line x1="180" y1="180" x2="180" y2="90" />
-          <line x1="180" y1="180" x2="180" y2="270" />
+        {/* Synaptic Pathway Network */}
+        <g stroke="var(--accent)" strokeOpacity="0.32" strokeWidth="1">
+          {/* Corpus Callosum Cross-Hemisphere Bridge */}
+          <line x1="140" y1="160" x2="220" y2="160" strokeWidth="1.8" strokeOpacity="0.5" />
+          <line x1="145" y1="190" x2="215" y2="190" strokeWidth="1.8" strokeOpacity="0.5" />
 
-          <line x1="110" y1="130" x2="180" y2="90" />
-          <line x1="250" y1="130" x2="180" y2="90" />
-          <line x1="110" y1="130" x2="90" y2="190" />
-          <line x1="250" y1="130" x2="270" y2="190" />
-          <line x1="90" y1="190" x2="140" y2="240" />
-          <line x1="270" y1="190" x2="220" y2="240" />
-          <line x1="140" y1="240" x2="180" y2="270" />
-          <line x1="220" y1="240" x2="180" y2="270" />
+          {/* Left Hemisphere Synapses */}
+          <line x1="175" y1="110" x2="130" y2="115" />
+          <line x1="130" y1="115" x2="105" y2="155" />
+          <line x1="105" y1="155" x2="120" y2="210" />
+          <line x1="120" y1="210" x2="155" y2="255" />
+          <line x1="130" y1="115" x2="140" y2="160" />
+          <line x1="105" y1="155" x2="145" y2="190" />
+          <line x1="140" y1="160" x2="120" y2="210" />
 
-          <line x1="70" y1="110" x2="110" y2="130" />
-          <line x1="290" y1="110" x2="250" y2="130" />
-          <line x1="55" y1="170" x2="90" y2="190" />
-          <line x1="305" y1="170" x2="270" y2="190" />
-          <line x1="100" y1="285" x2="140" y2="240" />
-          <line x1="260" y1="285" x2="220" y2="240" />
-          <line x1="180" y1="50" x2="180" y2="90" />
-          <line x1="180" y1="310" x2="180" y2="270" />
+          {/* Right Hemisphere Synapses */}
+          <line x1="185" y1="110" x2="230" y2="115" />
+          <line x1="230" y1="115" x2="255" y2="155" />
+          <line x1="255" y1="155" x2="240" y2="210" />
+          <line x1="240" y1="210" x2="205" y2="255" />
+          <line x1="230" y1="115" x2="220" y2="160" />
+          <line x1="255" y1="155" x2="215" y2="190" />
+          <line x1="220" y1="160" x2="240" y2="210" />
         </g>
 
         {/* Central Latent Core */}
@@ -87,27 +91,24 @@ export function FacetedFormPoster() {
             strokeOpacity="0.3"
             strokeWidth="1.2"
           />
-          <polygon
-            points="180,158 198,170 198,190 180,202 162,190 162,170"
-            fill="var(--accent-contrast)"
-            fillOpacity="0.3"
-          />
         </g>
 
-        {/* Neural Nodes / Token Embeddings */}
+        {/* Cortical Neural Nodes & Focal ICH cluster */}
         <g fill="var(--accent)">
-          <circle cx="180" cy="90" r="4.5" />
-          <circle cx="110" cy="130" r="4.5" />
-          <circle cx="250" cy="130" r="4.5" />
-          <circle cx="90" cy="190" r="4.5" />
-          <circle cx="270" cy="190" r="4.5" />
-          <circle cx="140" cy="240" r="4.5" />
-          <circle cx="220" cy="240" r="4.5" />
-          <circle cx="180" cy="270" r="4.5" />
+          <circle cx="175" cy="110" r="4.5" />
+          <circle cx="185" cy="110" r="4.5" />
+          <circle cx="130" cy="115" r="4.5" />
+          <circle cx="230" cy="115" r="4.5" />
+          <circle cx="105" cy="155" r="4.5" />
+          <circle cx="120" cy="210" r="4.5" />
+          <circle cx="155" cy="255" r="4.5" />
+          <circle cx="205" cy="255" r="4.5" />
 
-          {/* Outer constellation nodes */}
-          <circle cx="70" cy="110" r="3.5" fillOpacity="0.75" />
-          <circle cx="290" cy="110" r="3.5" fillOpacity="0.75" />
+          {/* Focal ICH area (luminous cyan) */}
+          <circle cx="255" cy="155" r="6" fill="#38BDF8" />
+          <circle cx="240" cy="210" r="5" fill="#38BDF8" fillOpacity="0.8" />
+          <circle cx="248" cy="180" r="4" fill="#38BDF8" fillOpacity="0.6" />
+
           <circle cx="55" cy="170" r="3.5" fillOpacity="0.75" />
           <circle cx="305" cy="170" r="3.5" fillOpacity="0.75" />
           <circle cx="100" cy="285" r="3.5" fillOpacity="0.75" />

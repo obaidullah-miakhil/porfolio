@@ -102,15 +102,15 @@ export function shouldSkipWebGL(): boolean {
     return true;
   }
 
-  // 3. Low device memory (<= 4 GB)
-  if (typeof nav.deviceMemory === 'number' && nav.deviceMemory <= 4) {
+  // 3. Ultra-low device memory (< 2 GB)
+  if (typeof nav.deviceMemory === 'number' && nav.deviceMemory < 2) {
     return true;
   }
 
-  // 4. Low hardware concurrency (<= 4 cores)
+  // 4. Ultra-low hardware concurrency (< 2 cores)
   if (
     typeof nav.hardwareConcurrency === 'number' &&
-    nav.hardwareConcurrency <= 4
+    nav.hardwareConcurrency < 2
   ) {
     return true;
   }

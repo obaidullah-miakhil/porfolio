@@ -69,7 +69,11 @@ export function Hero() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
           {/* Start side: Typography, Audience Switch, CTAs, Links */}
           <div className="md:col-span-7 flex flex-col gap-4 text-start">
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
+            <div className="inline-flex items-center gap-2 self-start px-2.5 py-1 rounded-[4px] border border-[var(--border)] bg-[var(--surface)] text-[11px] font-mono text-[var(--accent)] shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 pulse-dot inline-block" aria-hidden="true" />
+              <span>Available for PhD (Fall 2025/2026) · Medical AI &amp; NLP</span>
+            </div>
             <h1 className="text-step-h1 font-bold tracking-tight text-[var(--text)]">
               {profile.name}
             </h1>
