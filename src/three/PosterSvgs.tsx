@@ -12,125 +12,113 @@ export function FacetedFormPoster() {
         className="w-[220px] h-[220px] md:w-[320px] md:h-[320px]"
         aria-hidden="true"
       >
-        {/* Discrete flat-shaded icosahedral facets in solid --accent opacities + thin wireframe in --text */}
-        <g stroke="var(--text)" strokeOpacity="0.18" strokeWidth="1">
-          {/* Top cap facets */}
+        {/* Attention Gimbal Rings (Q, K, V) */}
+        <ellipse
+          cx="180"
+          cy="180"
+          rx="140"
+          ry="55"
+          fill="none"
+          stroke="var(--accent)"
+          strokeOpacity="0.32"
+          strokeWidth="1.5"
+          transform="rotate(-25 180 180)"
+        />
+        <ellipse
+          cx="180"
+          cy="180"
+          rx="150"
+          ry="60"
+          fill="none"
+          stroke="var(--accent)"
+          strokeOpacity="0.25"
+          strokeWidth="1.2"
+          transform="rotate(45 180 180)"
+        />
+        <ellipse
+          cx="180"
+          cy="180"
+          rx="130"
+          ry="80"
+          fill="none"
+          stroke="var(--accent)"
+          strokeOpacity="0.2"
+          strokeWidth="1"
+          transform="rotate(85 180 180)"
+        />
+
+        {/* Synaptic connection network lines */}
+        <g stroke="var(--accent)" strokeOpacity="0.28" strokeWidth="1">
+          <line x1="180" y1="180" x2="110" y2="130" />
+          <line x1="180" y1="180" x2="250" y2="130" />
+          <line x1="180" y1="180" x2="140" y2="240" />
+          <line x1="180" y1="180" x2="220" y2="240" />
+          <line x1="180" y1="180" x2="90" y2="190" />
+          <line x1="180" y1="180" x2="270" y2="190" />
+          <line x1="180" y1="180" x2="180" y2="90" />
+          <line x1="180" y1="180" x2="180" y2="270" />
+
+          <line x1="110" y1="130" x2="180" y2="90" />
+          <line x1="250" y1="130" x2="180" y2="90" />
+          <line x1="110" y1="130" x2="90" y2="190" />
+          <line x1="250" y1="130" x2="270" y2="190" />
+          <line x1="90" y1="190" x2="140" y2="240" />
+          <line x1="270" y1="190" x2="220" y2="240" />
+          <line x1="140" y1="240" x2="180" y2="270" />
+          <line x1="220" y1="240" x2="180" y2="270" />
+
+          <line x1="70" y1="110" x2="110" y2="130" />
+          <line x1="290" y1="110" x2="250" y2="130" />
+          <line x1="55" y1="170" x2="90" y2="190" />
+          <line x1="305" y1="170" x2="270" y2="190" />
+          <line x1="100" y1="285" x2="140" y2="240" />
+          <line x1="260" y1="285" x2="220" y2="240" />
+          <line x1="180" y1="50" x2="180" y2="90" />
+          <line x1="180" y1="310" x2="180" y2="270" />
+        </g>
+
+        {/* Central Latent Core */}
+        <g>
           <polygon
-            points="180,38 106,92 146,126"
-            fill="var(--accent)"
-            fillOpacity="0.92"
-          />
-          <polygon
-            points="180,38 146,126 214,126"
-            fill="var(--accent)"
-            fillOpacity="0.78"
-          />
-          <polygon
-            points="180,38 214,126 254,92"
-            fill="var(--accent)"
-            fillOpacity="0.64"
-          />
-          <polygon
-            points="180,38 68,128 106,92"
+            points="180,148 208,164 208,196 180,212 152,196 152,164"
             fill="var(--accent)"
             fillOpacity="0.85"
+            stroke="var(--text)"
+            strokeOpacity="0.3"
+            strokeWidth="1.2"
           />
           <polygon
-            points="180,38 254,92 292,128"
-            fill="var(--accent)"
-            fillOpacity="0.52"
+            points="180,158 198,170 198,190 180,202 162,190 162,170"
+            fill="var(--accent-contrast)"
+            fillOpacity="0.3"
           />
+        </g>
 
-          {/* Upper mid ring facets */}
-          <polygon
-            points="68,128 106,92 146,126"
-            fill="var(--accent)"
-            fillOpacity="0.74"
-          />
-          <polygon
-            points="68,128 146,126 112,196"
-            fill="var(--accent)"
-            fillOpacity="0.88"
-          />
-          <polygon
-            points="146,126 214,126 180,192"
-            fill="var(--accent)"
-            fillOpacity="0.96"
-          />
-          <polygon
-            points="146,126 180,192 112,196"
-            fill="var(--accent)"
-            fillOpacity="0.82"
-          />
-          <polygon
-            points="214,126 254,92 248,196"
-            fill="var(--accent)"
-            fillOpacity="0.58"
-          />
-          <polygon
-            points="214,126 248,196 180,192"
-            fill="var(--accent)"
-            fillOpacity="0.68"
-          />
-          <polygon
-            points="254,92 292,128 248,196"
-            fill="var(--accent)"
-            fillOpacity="0.46"
-          />
+        {/* Neural Nodes / Token Embeddings */}
+        <g fill="var(--accent)">
+          <circle cx="180" cy="90" r="4.5" />
+          <circle cx="110" cy="130" r="4.5" />
+          <circle cx="250" cy="130" r="4.5" />
+          <circle cx="90" cy="190" r="4.5" />
+          <circle cx="270" cy="190" r="4.5" />
+          <circle cx="140" cy="240" r="4.5" />
+          <circle cx="220" cy="240" r="4.5" />
+          <circle cx="180" cy="270" r="4.5" />
 
-          {/* Lower mid ring facets */}
-          <polygon
-            points="68,128 112,196 76,232"
-            fill="var(--accent)"
-            fillOpacity="0.66"
-          />
-          <polygon
-            points="112,196 180,192 144,264"
-            fill="var(--accent)"
-            fillOpacity="0.76"
-          />
-          <polygon
-            points="180,192 248,196 216,264"
-            fill="var(--accent)"
-            fillOpacity="0.56"
-          />
-          <polygon
-            points="180,192 216,264 144,264"
-            fill="var(--accent)"
-            fillOpacity="0.64"
-          />
-          <polygon
-            points="292,128 284,232 248,196"
-            fill="var(--accent)"
-            fillOpacity="0.38"
-          />
-          <polygon
-            points="76,232 112,196 144,264"
-            fill="var(--accent)"
-            fillOpacity="0.58"
-          />
-          <polygon
-            points="248,196 284,232 216,264"
-            fill="var(--accent)"
-            fillOpacity="0.44"
-          />
+          {/* Outer constellation nodes */}
+          <circle cx="70" cy="110" r="3.5" fillOpacity="0.75" />
+          <circle cx="290" cy="110" r="3.5" fillOpacity="0.75" />
+          <circle cx="55" cy="170" r="3.5" fillOpacity="0.75" />
+          <circle cx="305" cy="170" r="3.5" fillOpacity="0.75" />
+          <circle cx="100" cy="285" r="3.5" fillOpacity="0.75" />
+          <circle cx="260" cy="285" r="3.5" fillOpacity="0.75" />
+          <circle cx="180" cy="50" r="3.5" fillOpacity="0.75" />
+          <circle cx="180" cy="310" r="3.5" fillOpacity="0.75" />
 
-          {/* Bottom cap facets */}
-          <polygon
-            points="76,232 144,264 180,322"
-            fill="var(--accent)"
-            fillOpacity="0.48"
-          />
-          <polygon
-            points="144,264 216,264 180,322"
-            fill="var(--accent)"
-            fillOpacity="0.52"
-          />
-          <polygon
-            points="216,264 284,232 180,322"
-            fill="var(--accent)"
-            fillOpacity="0.34"
-          />
+          {/* Active Synaptic data packet */}
+          <circle cx="145" cy="155" r="2.8" fill="#FFFFFF" />
+          <circle cx="215" cy="155" r="2.8" fill="#FFFFFF" />
+          <circle cx="160" cy="210" r="2.8" fill="#FFFFFF" />
         </g>
       </svg>
     </div>

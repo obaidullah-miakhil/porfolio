@@ -1,177 +1,202 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { detectSoftwareWebGL, readThemeTokenColors } from '@/lib/device';
 
-const VERTEX_SHADER = /* glsl */ `
-  uniform float uTime;
-  uniform float uAmplitude;
-  varying vec3 vViewPosition;
+interface NodeData {
+  base: THREE.Vector3;
+  current: THREE.Vector3;
+  phase: number;
+  activity: number;
+}
 
-  vec4 permute(vec4 x) {
-    return mod(((x * 34.0) + 1.0) * x, 289.0);
-  }
-  vec4 taylorInvSqrt(vec4 r) {
-    return 1.79284291400159 - 0.85373472095314 * r;
-  }
+interface EdgeData {
+  startIndex: number;
+  endIndex: number;
+}
 
-  float snoise(vec3 v) {
-    const vec2 C = vec2(1.0 / 6.0, 1.0 / 3.0);
-    const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+interface SignalData {
+  edgeIndex: number;
+  progress: number;
+  speed: number;
+}
 
-    vec3 i  = floor(v + dot(v, C.yyy));
-    vec3 x0 = v - i + dot(i, C.xxx);
+const NODE_COUNT = 52;
+const MAX_EDGE_DIST = 1.05;
+const MIN_EDGE_DIST = 0.45;
+const SPHERE_RADIUS = 1.5;
 
-    vec3 g = step(x0.yzx, x0.xyz);
-    vec3 l = 1.0 - g;
-    vec3 i1 = min(g.xyz, l.zxy);
-    vec3 i2 = max(g.xyz, l.zxy);
+function generateNeuralLattice() {
+  const nodes: NodeData[] = [];
+  const phi = Math.PI * (3 - Math.sqrt(5)); // Golden angle
 
-    vec3 x1 = x0 - i1 + 1.0 * C.xxx;
-    vec3 x2 = x0 - i2 + 2.0 * C.xxx;
-    vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
+  for (let i = 0; i < NODE_COUNT; i++) {
+    const y = 1 - (i / (NODE_COUNT - 1)) * 2;
+    const radius = Math.sqrt(1 - y * y);
+    const theta = phi * i;
 
-    i = mod(i, 289.0);
-    vec4 p = permute(
-      permute(
-        permute(i.z + vec4(0.0, i1.z, i2.z, 1.0))
-        + i.y + vec4(0.0, i1.y, i2.y, 1.0)
-      )
-      + i.x + vec4(0.0, i1.x, i2.x, 1.0)
-    );
+    // Subtle organic perturbation so it feels like a biological/artificial neural manifold
+    const jitter = 0.88 + Math.sin(i * 12.3) * 0.16;
+    const r = SPHERE_RADIUS * jitter;
 
-    float n_ = 1.0 / 7.0;
-    vec3 ns = n_ * D.wyz - D.xzx;
+    const x = Math.cos(theta) * radius * r;
+    const z = Math.sin(theta) * radius * r;
+    const pos = new THREE.Vector3(x, y * r, z);
 
-    vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-
-    vec4 x_ = floor(j * ns.z);
-    vec4 y_ = floor(j - 7.0 * x_);
-
-    vec4 x = x_ * ns.x + ns.yyyy;
-    vec4 y = y_ * ns.x + ns.yyyy;
-    vec4 h = 1.0 - abs(x) - abs(y);
-
-    vec4 b0 = vec4(x.xy, y.xy);
-    vec4 b1 = vec4(x.zw, y.zw);
-
-    vec4 s0 = floor(b0) * 2.0 + 1.0;
-    vec4 s1 = floor(b1) * 2.0 + 1.0;
-    vec4 sh = -step(h, vec4(0.0));
-
-    vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
-    vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
-
-    vec3 p0 = vec3(a0.xy, h.x);
-    vec3 p1 = vec3(a0.zw, h.y);
-    vec3 p2 = vec3(a1.xy, h.z);
-    vec3 p3 = vec3(a1.zw, h.w);
-
-    vec4 norm = taylorInvSqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));
-    p0 *= norm.x;
-    p1 *= norm.y;
-    p2 *= norm.z;
-    p3 *= norm.w;
-
-    vec4 m = max(0.6 - vec4(dot(x0, x0), dot(x1, x1), dot(x2, x2), dot(x3, x3)), 0.0);
-    m = m * m;
-    return 42.0 * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
+    nodes.push({
+      base: pos.clone(),
+      current: pos.clone(),
+      phase: (i * 0.35) % (Math.PI * 2),
+      activity: 0,
+    });
   }
 
-  void main() {
-    float n = snoise(position * 1.15 + vec3(uTime * 0.28, uTime * 0.22, -uTime * 0.19));
-    vec3 displaced = position + normal * (n * uAmplitude);
-    vec4 mvPosition = modelViewMatrix * vec4(displaced, 1.0);
-    vViewPosition = -mvPosition.xyz;
-    gl_Position = projectionMatrix * mvPosition;
+  const edges: EdgeData[] = [];
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dist = nodes[i].base.distanceTo(nodes[j].base);
+      if (dist >= MIN_EDGE_DIST && dist <= MAX_EDGE_DIST) {
+        edges.push({ startIndex: i, endIndex: j });
+      }
+    }
   }
-`;
 
-const FRAGMENT_SHADER = /* glsl */ `
-  uniform vec3 uAccentColor;
-  uniform vec3 uBgColor;
-  varying vec3 vViewPosition;
-
-  void main() {
-    vec3 fdx = dFdx(vViewPosition);
-    vec3 fdy = dFdy(vViewPosition);
-    vec3 faceNormal = normalize(cross(fdx, fdy));
-
-    vec3 lightDir = normalize(vec3(0.55, 0.75, 0.85));
-    float diff = max(dot(faceNormal, lightDir), 0.0);
-
-    // Quantize into discrete flat facet steps so each triangle has a single flat tone
-    float stepped = floor(diff * 5.0) / 5.0;
-    float shade = 0.32 + stepped * 0.68;
-
-    vec3 finalColor = mix(uBgColor, uAccentColor, shade);
-    gl_FragColor = vec4(finalColor, 1.0);
+  const signals: SignalData[] = [];
+  const signalCount = Math.min(18, edges.length);
+  for (let s = 0; s < signalCount; s++) {
+    signals.push({
+      edgeIndex: (s * 3) % edges.length,
+      progress: Math.random(),
+      speed: 0.35 + Math.random() * 0.45,
+    });
   }
-`;
 
-const WIRE_FRAGMENT_SHADER = /* glsl */ `
-  uniform vec3 uTextColor;
-  void main() {
-    gl_FragColor = vec4(uTextColor, 0.15);
-  }
-`;
+  return { nodes, edges, signals };
+}
 
-interface HeroFormMeshProps {
-  pointerRef: React.MutableRefObject<{ x: number; y: number }>;
+interface NeuralAttentionMeshProps {
+  pointerRef: React.MutableRefObject<{ x: number; y: number; isDragging: boolean; clickTrigger: number }>;
   onReady?: () => void;
   onLowFps?: () => void;
 }
 
-function HeroFormMesh({ pointerRef, onReady, onLowFps }: HeroFormMeshProps) {
+function NeuralAttentionMesh({ pointerRef, onReady, onLowFps }: NeuralAttentionMeshProps) {
   const groupRef = useRef<THREE.Group | null>(null);
+  const coreRef = useRef<THREE.Group | null>(null);
+  const ringQRef = useRef<THREE.Mesh | null>(null);
+  const ringKRef = useRef<THREE.Mesh | null>(null);
+  const ringVRef = useRef<THREE.Mesh | null>(null);
+  const nodesMeshRef = useRef<THREE.InstancedMesh | null>(null);
+  const linesGeometryRef = useRef<THREE.BufferGeometry | null>(null);
+  const signalsMeshRef = useRef<THREE.InstancedMesh | null>(null);
+
   const invalidate = useThree((s) => s.invalidate);
   const isSoftware = useMemo(() => detectSoftwareWebGL(), []);
 
-  const { geometry, solidMaterial, wireMaterial } = useMemo(() => {
-    const colors = readThemeTokenColors();
-    const geo = new THREE.IcosahedronGeometry(1.42, 4);
+  // Neural network data
+  const { nodes, edges, signals } = useMemo(() => generateNeuralLattice(), []);
 
-    const solidMat = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uAmplitude: { value: 0.22 },
-        uAccentColor: { value: new THREE.Color(colors.accent) },
-        uBgColor: { value: new THREE.Color(colors.surface) },
-      },
-      vertexShader: VERTEX_SHADER,
-      fragmentShader: FRAGMENT_SHADER,
+  // Shockwave state
+  const shockwaveRef = useRef({ radius: 99, active: false, maxRadius: 3.2 });
+  const prevTriggerRef = useRef(0);
+
+  // Rotation inertia
+  const rotationVelocityRef = useRef({ x: 0, y: 0.0025 });
+
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const tempColor = useMemo(() => new THREE.Color(), []);
+  const edgeLinePositions = useMemo(() => new Float32Array(edges.length * 2 * 3), [edges]);
+
+  // Materials & Geometries
+  const {
+    nodeGeometry,
+    nodeMaterial,
+    lineMaterial,
+    ringGeometry,
+    ringMaterial,
+    coreGeometry,
+    coreWireGeometry,
+    coreMaterial,
+    coreWireMaterial,
+    signalGeometry,
+    signalMaterial,
+  } = useMemo(() => {
+    const colors = readThemeTokenColors();
+
+    const nodeGeo = new THREE.SphereGeometry(0.048, 10, 10);
+    const nodeMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(colors.accent),
     });
 
-    const wireMat = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uAmplitude: { value: 0.222 },
-        uTextColor: { value: new THREE.Color(colors.text) },
-      },
-      vertexShader: VERTEX_SHADER,
-      fragmentShader: WIRE_FRAGMENT_SHADER,
-      wireframe: true,
+    const lineMat = new THREE.LineBasicMaterial({
+      color: new THREE.Color(colors.accent),
       transparent: true,
+      opacity: 0.28,
       depthWrite: false,
     });
 
-    return { geometry: geo, solidMaterial: solidMat, wireMaterial: wireMat };
+    const ringGeo = new THREE.TorusGeometry(2.05, 0.008, 6, 80);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(colors.accent),
+      transparent: true,
+      opacity: 0.38,
+      depthWrite: false,
+    });
+
+    const coreGeo = new THREE.IcosahedronGeometry(0.48, 1);
+    const coreMat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(colors.accent),
+      metalness: 0.2,
+      roughness: 0.4,
+      transparent: true,
+      opacity: 0.85,
+      flatShading: true,
+    });
+
+    const coreWireGeo = new THREE.IcosahedronGeometry(0.58, 1);
+    const coreWireMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(colors.text),
+      wireframe: true,
+      transparent: true,
+      opacity: 0.22,
+    });
+
+    const sigGeo = new THREE.SphereGeometry(0.038, 8, 8);
+    const sigMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color('#FFFFFF'),
+    });
+
+    return {
+      nodeGeometry: nodeGeo,
+      nodeMaterial: nodeMat,
+      lineMaterial: lineMat,
+      ringGeometry: ringGeo,
+      ringMaterial: ringMat,
+      coreGeometry: coreGeo,
+      coreWireGeometry: coreWireGeo,
+      coreMaterial: coreMat,
+      coreWireMaterial: coreWireMat,
+      signalGeometry: sigGeo,
+      signalMaterial: sigMat,
+    };
   }, []);
 
-  // Sync CSS theme variables on light/dark toggle
+  // Update theme colors when Light/Dark theme changes
   useEffect(() => {
     const syncColors = () => {
       const colors = readThemeTokenColors();
-      solidMaterial.uniforms.uAccentColor.value.set(colors.accent);
-      solidMaterial.uniforms.uBgColor.value.set(colors.surface);
-      wireMaterial.uniforms.uTextColor.value.set(colors.text);
+      const accent = new THREE.Color(colors.accent);
+      nodeMaterial.color.set(accent);
+      lineMaterial.color.set(accent);
+      ringMaterial.color.set(accent);
+      coreMaterial.color.set(accent);
+      coreWireMaterial.color.set(new THREE.Color(colors.text));
       invalidate();
     };
 
     syncColors();
-
     const observer = new MutationObserver(syncColors);
     observer.observe(document.documentElement, {
       attributes: true,
@@ -179,18 +204,38 @@ function HeroFormMesh({ pointerRef, onReady, onLowFps }: HeroFormMeshProps) {
     });
 
     return () => observer.disconnect();
-  }, [solidMaterial, wireMaterial, invalidate]);
+  }, [nodeMaterial, lineMaterial, ringMaterial, coreMaterial, coreWireMaterial, invalidate]);
 
-  // Dispose geometries and materials on unmount
+  // Clean disposal
   useEffect(() => {
     return () => {
-      geometry.dispose();
-      solidMaterial.dispose();
-      wireMaterial.dispose();
+      nodeGeometry.dispose();
+      nodeMaterial.dispose();
+      lineMaterial.dispose();
+      ringGeometry.dispose();
+      ringMaterial.dispose();
+      coreGeometry.dispose();
+      coreMaterial.dispose();
+      coreWireGeometry.dispose();
+      coreWireMaterial.dispose();
+      signalGeometry.dispose();
+      signalMaterial.dispose();
     };
-  }, [geometry, solidMaterial, wireMaterial]);
+  }, [
+    nodeGeometry,
+    nodeMaterial,
+    lineMaterial,
+    ringGeometry,
+    ringMaterial,
+    coreGeometry,
+    coreMaterial,
+    coreWireGeometry,
+    coreWireMaterial,
+    signalGeometry,
+    signalMaterial,
+  ]);
 
-  // Demand-based loop + FPS probe + visibility pause
+  // Demand loop & visibility control
   useEffect(() => {
     let active = true;
     let timerId = 0;
@@ -199,8 +244,7 @@ function HeroFormMesh({ pointerRef, onReady, onLowFps }: HeroFormMeshProps) {
     onReady?.();
 
     const scheduleNext = () => {
-      if (!active) return;
-      if (document.hidden) return;
+      if (!active || document.hidden) return;
       if (isSoftware) {
         timerId = window.setTimeout(() => {
           if (active && !document.hidden) {
@@ -219,9 +263,7 @@ function HeroFormMesh({ pointerRef, onReady, onLowFps }: HeroFormMeshProps) {
     };
 
     const onVisibility = () => {
-      if (!document.hidden && active) {
-        scheduleNext();
-      }
+      if (!document.hidden && active) scheduleNext();
     };
 
     document.addEventListener('visibilitychange', onVisibility);
@@ -235,12 +277,31 @@ function HeroFormMesh({ pointerRef, onReady, onLowFps }: HeroFormMeshProps) {
     };
   }, [invalidate, isSoftware, onReady]);
 
+  // Connect interactive drag rotation
+  useEffect(() => {
+    const onDrag = (e: Event) => {
+      const custom = e as CustomEvent<{ dx: number; dy: number }>;
+      if (!custom.detail) return;
+      const { dx, dy } = custom.detail;
+      if (groupRef.current) {
+        groupRef.current.rotation.y += dx * 0.007;
+        groupRef.current.rotation.x += dy * 0.007;
+        rotationVelocityRef.current.y = dx * 0.004;
+        rotationVelocityRef.current.x = dy * 0.004;
+        invalidate();
+      }
+    };
+    window.addEventListener('hero-3d-drag', onDrag);
+    return () => window.removeEventListener('hero-3d-drag', onDrag);
+  }, [invalidate]);
+
+  // Frame FPS check
   const frameSampleRef = useRef({ count: 0, totalDelta: 0, checked: false });
 
   useFrame((state, delta) => {
-    const clampedDelta = Math.min(delta, 0.1);
+    const clampedDelta = Math.min(delta, 0.08);
 
-    // Quick first-frames FPS probe on hardware GPUs
+    // FPS probe
     if (!isSoftware && !frameSampleRef.current.checked) {
       const sample = frameSampleRef.current;
       if (delta > 0 && delta < 0.5) {
@@ -258,48 +319,191 @@ function HeroFormMesh({ pointerRef, onReady, onLowFps }: HeroFormMeshProps) {
     }
 
     const elapsed = state.clock.getElapsedTime();
-    solidMaterial.uniforms.uTime.value = elapsed;
-    wireMaterial.uniforms.uTime.value = elapsed;
 
-    // Ease noise amplitude down as user scrolls past hero
-    const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-    const scrollFactor = Math.max(0.25, 1 - Math.min(1, scrollY / 500) * 0.75);
-    const targetAmp = 0.22 * scrollFactor;
-    solidMaterial.uniforms.uAmplitude.value = THREE.MathUtils.damp(
-      solidMaterial.uniforms.uAmplitude.value,
-      targetAmp,
-      4,
-      clampedDelta
-    );
-    wireMaterial.uniforms.uAmplitude.value =
-      solidMaterial.uniforms.uAmplitude.value + 0.002;
+    // Trigger impulse wave on user click
+    if (pointerRef.current.clickTrigger !== prevTriggerRef.current) {
+      prevTriggerRef.current = pointerRef.current.clickTrigger;
+      shockwaveRef.current.radius = 0;
+      shockwaveRef.current.active = true;
+      // Extra rotation burst
+      rotationVelocityRef.current.y += 0.015;
+    }
 
+    // Expand shockwave
+    if (shockwaveRef.current.active) {
+      shockwaveRef.current.radius += clampedDelta * 4.2;
+      if (shockwaveRef.current.radius > shockwaveRef.current.maxRadius) {
+        shockwaveRef.current.active = false;
+      }
+    }
+
+    // 1. Update Nodes Positions & Activity
+    if (nodesMeshRef.current) {
+      const shockRadius = shockwaveRef.current.radius;
+      for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+
+        // Organic respiration (neural breathing)
+        const breathe = Math.sin(elapsed * 1.6 + node.phase) * 0.06;
+        node.current.copy(node.base).multiplyScalar(1 + breathe);
+
+        // Check if shockwave hit this node
+        const distFromCenter = node.base.length();
+        if (shockwaveRef.current.active && Math.abs(distFromCenter - shockRadius) < 0.35) {
+          node.activity = 1.0;
+        } else {
+          node.activity = Math.max(0, node.activity - clampedDelta * 2.2);
+        }
+
+        const scale = 1 + node.activity * 1.5;
+        dummy.position.copy(node.current);
+        dummy.scale.set(scale, scale, scale);
+        dummy.updateMatrix();
+        nodesMeshRef.current.setMatrixAt(i, dummy.matrix);
+
+        // Highlight active nodes
+        if (node.activity > 0.05) {
+          tempColor.set('#FFFFFF').lerp(nodeMaterial.color, 1 - node.activity);
+        } else {
+          tempColor.copy(nodeMaterial.color);
+        }
+        nodesMeshRef.current.setColorAt(i, tempColor);
+      }
+      nodesMeshRef.current.instanceMatrix.needsUpdate = true;
+      if (nodesMeshRef.current.instanceColor) {
+        nodesMeshRef.current.instanceColor.needsUpdate = true;
+      }
+    }
+
+    // 2. Update Synaptic Edge Lines
+    if (linesGeometryRef.current) {
+      let ptr = 0;
+      for (let e = 0; e < edges.length; e++) {
+        const p1 = nodes[edges[e].startIndex].current;
+        const p2 = nodes[edges[e].endIndex].current;
+        edgeLinePositions[ptr++] = p1.x;
+        edgeLinePositions[ptr++] = p1.y;
+        edgeLinePositions[ptr++] = p1.z;
+        edgeLinePositions[ptr++] = p2.x;
+        edgeLinePositions[ptr++] = p2.y;
+        edgeLinePositions[ptr++] = p2.z;
+      }
+      linesGeometryRef.current.setAttribute(
+        'position',
+        new THREE.BufferAttribute(edgeLinePositions, 3)
+      );
+    }
+
+    // 3. Update Synaptic Signals (data packets traveling along edges)
+    if (signalsMeshRef.current && edges.length > 0) {
+      for (let s = 0; s < signals.length; s++) {
+        const sig = signals[s];
+        sig.progress += clampedDelta * sig.speed;
+        if (sig.progress > 1) {
+          sig.progress = 0;
+          sig.edgeIndex = Math.floor(Math.random() * edges.length);
+        }
+
+        const edge = edges[sig.edgeIndex];
+        const p1 = nodes[edge.startIndex].current;
+        const p2 = nodes[edge.endIndex].current;
+
+        dummy.position.lerpVectors(p1, p2, sig.progress);
+        const sigScale = Math.sin(sig.progress * Math.PI) * 1.1;
+        dummy.scale.set(sigScale, sigScale, sigScale);
+        dummy.updateMatrix();
+        signalsMeshRef.current.setMatrixAt(s, dummy.matrix);
+      }
+      signalsMeshRef.current.instanceMatrix.needsUpdate = true;
+    }
+
+    // 4. Rotate Multi-Head Attention Rings (Q, K, V)
+    if (ringQRef.current) {
+      ringQRef.current.rotation.x = 0.8 + elapsed * 0.18;
+      ringQRef.current.rotation.y = elapsed * 0.24;
+    }
+    if (ringKRef.current) {
+      ringKRef.current.rotation.y = 1.2 + elapsed * -0.22;
+      ringKRef.current.rotation.z = elapsed * 0.16;
+    }
+    if (ringVRef.current) {
+      ringVRef.current.rotation.x = elapsed * -0.15;
+      ringVRef.current.rotation.z = 0.5 + elapsed * 0.28;
+    }
+
+    // 5. Rotate Central Latent Core
+    if (coreRef.current) {
+      coreRef.current.rotation.y = elapsed * 0.42;
+      coreRef.current.rotation.x = Math.sin(elapsed * 0.3) * 0.25;
+      const corePulse = 1 + Math.sin(elapsed * 2.2) * 0.05 + (shockwaveRef.current.active ? 0.2 : 0);
+      coreRef.current.scale.set(corePulse, corePulse, corePulse);
+    }
+
+    // 6. 3D Cluster Rotation & Inertia Handling
     if (groupRef.current) {
-      // Slow rotation (~0.05 rad/s) + pointer parallax tilt (max 8 deg = 0.14 rad)
-      const maxTilt = 0.14;
-      const targetRotX = pointerRef.current.y * maxTilt;
-      const targetRotZ = -pointerRef.current.x * maxTilt * 0.5;
+      if (!pointerRef.current.isDragging) {
+        // Friction decay on drag release
+        rotationVelocityRef.current.x *= 0.94;
+        rotationVelocityRef.current.y *= 0.94;
 
-      groupRef.current.rotation.y += clampedDelta * 0.05;
-      groupRef.current.rotation.x = THREE.MathUtils.damp(
-        groupRef.current.rotation.x,
-        targetRotX,
-        5,
-        clampedDelta
-      );
-      groupRef.current.rotation.z = THREE.MathUtils.damp(
-        groupRef.current.rotation.z,
-        targetRotZ,
-        5,
-        clampedDelta
-      );
+        // Default ambient spin
+        if (Math.abs(rotationVelocityRef.current.y) < 0.002) {
+          rotationVelocityRef.current.y = 0.002;
+        }
+
+        groupRef.current.rotation.y += rotationVelocityRef.current.y;
+        groupRef.current.rotation.x += rotationVelocityRef.current.x;
+
+        // Parallax tilt towards pointer
+        const maxTilt = 0.16;
+        const targetTiltX = pointerRef.current.y * maxTilt;
+        const targetTiltZ = -pointerRef.current.x * maxTilt * 0.6;
+
+        groupRef.current.rotation.x = THREE.MathUtils.damp(
+          groupRef.current.rotation.x,
+          targetTiltX,
+          3,
+          clampedDelta
+        );
+        groupRef.current.rotation.z = THREE.MathUtils.damp(
+          groupRef.current.rotation.z,
+          targetTiltZ,
+          3,
+          clampedDelta
+        );
+      }
     }
   });
 
   return (
     <group ref={groupRef}>
-      <mesh geometry={geometry} material={solidMaterial} />
-      <mesh geometry={geometry} material={wireMaterial} />
+      {/* Central Latent Core & Wireframe Cage */}
+      <group ref={coreRef}>
+        <mesh geometry={coreGeometry} material={coreMaterial} />
+        <mesh geometry={coreWireGeometry} material={coreWireMaterial} />
+      </group>
+
+      {/* Multi-Head Attention Orbital Rings (Q, K, V) */}
+      <mesh ref={ringQRef} geometry={ringGeometry} material={ringMaterial} />
+      <mesh ref={ringKRef} geometry={ringGeometry} material={ringMaterial} />
+      <mesh ref={ringVRef} geometry={ringGeometry} material={ringMaterial} />
+
+      {/* Synaptic Connection Lines */}
+      <lineSegments material={lineMaterial}>
+        <bufferGeometry ref={linesGeometryRef} />
+      </lineSegments>
+
+      {/* Neural Embedding Nodes */}
+      <instancedMesh
+        ref={nodesMeshRef}
+        args={[nodeGeometry, nodeMaterial, nodes.length]}
+      />
+
+      {/* Synaptic Data Signals */}
+      <instancedMesh
+        ref={signalsMeshRef}
+        args={[signalGeometry, signalMaterial, signals.length]}
+      />
     </group>
   );
 }
@@ -311,36 +515,88 @@ export default function HeroForm({
   onReady?: () => void;
   onLowFps?: () => void;
 }) {
-  const pointerRef = useRef({ x: 0, y: 0 });
-  const antialias =
-    typeof window !== 'undefined' && window.devicePixelRatio === 1;
+  const pointerRef = useRef({ x: 0, y: 0, isDragging: false, clickTrigger: 0 });
+  const dragStartRef = useRef({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const antialias = typeof window !== 'undefined' && window.devicePixelRatio === 1;
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    pointerRef.current.isDragging = true;
+    dragStartRef.current = { x: e.clientX, y: e.clientY };
+    setIsDragging(true);
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     if (rect.width === 0 || rect.height === 0) return;
+
     const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
     pointerRef.current.x = Math.max(-1, Math.min(1, nx));
     pointerRef.current.y = Math.max(-1, Math.min(1, ny));
+
+    // Handle 360 drag rotation
+    if (pointerRef.current.isDragging) {
+      const dx = e.clientX - dragStartRef.current.x;
+      const dy = e.clientY - dragStartRef.current.y;
+      dragStartRef.current = { x: e.clientX, y: e.clientY };
+
+      // Apply direct interactive orbit
+      window.dispatchEvent(
+        new CustomEvent('hero-3d-drag', { detail: { dx, dy } })
+      );
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const totalDist = Math.hypot(
+      e.clientX - dragStartRef.current.x,
+      e.clientY - dragStartRef.current.y
+    );
+    // If it was a quick click, trigger synaptic pulse
+    if (totalDist < 5) {
+      pointerRef.current.clickTrigger += 1;
+    }
+
+    pointerRef.current.isDragging = false;
+    setIsDragging(false);
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {}
   };
 
   const handlePointerLeave = () => {
     pointerRef.current.x = 0;
     pointerRef.current.y = 0;
+    pointerRef.current.isDragging = false;
+    setIsHovered(false);
+    setIsDragging(false);
+  };
+
+  const handlePointerEnter = () => {
+    setIsHovered(true);
   };
 
   return (
     <div
+      onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       aria-hidden="true"
       data-testid="hero-3d-canvas-wrapper"
-      className="w-full h-full"
+      className={`relative w-full h-full select-none ${
+        isDragging ? 'cursor-grabbing' : 'cursor-grab'
+      }`}
     >
       <Canvas
         dpr={[1, 1.5]}
         frameloop="demand"
-        camera={{ position: [0, 0, 4.65], fov: 40 }}
+        camera={{ position: [0, 0, 5.0], fov: 42 }}
         gl={{
           antialias,
           powerPreference: 'low-power',
@@ -349,12 +605,24 @@ export default function HeroForm({
         aria-hidden="true"
         tabIndex={-1}
       >
-        <HeroFormMesh
+        <ambientLight intensity={0.75} />
+        <directionalLight position={[4, 5, 4]} intensity={1.2} />
+        <NeuralAttentionMesh
           pointerRef={pointerRef}
           onReady={onReady}
           onLowFps={onLowFps}
         />
       </Canvas>
+
+      {/* Interactive Micro-badge indicator */}
+      <div
+        className={`absolute bottom-2.5 end-3 pointer-events-none transition-opacity duration-300 flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] text-[11px] font-mono text-[var(--muted)] shadow-xs ${
+          isHovered ? 'opacity-100' : 'opacity-65'
+        }`}
+      >
+        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] pulse-dot inline-block" aria-hidden="true" />
+        <span>3D Neural Attention Lattice · Drag to rotate · Click to pulse</span>
+      </div>
     </div>
   );
 }
