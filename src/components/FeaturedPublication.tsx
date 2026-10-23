@@ -32,10 +32,11 @@ export function FeaturedPublication() {
   return (
     <section
       aria-labelledby="featured-publication-heading"
-      className="py-12 md:py-16 border-b border-[var(--border)]"
+      className="py-10 sm:py-12 md:py-16 border-b border-[var(--border)]"
     >
-      <div className="p-6 sm:p-8 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col gap-4">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8">
+        <div className="p-5 sm:p-7 md:p-8 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
           <span className="text-step-13 font-medium text-[var(--accent)]">
             {t('eyebrow')}
           </span>
@@ -116,6 +117,7 @@ export function FeaturedPublication() {
           </button>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
   );
 }

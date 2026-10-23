@@ -50,18 +50,30 @@ html {
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-vazirmatn), sans-serif;
-  font-size: 16px;
+  font-size: 15px; /* Mobile base */
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
 }
 
+@media (min-width: 640px) {
+  html {
+    font-size: 15.5px; /* Tablet base */
+  }
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 16px; /* Desktop base */
+  }
+}
+
 body {
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-vazirmatn), sans-serif;
-  font-size: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);
+  font-size: 1rem;
   line-height: 1.6;
   margin: 0;
   min-height: 100vh;
@@ -80,35 +92,157 @@ h6 {
   margin: 0;
 }
 
+/* ==========================================================================
+   Responsive Typography System (Mobile <640px | Tablet 640-1024px | Desktop >1024px)
+   ========================================================================== */
+
+/* Step 13: Meta labels, tags, captions */
 .text-step-13 {
-  font-size: 0.8125rem;
-  line-height: 1.5;
+  font-size: 0.75rem; /* 12px mobile */
+  line-height: 1.45;
+}
+@media (min-width: 640px) {
+  .text-step-13 {
+    font-size: 0.8125rem; /* 13px tablet & desktop */
+    line-height: 1.5;
+  }
 }
 
+/* Step 15: Standard body text */
 .text-step-15 {
-  font-size: 0.9375rem;
+  font-size: 0.875rem; /* 14px mobile */
   line-height: 1.55;
 }
-
-.text-step-17 {
-  font-size: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);
-  line-height: 1.6;
+@media (min-width: 640px) {
+  .text-step-15 {
+    font-size: 0.90625rem; /* 14.5px tablet */
+    line-height: 1.58;
+  }
+}
+@media (min-width: 1024px) {
+  .text-step-15 {
+    font-size: 0.9375rem; /* 15px desktop */
+    line-height: 1.6;
+  }
 }
 
+/* Step 17: Lead summaries & intros */
+.text-step-17 {
+  font-size: 0.9375rem; /* 15px mobile */
+  line-height: 1.55;
+}
+@media (min-width: 640px) {
+  .text-step-17 {
+    font-size: 1rem; /* 16px tablet */
+    line-height: 1.6;
+  }
+}
+@media (min-width: 1024px) {
+  .text-step-17 {
+    font-size: 1.0625rem; /* 17px desktop */
+    line-height: 1.65;
+  }
+}
+
+/* Step 18: Card subheadings & credentials */
+.text-step-18 {
+  font-size: 1rem; /* 16px mobile */
+  line-height: 1.35;
+}
+@media (min-width: 640px) {
+  .text-step-18 {
+    font-size: 1.0625rem; /* 17px tablet */
+  }
+}
+@media (min-width: 1024px) {
+  .text-step-18 {
+    font-size: 1.125rem; /* 18px desktop */
+  }
+}
+
+/* Step 22: Card titles & project names */
 .text-step-22 {
-  font-size: clamp(1.25rem, 1.15rem + 0.4vw, 1.375rem);
+  font-size: clamp(1.0625rem, 0.98rem + 0.35vw, 1.1875rem); /* 17-19px mobile */
   line-height: 1.25;
 }
+@media (min-width: 640px) {
+  .text-step-22 {
+    font-size: clamp(1.1875rem, 1.05rem + 0.3vw, 1.3125rem); /* 19-21px tablet */
+  }
+}
+@media (min-width: 1024px) {
+  .text-step-22 {
+    font-size: clamp(1.3125rem, 1.18rem + 0.25vw, 1.4375rem); /* 21-23px desktop */
+  }
+}
 
+/* Step 28: Section headings (About, Research, Experience, Education) */
+.text-step-28 {
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.4rem); /* 20-22.4px mobile */
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 640px) {
+  .text-step-28 {
+    font-size: clamp(1.4rem, 1.25rem + 0.5vw, 1.625rem); /* 22.4-26px tablet */
+  }
+}
+@media (min-width: 1024px) {
+  .text-step-28 {
+    font-size: clamp(1.625rem, 1.45rem + 0.4vw, 1.875rem); /* 26-30px desktop */
+  }
+}
+
+/* Step 32: Contact & major section titles */
 .text-step-32 {
-  font-size: clamp(1.625rem, 1.4rem + 1vw, 2rem);
-  line-height: 1.15;
+  font-size: clamp(1.375rem, 1.15rem + 1vw, 1.625rem); /* 22-26px mobile */
+  line-height: 1.2;
+}
+@media (min-width: 640px) {
+  .text-step-32 {
+    font-size: clamp(1.625rem, 1.35rem + 0.8vw, 1.875rem); /* 26-30px tablet */
+  }
+}
+@media (min-width: 1024px) {
+  .text-step-32 {
+    font-size: clamp(1.875rem, 1.5rem + 0.6vw, 2.125rem); /* 30-34px desktop */
+  }
 }
 
-.text-step-h1 {
-  font-size: clamp(3rem, 2.2rem + 3.5vw, 4rem);
+/* Step 36: Major Page Titles (/research, /projects, /cv) */
+.text-step-36 {
+  font-size: clamp(1.5rem, 1.25rem + 1.2vw, 1.75rem); /* 24-28px mobile */
   line-height: 1.15;
+  letter-spacing: -0.015em;
 }
+@media (min-width: 640px) {
+  .text-step-36 {
+    font-size: clamp(1.75rem, 1.45rem + 1vw, 2.125rem); /* 28-34px tablet */
+  }
+}
+@media (min-width: 1024px) {
+  .text-step-36 {
+    font-size: clamp(2.125rem, 1.75rem + 0.8vw, 2.375rem); /* 34-38px desktop */
+  }
+}
+
+/* Step H1: Hero Main Name */
+.text-step-h1 {
+  font-size: clamp(1.875rem, 1.3rem + 2.8vw, 2.375rem); /* 30-38px mobile */
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+@media (min-width: 640px) {
+  .text-step-h1 {
+    font-size: clamp(2.375rem, 1.8rem + 2vw, 3.125rem); /* 38-50px tablet */
+  }
+}
+@media (min-width: 1024px) {
+  .text-step-h1 {
+    font-size: clamp(3.125rem, 2.2rem + 1.5vw, 3.875rem); /* 50-62px desktop */
+  }
+}
+
 
 /* Focus Ring Accessibility */
 a:focus-visible,

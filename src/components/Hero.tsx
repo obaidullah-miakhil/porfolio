@@ -62,12 +62,13 @@ export function Hero() {
 
   return (
     <section
-      className="py-10 md:py-14 border-b border-[var(--border)]"
+      className="py-8 sm:py-10 md:py-14 border-b border-[var(--border)]"
       suppressHydrationWarning
     >
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
-        {/* Start side: Typography, Audience Switch, CTAs, Links */}
-        <div className="md:col-span-7 flex flex-col gap-4 text-start">
+      <div className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
+          {/* Start side: Typography, Audience Switch, CTAs, Links */}
+          <div className="md:col-span-7 flex flex-col gap-4 text-start">
           <div className="flex flex-col gap-1.5">
             <h1 className="text-step-h1 font-bold tracking-tight text-[var(--text)]">
               {profile.name}
@@ -229,9 +230,10 @@ export function Hero() {
           </div>
         </div>
 
-        {/* End side: 3D Hero Object / Poster */}
-        <div className="md:col-span-5 w-full max-h-[280px] md:max-h-[420px]">
-          <SceneGate scene="hero" />
+          {/* End side: 3D Hero Object / Poster */}
+          <div className="md:col-span-5 w-full flex items-center justify-center">
+            <SceneGate scene="hero" />
+          </div>
         </div>
       </div>
     </section>

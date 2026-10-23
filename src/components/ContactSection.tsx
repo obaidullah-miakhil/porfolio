@@ -39,9 +39,9 @@ export function ContactSection() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="py-16 md:py-24"
+      className="py-12 sm:py-16 md:py-24 border-t border-[var(--border)]"
     >
-      <div className="flex flex-col gap-6">
+      <div className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8 flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <h2
             id="contact-heading"

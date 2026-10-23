@@ -34,7 +34,7 @@ export default async function CvPage({
   const tCv = await getTranslations({ locale, namespace: 'cvPage' });
 
   return (
-    <div className="mx-auto max-w-[1160px] px-5 sm:px-8 py-12 sm:py-16 space-y-12">
+    <div className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 space-y-12">
       {/* Header & Download Bar */}
       <Reveal>
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-[var(--border)] pb-8">

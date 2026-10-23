@@ -8,7 +8,7 @@ export function Footer() {
 
   return (
     <footer className="w-full border-t border-[var(--border)] bg-[var(--bg)] py-10 mt-12">
-      <div className="max-w-[1080px] mx-auto px-4 sm:px-6 flex flex-col gap-4">
+      <div className="max-w-[1160px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-step-15 text-[var(--text)]">
           <div>
             <span>© {currentYear} Obaidullah Miakhil</span>

@@ -28,7 +28,7 @@ export function Header() {
         {t('skipToContent')}
       </a>
 
-      <div className="max-w-[1080px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-[1160px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Start side: wordmark */}
         <Link
           href="/"

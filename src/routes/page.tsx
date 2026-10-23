@@ -61,7 +61,7 @@ export default async function HomePage({
       <FeaturedPublication />
 
       {/* 3. About — profile photo (square, 6px radius) + two short paragraphs + a facts list */}
-      <section className="mx-auto max-w-[1160px] px-5 sm:px-8">
+      <section className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-10 border-t border-[var(--border)]">
             <div className="lg:col-span-8 flex flex-col sm:flex-row items-start gap-6">
@@ -123,7 +123,7 @@ export default async function HomePage({
       </section>
 
       {/* 4. Research Projects (4 cards) */}
-      <section className="mx-auto max-w-[1160px] px-5 sm:px-8">
+      <section className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="pt-10 border-t border-[var(--border)] space-y-6">
             <div className="flex flex-wrap items-baseline justify-between gap-4">
@@ -177,7 +177,7 @@ export default async function HomePage({
       </section>
 
       {/* 5. Recent Experience (5 entries) + Teaching */}
-      <section className="mx-auto max-w-[1160px] px-5 sm:px-8">
+      <section className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="pt-10 border-t border-[var(--border)] grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-8 space-y-5">
@@ -244,7 +244,7 @@ export default async function HomePage({
       </section>
 
       {/* 5. Selected Projects — 4 items: GitHub highlight block + 2 websites with screenshots + 1 ML repo */}
-      <section className="mx-auto max-w-[1160px] px-5 sm:px-8">
+      <section className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="pt-10 border-t border-[var(--border)] space-y-6">
             <div className="flex flex-wrap items-baseline justify-between gap-4">
@@ -300,7 +300,7 @@ export default async function HomePage({
       </section>
 
       {/* 7. Education */}
-      <section className="mx-auto max-w-[1160px] px-5 sm:px-8">
+      <section className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="pt-10 border-t border-[var(--border)] space-y-6">
             <h2 className="text-step-28 font-bold text-[var(--text)]">

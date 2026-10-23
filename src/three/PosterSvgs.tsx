@@ -5,7 +5,7 @@ export function FacetedFormPoster() {
     <div
       aria-hidden="true"
       data-testid="hero-faceted-poster"
-      className="w-full h-full flex items-center justify-center rounded-[6px] border border-[var(--border)] bg-[var(--surface)] select-none overflow-hidden"
+      className="w-full h-full flex items-center justify-center rounded-[6px] bg-transparent select-none overflow-hidden"
     >
       <svg
         viewBox="0 0 360 360"

@@ -35,7 +35,7 @@ export default async function ProjectsPage({
   const { repos, publicRepoCount } = await getGitHubRepos();
 
   return (
-    <div className="mx-auto max-w-[1160px] px-5 sm:px-8 py-12 sm:py-16 space-y-16">
+    <div className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 space-y-12 sm:space-y-16">
       {/* Page Header */}
       <Reveal>
         <div className="space-y-3 border-b border-[var(--border)] pb-8">

@@ -127,8 +127,8 @@ export function SceneGate({ scene }: { scene: SceneType }) {
 
   const heightClasses =
     scene === 'hero'
-      ? 'w-full h-[260px] md:h-[420px]'
-      : 'w-full h-[220px] md:h-[260px]';
+      ? 'w-full h-[220px] sm:h-[280px] md:h-[340px] lg:h-[380px]'
+      : 'w-full h-[180px] sm:h-[220px] md:h-[260px]';
 
   return (
     <div
@@ -150,7 +150,11 @@ export function SceneGate({ scene }: { scene: SceneType }) {
       {/* Lazily loaded 3D WebGL Canvas cross-fades over the poster */}
       {shouldMountCanvas ? (
         <div
-          className={`absolute inset-0 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] transition-opacity duration-300 ${
+          className={`absolute inset-0 rounded-[6px] ${
+            scene === 'hero'
+              ? 'bg-transparent'
+              : 'border border-[var(--border)] bg-[var(--surface)]'
+          } transition-opacity duration-300 ${
             canvasReady ? 'opacity-100' : 'opacity-0'
           }`}
         >
