@@ -179,32 +179,32 @@ export const profile = {
   audienceContent: {
     research: {
       summary:
-        "I'm an MS Artificial Intelligence student at PAF-IAST (CGPA 4.00/4.00) and a research engineer at the Sino-Park Centre of Artificial Intelligence. I build weakly-supervised and uncertainty-aware deep learning systems for medical imaging, and I'm looking for a PhD position in NLP and large language models, especially low-resource and multilingual NLP and trustworthy AI.",
+        "I'm an MS Artificial Intelligence researcher at PAF-IAST (CGPA 4.00/4.00) and a Research Engineer at the Sino-Pak Centre of Artificial Intelligence (SPCAI). I build weakly-supervised and uncertainty-aware deep learning systems for high-stakes medical imaging, and co-authored a Scopus Q1 peer-reviewed publication in Frontiers in Health Services (PR-AUC 0.777). I am actively seeking and available for a PhD position (Fall 2025 / Fall 2026) in NLP and large language models, especially low-resource and multilingual NLP, retrieval-augmented generation, and trustworthy AI.",
       primaryCtaLabelKey: 'downloadAcademicCv',
       primaryCtaHref: '/cv/Obaidullah-Miakhil-Academic-CV.pdf',
       highlights: [
         'MS AI CGPA 4.00/4.00 (PAF-IAST)',
-        'First/co-author in Frontiers in Health Services (Scopus Q1)',
-        'Weakly-supervised medical AI & MC Dropout uncertainty',
-        'Target PhD: Multilingual & Low-Resource NLP / Trustworthy LLMs',
+        'First/co-author in Frontiers in Health Services (Scopus Q1, PR-AUC 0.777)',
+        'Weakly-supervised medical AI & MC Dropout uncertainty (SPCAI)',
+        'Actively Available for PhD: Multilingual NLP & Trustworthy LLMs',
       ],
     },
     industry: {
       summary:
-        "I'm an AI engineer who ships machine learning systems end to end: from processing large DICOM and insurance-claims datasets to deploying LLM chatbots and web apps. I'm a co-author of a peer-reviewed paper on claim-denial prediction, and I'm open to AI/ML engineering and applied research roles.",
+        "I'm an AI engineer and machine learning researcher who ships production ML systems end to end: from processing 678,881 insurance-claims records (Scopus Q1, PR-AUC 0.777) and large RSNA DICOM CT scans with calibrated uncertainty to deploying conversational LLMs and web applications. Having supervised 150+ student engineering projects at PAF-IAST, I am actively open and available for AI/ML engineering, applied research, and consulting roles.",
       primaryCtaLabelKey: 'downloadResume',
       primaryCtaHref: '/cv/Obaidullah-Miakhil-Resume.pdf',
       highlights: [
         'End-to-end ML systems (678,881 U.S. claim lines, PR-AUC 0.777)',
-        'Large-scale RSNA DICOM & medical imaging pipelines',
-        'LLM admissions chatbot & production web applications',
-        'Python, PyTorch, TensorFlow, scikit-learn, Flask, SQL',
+        '150+ Supervised Student Engineering & Web Projects',
+        'Large-scale RSNA DICOM CT pipelines & MC Dropout uncertainty',
+        'Actively Available for AI/ML Engineering & Applied Research Roles',
       ],
     },
   },
 
   researchInterests:
-    'Multilingual AI researcher (native Pashto and Dari, fluent English and Urdu) with hands-on experience in weakly-supervised deep learning, LLM-based applications and uncertainty-aware models for high-stakes decision support. Target PhD areas: natural language processing and large language models, especially low-resource and multilingual NLP, retrieval-augmented generation, and trustworthy / explainable AI — carrying over calibrated uncertainty quantification and weak supervision from current work to make language models more reliable in real deployments.',
+    'Multilingual AI researcher (native Pashto and Dari, fluent English and Urdu) with hands-on experience in weakly-supervised deep learning, LLM-based applications and uncertainty-aware models for high-stakes decision support. Target PhD areas (Fall 2025 / Fall 2026): natural language processing and large language models, especially low-resource and multilingual NLP, retrieval-augmented generation, and trustworthy / explainable AI — carrying over calibrated uncertainty quantification and weak supervision from current work to make language models more reliable in real deployments.',
 
   publications: [
     {

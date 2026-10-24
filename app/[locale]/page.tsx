@@ -90,7 +90,7 @@ export default async function HomePage({
             </div>
 
             <div
-              className="card-interactive lg:col-span-4 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] p-6 space-y-4 self-start"
+              className="card-interactive lg:col-span-4 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] p-6 space-y-3.5 self-start"
               suppressHydrationWarning
             >
               <div suppressHydrationWarning>
@@ -111,9 +111,25 @@ export default async function HomePage({
               </div>
               <div className="border-t border-[var(--border)] pt-3" suppressHydrationWarning>
                 <div className="text-step-13 text-[var(--muted)]">
+                  {tAbout('factCredentialsLabel')}
+                </div>
+                <div className="text-step-15 font-medium text-[var(--text)]">
+                  {tAbout('factCredentialsValue')}
+                </div>
+              </div>
+              <div className="border-t border-[var(--border)] pt-3" suppressHydrationWarning>
+                <div className="text-step-13 text-[var(--muted)]">
+                  {tAbout('factMentorshipLabel')}
+                </div>
+                <div className="text-step-15 font-medium text-[var(--text)]">
+                  {tAbout('factMentorshipValue')}
+                </div>
+              </div>
+              <div className="border-t border-[var(--border)] pt-3" suppressHydrationWarning>
+                <div className="text-step-13 text-[var(--muted)]">
                   {tAbout('factOpenToLabel')}
                 </div>
-                <div className="text-step-15 font-medium text-[var(--accent)]">
+                <div className="text-step-15 font-semibold text-[var(--accent)]">
                   {tAbout('factOpenToValue')}
                 </div>
               </div>
