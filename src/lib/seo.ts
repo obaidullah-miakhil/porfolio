@@ -155,7 +155,7 @@ export function buildHomeJsonLd(locale: string) {
           familyName: profile.familyName,
           jobTitle: profile.roleLine,
           description:
-            'Obaidullah Miakhil is an AI engineer and machine learning researcher working on medical AI, deep learning and NLP. Prospective PhD candidate in NLP and LLMs.',
+            'Obaidullah Miakhil is an AI engineer and machine learning researcher specializing in medical diagnosis and medical AI. Prospective PhD candidate in Computer Science (Sept 2027 intake onwards).',
           image: `${siteUrl}${profile.profilePhoto}`,
           url: siteUrl,
           email: profile.emailPrimary,

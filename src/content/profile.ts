@@ -179,14 +179,14 @@ export const profile = {
   audienceContent: {
     research: {
       summary:
-        "I'm an MS Artificial Intelligence researcher at PAF-IAST (CGPA 4.00/4.00) and a Research Engineer at the Sino-Pak Centre of Artificial Intelligence (SPCAI). I build weakly-supervised and uncertainty-aware deep learning systems for high-stakes medical imaging, and co-authored a Scopus Q1 peer-reviewed publication in Frontiers in Health Services (PR-AUC 0.777). I am actively seeking and available for a PhD position (Fall 2025 / Fall 2026) in NLP and large language models, especially low-resource and multilingual NLP, retrieval-augmented generation, and trustworthy AI.",
+        "I'm an MS Artificial Intelligence researcher at PAF-IAST (CGPA 4.00/4.00) and a Research Engineer at the Sino-Pak Centre of Artificial Intelligence (SPCAI). My research focuses on problem-solving in medical domains and medical diagnosis — developing weakly-supervised and uncertainty-aware deep learning systems for high-stakes medical imaging, and co-authored a Scopus Q1 peer-reviewed publication in Frontiers in Health Services (PR-AUC 0.777). I am actively seeking and available for a PhD position in Computer Science and related fields for the September 2027 intake onwards.",
       primaryCtaLabelKey: 'downloadAcademicCv',
       primaryCtaHref: '/cv/Obaidullah-Miakhil-Academic-CV.pdf',
       highlights: [
         'MS AI CGPA 4.00/4.00 (PAF-IAST)',
         'First/co-author in Frontiers in Health Services (Scopus Q1, PR-AUC 0.777)',
-        'Weakly-supervised medical AI & MC Dropout uncertainty (SPCAI)',
-        'Actively Available for PhD: Multilingual NLP & Trustworthy LLMs',
+        'Medical AI @ SPCAI (Weakly-supervised CT diagnosis & MC Dropout)',
+        'Available for PhD in Computer Science (Sept 2027 Intake Onwards · Medical Diagnosis Focus)',
       ],
     },
     industry: {
@@ -204,7 +204,7 @@ export const profile = {
   },
 
   researchInterests:
-    'Multilingual AI researcher (native Pashto and Dari, fluent English and Urdu) with hands-on experience in weakly-supervised deep learning, LLM-based applications and uncertainty-aware models for high-stakes decision support. Target PhD areas (Fall 2025 / Fall 2026): natural language processing and large language models, especially low-resource and multilingual NLP, retrieval-augmented generation, and trustworthy / explainable AI — carrying over calibrated uncertainty quantification and weak supervision from current work to make language models more reliable in real deployments.',
+    'Computer Science and AI researcher with a primary focus on problem-solving in medical domains and medical diagnosis. Hands-on experience developing weakly-supervised deep learning architectures, uncertainty-aware models with clinical safety/abstain policies for CT imaging at SPCAI, and large-scale healthcare data modeling (Frontiers in Health Services, Scopus Q1). Target PhD areas (September 2027 intake onwards): Computer Science and related fields focusing on medical diagnosis, medical imaging AI, weakly-supervised learning, calibrated uncertainty quantification, and trustworthy clinical decision support.',
 
   publications: [
     {

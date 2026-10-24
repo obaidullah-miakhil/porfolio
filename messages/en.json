@@ -1,13 +1,13 @@
 {
   "meta": {
     "homeTitle": "Obaidullah Miakhil — AI Engineer & ML Researcher",
-    "homeDescription": "Obaidullah Miakhil is an AI engineer and machine learning researcher working on medical AI, deep learning and NLP. Open to PhD and AI/ML roles.",
+    "homeDescription": "Obaidullah Miakhil is an AI engineer and machine learning researcher specializing in medical diagnosis and medical AI. Available for PhD in Computer Science (Sept 2027 intake onwards).",
     "researchTitle": "Research & Publications",
-    "researchDescription": "Research by Obaidullah Miakhil on healthcare insurance claim denial prediction (Frontiers in Health Services, Scopus Q1), intracranial hemorrhage deep learning, and multilingual NLP & LLMs.",
+    "researchDescription": "Research by Obaidullah Miakhil on healthcare insurance claim denial prediction (Frontiers in Health Services, Scopus Q1), intracranial hemorrhage CT diagnosis, and medical AI problem-solving.",
     "projectsTitle": "Projects",
     "projectsDescription": "Machine learning repositories, software engineering projects on GitHub, and web applications built by Obaidullah Miakhil.",
     "cvTitle": "CV",
-    "cvDescription": "Curriculum vitae of Obaidullah Miakhil, prospective PhD candidate in NLP and LLMs, MS Artificial Intelligence at PAF-IAST."
+    "cvDescription": "Curriculum vitae of Obaidullah Miakhil, prospective PhD candidate in Computer Science & Medical AI, MS Artificial Intelligence at PAF-IAST."
   },
   "nav": {
     "skipToContent": "Skip to content",
@@ -26,12 +26,12 @@
   "hero": {
     "roleLine": "AI Engineer & Machine Learning Researcher",
     "subLine": "Medical AI · Deep Learning · NLP & LLMs — Islamabad, Pakistan",
-    "availabilityStatus": "Actively Available for PhD (Fall 2025/2026) · Open to AI/ML Roles",
-    "availabilityTarget": "Targeting Multilingual NLP, Low-Resource LLMs & Trustworthy AI",
+    "availabilityStatus": "Available for PhD in Computer Science (Sept 2027 Intake Onwards) · Open to AI/ML Roles",
+    "availabilityTarget": "Focus: Medical Diagnosis · Medical AI · Healthcare Problem Solving",
     "viewingAs": "Viewing as:",
     "audienceResearch": "Research",
     "audienceIndustry": "Industry",
-    "researchSummary": "I'm an MS Artificial Intelligence researcher at PAF-IAST (CGPA 4.00/4.00) and a Research Engineer at the Sino-Pak Centre of Artificial Intelligence (SPCAI). I build weakly-supervised and uncertainty-aware deep learning systems for high-stakes medical imaging, and co-authored a Scopus Q1 peer-reviewed publication in Frontiers in Health Services (PR-AUC 0.777). I am actively seeking and available for a PhD position (Fall 2025 / Fall 2026) in NLP and large language models, especially low-resource and multilingual NLP, retrieval-augmented generation, and trustworthy AI.",
+    "researchSummary": "I'm an MS Artificial Intelligence researcher at PAF-IAST (CGPA 4.00/4.00) and a Research Engineer at the Sino-Pak Centre of Artificial Intelligence (SPCAI). My research focuses on problem-solving in medical domains and medical diagnosis — building weakly-supervised and uncertainty-aware deep learning systems for CT imaging and clinical decision support, alongside a Scopus Q1 publication in Frontiers in Health Services (PR-AUC 0.777). I am actively seeking and available for a PhD position in Computer Science and related fields for the September 2027 intake onwards.",
     "industrySummary": "I'm an AI engineer and machine learning researcher who ships production ML systems end to end: from processing 678,881 insurance-claims records (Scopus Q1, PR-AUC 0.777) and large RSNA DICOM CT scans with calibrated uncertainty to deploying conversational LLMs and web applications. Having supervised 150+ student engineering projects at PAF-IAST, I am actively open and available for AI/ML engineering, applied research, and consulting roles.",
     "metricCgpaLabel": "4.00 / 4.00 CGPA",
     "metricCgpaDesc": "MS AI · Top Distinction (PAF-IAST)",
@@ -57,13 +57,13 @@
   "about": {
     "title": "About",
     "paragraph1": "I work at the intersection of medical imaging, applied machine learning, and language models. At the Sino-Pak Centre of Artificial Intelligence (SPCAI) and PAF-IAST in Pakistan, I develop two-stage deep learning pipelines for intracranial hemorrhage localization on RSNA DICOM scans and teach undergraduate computer science and AI laboratories in Python.",
-    "paragraph2": "My bachelor's thesis on predicting healthcare insurance claim denials grew into a peer-reviewed article in Frontiers in Health Services (Scopus Q1), evaluated on 678,881 U.S. claim lines. As a native speaker of Pashto and Dari who also works in English and Urdu, I am preparing for PhD research in low-resource and multilingual NLP, retrieval-augmented generation, and calibrated uncertainty quantification for trustworthy language models.",
+    "paragraph2": "My bachelor's thesis on predicting healthcare insurance claim denials grew into a peer-reviewed article in Frontiers in Health Services (Scopus Q1), evaluated on 678,881 U.S. claim lines. As a researcher focused on solving complex problems in medical domains and medical diagnosis, I am preparing for PhD research in Computer Science and related fields for the September 2027 intake onwards, specializing in medical imaging AI, weakly-supervised learning, and calibrated uncertainty quantification for clinical safety.",
     "factLocationLabel": "Based in",
     "factLocationValue": "Islamabad, Pakistan",
     "factLanguagesLabel": "Languages",
     "factLanguagesValue": "Pashto, Dari (native), English, Urdu (C1)",
     "factOpenToLabel": "Open to & Available for",
-    "factOpenToValue": "PhD positions (Fall 2025/2026) & AI/ML engineering roles",
+    "factOpenToValue": "PhD in Computer Science (Sept 2027 intake onwards) & Medical AI roles",
     "factCredentialsLabel": "Key credentials",
     "factCredentialsValue": "MS AI CGPA 4.00/4.00 · Scopus Q1 Author (PR-AUC 0.777)",
     "factMentorshipLabel": "Mentorship",
@@ -88,7 +88,7 @@
   },
   "researchPage": {
     "heading": "Research",
-    "intro": "Multilingual AI researcher (native Pashto and Dari, fluent English and Urdu) with hands-on experience in weakly-supervised deep learning, LLM-based applications and uncertainty-aware models for high-stakes decision support. Target PhD areas: natural language processing and large language models, especially low-resource and multilingual NLP, retrieval-augmented generation, and trustworthy / explainable AI — carrying over calibrated uncertainty quantification and weak supervision from current work to make language models more reliable in real deployments.",
+    "intro": "AI researcher focused on problem-solving in medical domains and medical diagnosis. Hands-on experience developing weakly-supervised deep learning architectures, uncertainty-aware models with clinical safety/abstain policies for RSNA CT imaging at SPCAI, and large-scale healthcare data modeling (Frontiers in Health Services, Scopus Q1). Target PhD areas (September 2027 intake onwards): Computer Science and related fields focusing on medical diagnosis, medical imaging AI, weakly-supervised learning, and trustworthy clinical decision support.",
     "publicationsHeading": "Publications & manuscripts",
     "projectsHeading": "Research projects",
     "talksHeading": "Talks, workshops & conferences",
@@ -112,7 +112,7 @@
   },
   "cvPage": {
     "heading": "Curriculum vitae",
-    "subtitle": "Prospective PhD candidate in NLP & LLMs · AI Engineer & Machine Learning Researcher",
+    "subtitle": "Prospective PhD Candidate in Computer Science (Medical Diagnosis & AI) · AI Engineer & ML Researcher",
     "printCv": "Print CV",
     "thesisLabel": "Thesis:",
     "courseworkLabel": "Coursework:",

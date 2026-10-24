@@ -33,15 +33,15 @@ export function ContactSection() {
   const topics = [
     {
       id: 'phd' as const,
-      label: 'PhD Opportunity',
-      subject: '[PhD Position] Inquiry for Obaidullah Miakhil',
-      body: 'Hi Obaidullah,%0D%0A%0D%0AI came across your research profile and would like to discuss potential PhD opportunities...',
+      label: 'PhD in Computer Science',
+      subject: '[PhD Opportunity] Inquiry for Obaidullah Miakhil (Sept 2027 Intake)',
+      body: 'Hi Obaidullah,%0D%0A%0D%0AI came across your research in medical diagnosis and AI, and would like to discuss potential PhD opportunities in Computer Science for the September 2027 intake onwards...',
     },
     {
       id: 'research' as const,
-      label: 'Research Collaboration',
-      subject: '[Research Collaboration] Deep Learning & NLP',
-      body: 'Hi Obaidullah,%0D%0A%0D%0AI am interested in collaborating on research related to your work in Medical AI / NLP...',
+      label: 'Medical AI / Research',
+      subject: '[Research Collaboration] Medical Diagnosis & Deep Learning',
+      body: 'Hi Obaidullah,%0D%0A%0D%0AI am interested in collaborating on research related to your work in medical diagnosis and deep learning...',
     },
     {
       id: 'industry' as const,
@@ -87,7 +87,7 @@ export function ContactSection() {
         <div className="flex flex-col gap-3">
           <div className="inline-flex items-center gap-2 self-start px-2.5 py-1 rounded-[4px] border border-[var(--border)] bg-[var(--surface)] text-[11px] font-mono text-[var(--accent)] shadow-xs">
             <span className="w-2 h-2 rounded-full bg-[var(--accent)] pulse-dot inline-block" aria-hidden="true" />
-            <span>Open for PhD (Fall 2025/2026) & AI Engineering</span>
+            <span>Available for PhD in Computer Science (Sept 2027 Intake Onwards) · Medical Diagnosis Focus</span>
           </div>
 
           <h2
