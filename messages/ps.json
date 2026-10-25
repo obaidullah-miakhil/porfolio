@@ -95,7 +95,16 @@
     "talksHeading": "کنفرانسونه او ورکشاپونه",
     "teachingHeading": "تدریس او علمي خدمتونه",
     "supervisorLabel": "لارښود استاد:",
-    "keywordsLabel": "کلیموې:"
+    "keywordsLabel": "کلیموې:",
+    "eyebrow": "څېړنې · طبي AI، ژوره زده کړه، NLP",
+    "heroTitle": "طبي AI چې *پوهېږي کله ډاډه نه دی.*",
+    "stats": {
+      "prauc": "PR-AUC، خپره شوې مقاله",
+      "praucDetail": "PR-AUC د امریکا د بیمې په 678,881 ادعاوو، د 0.330 بنسټیزې کچې په پرتله؛ ROC-AUC 0.865",
+      "cgpa": "د AI ماسټرۍ CGPA (له 4.00)",
+      "papers": "مقالې او لاسوندونه",
+      "projects": "څېړنیزې پروژې"
+    }
   },
   "projectsPage": {
     "heading": "پروژې",
@@ -109,7 +118,10 @@
     "visitSite": "ویب پاڼه وګورئ",
     "viewRepository": "زیرمه وګورئ",
     "starsLabel": "ستوري",
-    "roleLabel": "ونډه:"
+    "roleLabel": "ونډه:",
+    "eyebrow": "پروژې · کوډ، ویبپاڼې، زده‌کوونکي",
+    "heroTitle": "هغه شیان چې ما *جوړ او خپاره کړي.*",
+    "supervisedLabel": "د زده‌کوونکو پروژې چې لارښوونه مې کړې"
   },
   "cvPage": {
     "heading": "ژوندلیک (Curriculum vitae)",
@@ -117,7 +129,10 @@
     "printCv": "چاپ کړئ",
     "thesisLabel": "تیزس:",
     "courseworkLabel": "مضمونونه:",
-    "verifyCertificate": "تصدیق پاڼه وګورئ"
+    "verifyCertificate": "تصدیق پاڼه وګورئ",
+    "eyebrow": "ژوندلیک",
+    "heroTitle": "عبیدالله *میاخیل.*",
+    "recognitionHeading": "جایزې، ویناوې او سندونه"
   },
   "contact": {
     "heading": "اړیکه",

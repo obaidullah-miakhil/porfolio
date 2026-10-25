@@ -16,40 +16,6 @@ const DEFAULT_LIGHT_COLORS: ThemeColors = {
   accent: '#FF4F00',
 };
 
-let cachedSoftwareGl: boolean | null = null;
-
-export function detectSoftwareWebGL(): boolean {
-  if (typeof window === 'undefined' || typeof document === 'undefined') {
-    return false;
-  }
-  if (cachedSoftwareGl !== null) {
-    return cachedSoftwareGl;
-  }
-
-  try {
-    const canvas = document.createElement('canvas');
-    const gl =
-      canvas.getContext('webgl2') ||
-      canvas.getContext('webgl') ||
-      canvas.getContext('experimental-webgl');
-    if (!gl || !('getParameter' in gl)) {
-      cachedSoftwareGl = true;
-      return true;
-    }
-    const webgl = gl as WebGLRenderingContext;
-    const ext = webgl.getExtension('WEBGL_debug_renderer_info');
-    const param = ext ? ext.UNMASKED_RENDERER_WEBGL : webgl.RENDERER;
-    const gpu = String(webgl.getParameter(param) || '');
-    webgl.getExtension('WEBGL_lose_context')?.loseContext();
-    cachedSoftwareGl =
-      /SwiftShader|llvmpipe|softpipe|Software|Basic Render/i.test(gpu);
-    return cachedSoftwareGl;
-  } catch {
-    cachedSoftwareGl = true;
-    return true;
-  }
-}
-
 export function isWebGLAvailable(): boolean {
   if (typeof window === 'undefined' || typeof document === 'undefined') {
     return false;
@@ -90,58 +56,6 @@ export function shouldSkipStoryAvatar(): boolean {
   if (nav.connection?.saveData === true) return true;
   if (typeof nav.deviceMemory === 'number' && nav.deviceMemory < 2) return true;
   return !isWebGLAvailable();
-}
-
-export function shouldSkipWebGL(): boolean {
-  if (typeof window === 'undefined') return true;
-
-  try {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('poster') === '1') return true;
-    if (params.get('lowmem') === '1') return true;
-    if (params.get('force3d') === '1') {
-      return !isWebGLAvailable();
-    }
-  } catch {
-    // Ignore URL parse error
-  }
-
-  // 1. Reduced motion preference
-  if (
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  ) {
-    return true;
-  }
-
-  // 2. Data Saver mode
-  const nav = navigator as Navigator & {
-    connection?: { saveData?: boolean };
-    deviceMemory?: number;
-  };
-  if (nav.connection?.saveData === true) {
-    return true;
-  }
-
-  // 3. Low device memory (<= 4 GB per spec Section 5)
-  if (typeof nav.deviceMemory === 'number' && nav.deviceMemory <= 4) {
-    return true;
-  }
-
-  // 4. Low hardware concurrency (<= 4 cores per spec Section 5)
-  if (
-    typeof nav.hardwareConcurrency === 'number' &&
-    nav.hardwareConcurrency <= 4
-  ) {
-    return true;
-  }
-
-  // 5. WebGL unavailable
-  if (!isWebGLAvailable()) {
-    return true;
-  }
-
-  return false;
 }
 
 export function readThemeTokenColors(): ThemeColors {

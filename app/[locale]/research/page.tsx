@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { profile } from '@/content/profile';
-import { Reveal } from '@/components/Reveal';
+import { ArrowUpRight } from 'lucide-react';
+import { profile, getFeaturedPublication } from '@/content/profile';
 import { buildPageMetadata, buildResearchJsonLd } from '@/lib/seo';
-import { SceneGate } from '@/three/SceneGate';
-import { ExternalLink } from 'lucide-react';
+import { PageHero, PageSection, StatPanel } from '@/components/page/PageParts';
 
 export async function generateMetadata({
   params,
@@ -21,6 +20,19 @@ export async function generateMetadata({
   });
 }
 
+function Authors({ authors }: { authors: string[] }) {
+  return (
+    <bdi>
+      {authors.map((author, i) => (
+        <span key={author}>
+          {author.includes('Miakhil') ? <strong className="text-[var(--text)]">{author}</strong> : author}
+          {i < authors.length - 1 ? ', ' : ''}
+        </span>
+      ))}
+    </bdi>
+  );
+}
+
 export default async function ResearchPage({
   params,
 }: {
@@ -29,283 +41,165 @@ export default async function ResearchPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const tRes = await getTranslations({ locale, namespace: 'researchPage' });
-  const tPub = await getTranslations({
-    locale,
-    namespace: 'featuredPublication',
-  });
+  const t = await getTranslations({ locale, namespace: 'researchPage' });
+  const tPub = await getTranslations({ locale, namespace: 'featuredPublication' });
   const jsonLd = buildResearchJsonLd();
+  const paper = getFeaturedPublication();
+  const manuscripts = profile.publications.filter((p) => !p.isPublished);
+  const msCgpa = profile.education[0].gpa?.match(/[\d.]+/)?.[0] ?? '';
 
   return (
-    <div
-      className="mx-auto max-w-[1080px] px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 space-y-12 sm:space-y-16"
-      suppressHydrationWarning
-    >
+    <div className="page">
       <script
         id="research-jsonld"
         type="application/ld+json"
-        suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Header + AttentionGrid 3D Scene */}
-      <Reveal>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border-b border-[var(--border)] pb-10">
-          <div className="lg:col-span-7 space-y-4">
-            <h1 className="text-step-36 font-bold text-[var(--text)]">
-              {tRes('heading')}
-            </h1>
-            <p className="text-step-15 text-[var(--text)] leading-relaxed max-w-[65ch] m-0">
-              {tRes('intro')}
+      <PageHero
+        eyebrow={t('eyebrow')}
+        title={t('heroTitle')}
+        lead={t('intro')}
+        aside={
+          <StatPanel
+            stats={[
+              { value: '0.777', label: t('stats.prauc') },
+              { value: msCgpa, label: t('stats.cgpa') },
+              { value: String(profile.publications.length), label: t('stats.papers') },
+              { value: String(profile.researchProjects.length), label: t('stats.projects') },
+            ]}
+          />
+        }
+      />
+
+      <PageSection id="publications" index={1} title={t('publicationsHeading')}>
+        <article className="panel feature-paper">
+          <div className="feature-paper-main">
+            <div className="pill-row">
+              <span className="pill pill-accent">
+                <bdi>{paper.status}</bdi>
+              </span>
+              {paper.badges?.map((badge) => (
+                <span key={badge} className="pill">
+                  <bdi>{badge}</bdi>
+                </span>
+              ))}
+            </div>
+            <h3 className="feature-paper-title">
+              <bdi>{paper.title}</bdi>
+            </h3>
+            <p className="meta-line">
+              <Authors authors={paper.authors} />
             </p>
-          </div>
-
-          <div className="lg:col-span-5 flex flex-col items-center">
-            <SceneGate scene="research" />
-          </div>
-        </div>
-      </Reveal>
-
-      {/* 01 Publications & Manuscripts (all 4 items) */}
-      <Reveal>
-        <section aria-labelledby="publications-heading" className="space-y-6">
-          <div className="space-y-1">
-            <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
-              01
+            <p className="meta-line">
+              <bdi>
+                {paper.venue}, vol. {paper.volume}, article {paper.articleNumber} · {paper.publishedDate}
+                {paper.funding ? ` · ${paper.funding}` : ''}
+              </bdi>
+            </p>
+            <p className="body-text">
+              <bdi>{paper.summary}</bdi>
+            </p>
+            <div className="chapter-links">
+              <a className="btn-primary" href={`https://doi.org/${paper.doi}`} target="_blank" rel="noopener noreferrer">
+                {tPub('readPaper')}
+                <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+              </a>
+              <span className="chapter-stat-caption">doi:{paper.doi}</span>
             </div>
-            <h2
-              id="publications-heading"
-              className="text-step-28 font-bold text-[var(--text)]"
-            >
-              {tRes('publicationsHeading')}
-            </h2>
           </div>
+          <div className="feature-paper-stat">
+            <span className="chapter-stat-value">0.777</span>
+            <span className="chapter-stat-caption" dir="auto">
+              {t('stats.praucDetail')}
+            </span>
+          </div>
+        </article>
 
-          <div className="space-y-5">
-            {profile.publications.map((pub) => (
-              <article
-                key={pub.id}
-                className="card-interactive group p-6 sm:p-8 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-4"
-              >
-                <div className="flex flex-wrap items-center gap-2 tabular-nums">
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-[4px] text-step-13 font-medium border border-[var(--accent)] text-[var(--accent)]">
-                    <bdi>{pub.status}</bdi>
-                  </span>
-                  {pub.badges?.map((badge) => (
-                    <span
-                      key={badge}
-                      className="px-2.5 py-0.5 rounded-[4px] text-step-13 border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
-                    >
-                      <bdi>{badge}</bdi>
-                    </span>
-                  ))}
-                  <span className="text-step-13 text-[var(--muted)]">
-                    <bdi>{pub.year}</bdi>
-                  </span>
-                </div>
-
-                <h3 className="text-step-22 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-200">
-                  {pub.doi || pub.url ? (
-                    <a
-                      href={pub.doi ? `https://doi.org/${pub.doi}` : pub.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="editorial-link"
-                    >
-                      <bdi>{pub.title}</bdi>
-                    </a>
-                  ) : (
-                    <bdi>{pub.title}</bdi>
-                  )}
+        <ul className="panel row-list">
+          {manuscripts.map((pub) => (
+            <li key={pub.id}>
+              <span className="pill">
+                <bdi>{pub.status}</bdi>
+              </span>
+              <div>
+                <h3 className="row-title">
+                  <bdi>{pub.title}</bdi>
                 </h3>
-
-                <p className="text-step-15 text-[var(--muted)] m-0">
+                <p className="meta-line">
                   <bdi>
-                    {pub.authors.map((author, authorIdx) => {
-                      const isMe = author.includes('Miakhil');
-                      return (
-                        <span key={author}>
-                          {isMe ? (
-                            <strong className="font-bold text-[var(--text)]">
-                              {author}
-                            </strong>
-                          ) : (
-                            author
-                          )}
-                          {authorIdx < pub.authors.length - 1 ? ', ' : ''}
-                        </span>
-                      );
-                    })}
+                    {pub.venue} · {pub.year}
                   </bdi>
                 </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </PageSection>
 
-                <p className="text-step-13 text-[var(--muted)] m-0 tabular-nums">
-                  <bdi>
-                    {pub.venue}
-                    {pub.volume ? `, vol. ${pub.volume}` : ''}
-                    {pub.articleNumber ? `, article ${pub.articleNumber}` : ''}
-                    {pub.publishedDate
-                      ? ` · Published ${pub.publishedDate}`
-                      : ''}
-                    {pub.receivedDate
-                      ? ` (Received ${pub.receivedDate}, Accepted ${pub.acceptedDate})`
-                      : ''}
-                    {pub.funding ? ` · ${pub.funding}` : ''}
-                  </bdi>
+      <PageSection id="research-projects" index={2} title={t('projectsHeading')}>
+        <div className="card-grid">
+          {profile.researchProjects.map((project) => (
+            <article key={project.id} className="panel project-card">
+              <span className="section-index">
+                <bdi>{project.period}</bdi>
+              </span>
+              <h3 className="row-title">
+                <bdi>{project.title}</bdi>
+              </h3>
+              {project.supervisor ? (
+                <p className="meta-line">
+                  {t('supervisorLabel')} <bdi>{project.supervisor}</bdi>
                 </p>
+              ) : null}
+              <p className="body-text">
+                <bdi>{project.description}</bdi>
+              </p>
+              <div className="pill-row">
+                {project.metricsOrMethods.map((m) => (
+                  <span key={m} className="pill">
+                    <bdi>{m}</bdi>
+                  </span>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </PageSection>
 
-                {pub.summary && (
-                  <p className="text-step-15 text-[var(--text)] max-w-[65ch] leading-relaxed m-0 tabular-nums">
-                    <bdi>{pub.summary}</bdi>
-                  </p>
-                )}
-
-                {pub.keywords && pub.keywords.length > 0 && (
-                  <div className="flex flex-wrap items-center gap-2 pt-2">
-                    <span className="text-step-13 font-medium text-[var(--muted)]">
-                      {tRes('keywordsLabel')}
-                    </span>
-                    {pub.keywords.map((kw) => (
-                      <span
-                        key={kw}
-                        className="text-step-13 px-2 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
-                      >
-                        <bdi>{kw}</bdi>
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {(pub.doi || pub.url) && (
-                  <div className="pt-3 border-t border-[var(--border)] flex flex-wrap items-center gap-4 tabular-nums">
-                    <a
-                      href={pub.doi ? `https://doi.org/${pub.doi}` : pub.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="editorial-link link-arrow inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)]"
-                    >
-                      <span>{tPub('readPaper')}</span>
-                      <ExternalLink className="w-4 h-4 rtl-flip" />
-                    </a>
-                    {pub.doi && (
-                      <a
-                        href={`https://doi.org/${pub.doi}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="editorial-link text-step-13 text-[var(--muted)] hover:text-[var(--accent)]"
-                      >
-                        <bdi>DOI: {pub.doi}</bdi>
-                      </a>
-                    )}
-                  </div>
-                )}
-              </article>
-            ))}
-          </div>
-        </section>
-      </Reveal>
-
-      {/* 02 Research Projects */}
-      <Reveal>
-        <section
-          aria-labelledby="research-projects-heading"
-          className="space-y-6 pt-10 border-t border-[var(--border)]"
-        >
-          <div className="space-y-1">
-            <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
-              02
-            </div>
-            <h2
-              id="research-projects-heading"
-              className="text-step-28 font-bold text-[var(--text)]"
-            >
-              {tRes('projectsHeading')}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {profile.researchProjects.map((proj) => (
-              <article
-                key={proj.id}
-                className="card-interactive group p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-4"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-baseline justify-between gap-2 tabular-nums">
-                    <h3 className="text-step-22 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-200">
-                      <bdi>{proj.title}</bdi>
-                    </h3>
-                    <span className="text-step-13 text-[var(--muted)] shrink-0">
-                      <bdi>{proj.period}</bdi>
-                    </span>
-                  </div>
-                  {proj.supervisor && (
-                    <p className="text-step-13 text-[var(--accent)] m-0">
-                      {tRes('supervisorLabel')} <bdi>{proj.supervisor}</bdi>
-                    </p>
-                  )}
-                  <p className="text-step-15 text-[var(--text)] leading-relaxed m-0">
-                    <bdi>{proj.description}</bdi>
+      <PageSection id="talks" index={3} title={t('talksHeading')}>
+        <div className="card-grid">
+          <ul className="panel row-list row-list-plain">
+            {profile.talksAndConferences.map((talk) => (
+              <li key={talk.id}>
+                <span className="section-index">
+                  <bdi>{talk.date}</bdi>
+                </span>
+                <div>
+                  <h3 className="row-title">
+                    <bdi>{talk.title}</bdi>
+                  </h3>
+                  <p className="meta-line">
+                    <bdi>{talk.venue}</bdi>
                   </p>
                 </div>
-
-                <div className="flex flex-wrap gap-2 pt-3 border-t border-[var(--border)] tabular-nums">
-                  {proj.metricsOrMethods.slice(0, 3).map((m) => (
-                    <span
-                      key={m}
-                      className="text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
-                    >
-                      <bdi>{m}</bdi>
-                    </span>
-                  ))}
-                </div>
-              </article>
+              </li>
             ))}
-          </div>
-        </section>
-      </Reveal>
-
-      {/* 03 Talks & Teaching */}
-      <Reveal>
-        <div className="space-y-6 pt-10 border-t border-[var(--border)]">
-          <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
-            03
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <section className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-4">
-              <h2 className="text-step-22 font-bold text-[var(--text)]">
-                {tRes('talksHeading')}
-              </h2>
-              <ul className="space-y-3 tabular-nums">
-                {profile.talksAndConferences.map((talk) => (
-                  <li key={talk.id} className="text-step-15">
-                    <div className="font-medium text-[var(--text)]">
-                      <bdi>{talk.title}</bdi>
-                    </div>
-                    <div className="text-step-13 text-[var(--muted)]">
-                      <bdi>
-                        {talk.venue} · {talk.date}
-                      </bdi>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            <section className="p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-4">
-              <h2 className="text-step-22 font-bold text-[var(--text)]">
-                {tRes('teachingHeading')}
-              </h2>
-              <ul className="space-y-2.5 text-step-15 text-[var(--text)] list-disc ps-5 tabular-nums">
-                {profile.teachingAndService.map((item) => (
-                  <li key={item}>
-                    <bdi>{item}</bdi>
-                  </li>
-                ))}
-              </ul>
-            </section>
+          </ul>
+          <div className="panel">
+            <h3 className="row-title mb-4" dir="auto">
+              {t('teachingHeading')}
+            </h3>
+            <ul className="bullet-list">
+              {profile.teachingAndService.map((item) => (
+                <li key={item}>
+                  <bdi>{item}</bdi>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-      </Reveal>
+      </PageSection>
     </div>
   );
 }

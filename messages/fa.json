@@ -95,7 +95,16 @@
     "talksHeading": "سخنرانی‌ها، کارگاه‌ها و کنفرانس‌ها",
     "teachingHeading": "تدریس و خدمات دانشگاهی",
     "supervisorLabel": "استاد راهنما:",
-    "keywordsLabel": "کلیدواژه‌ها:"
+    "keywordsLabel": "کلیدواژه‌ها:",
+    "eyebrow": "پژوهش · هوش مصنوعی پزشکی، یادگیری عمیق، NLP",
+    "heroTitle": "هوش مصنوعی پزشکی که *می‌داند کی مطمئن نیست.*",
+    "stats": {
+      "prauc": "PR-AUC، مقالهٔ منتشرشده",
+      "praucDetail": "PR-AUC روی 678,881 ادعای بیمه در آمریکا، در برابر خط پایهٔ 0.330؛ ROC-AUC 0.865",
+      "cgpa": "معدل فوق‌لیسانس هوش مصنوعی (از 4.00)",
+      "papers": "مقاله‌ها و دست‌نوشته‌ها",
+      "projects": "پروژه‌های پژوهشی"
+    }
   },
   "projectsPage": {
     "heading": "پروژه‌ها",
@@ -109,7 +118,10 @@
     "visitSite": "مشاهده وب‌سایت",
     "viewRepository": "مشاهده مخزن",
     "starsLabel": "ستاره",
-    "roleLabel": "نقش:"
+    "roleLabel": "نقش:",
+    "eyebrow": "پروژه‌ها · کد، وب‌سایت‌ها، دانشجویان",
+    "heroTitle": "چیزهایی که *ساخته و منتشر کرده‌ام.*",
+    "supervisedLabel": "پروژهٔ دانشجویی زیر راهنمایی"
   },
   "cvPage": {
     "heading": "کارنامه علمی و حرفه‌ای (CV)",
@@ -117,7 +129,10 @@
     "printCv": "چاپ رزومه",
     "thesisLabel": "پایان‌نامه:",
     "courseworkLabel": "دروس گذرانده‌شده:",
-    "verifyCertificate": "بررسی گواهینامه"
+    "verifyCertificate": "بررسی گواهینامه",
+    "eyebrow": "رزومه",
+    "heroTitle": "عبیدالله *میاخیل.*",
+    "recognitionHeading": "جوایز، سخنرانی‌ها و گواهی‌نامه‌ها"
   },
   "contact": {
     "heading": "تماس",

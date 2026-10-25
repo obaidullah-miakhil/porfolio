@@ -94,7 +94,16 @@
     "talksHeading": "Talks, workshops & conferences",
     "teachingHeading": "Teaching & service",
     "supervisorLabel": "Supervisor:",
-    "keywordsLabel": "Keywords:"
+    "keywordsLabel": "Keywords:",
+    "eyebrow": "Research · Medical AI, deep learning, NLP",
+    "heroTitle": "Medical AI that *knows when it isn’t sure.*",
+    "stats": {
+      "prauc": "PR-AUC, published paper",
+      "praucDetail": "PR-AUC on 678,881 U.S. claim lines, against a no-skill baseline of 0.330; ROC-AUC 0.865",
+      "cgpa": "M.S. AI CGPA (of 4.00)",
+      "papers": "Papers & manuscripts",
+      "projects": "Research projects"
+    }
   },
   "projectsPage": {
     "heading": "Projects",
@@ -108,7 +117,10 @@
     "visitSite": "Visit site",
     "viewRepository": "View repository",
     "starsLabel": "stars",
-    "roleLabel": "Role:"
+    "roleLabel": "Role:",
+    "eyebrow": "Projects · Code, websites, students",
+    "heroTitle": "Things I’ve *built and shipped.*",
+    "supervisedLabel": "Student projects supervised"
   },
   "cvPage": {
     "heading": "Curriculum vitae",
@@ -116,7 +128,10 @@
     "printCv": "Print CV",
     "thesisLabel": "Thesis:",
     "courseworkLabel": "Coursework:",
-    "verifyCertificate": "Verify certificate"
+    "verifyCertificate": "Verify certificate",
+    "eyebrow": "Curriculum vitae",
+    "heroTitle": "Obaidullah *Miakhil.*",
+    "recognitionHeading": "Awards, talks & certificates"
   },
   "contact": {
     "heading": "Contact",

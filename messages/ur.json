@@ -95,7 +95,16 @@
     "talksHeading": "کانفرنسز اور ورکشاپس",
     "teachingHeading": "تدریس اور تعلیمی خدمات",
     "supervisorLabel": "نگران:",
-    "keywordsLabel": "کلیدی الفاظ:"
+    "keywordsLabel": "کلیدی الفاظ:",
+    "eyebrow": "تحقیق · میڈیکل اے آئی، ڈیپ لرننگ، NLP",
+    "heroTitle": "میڈیکل اے آئی جو *جانتی ہے کہ کب اسے یقین نہیں۔*",
+    "stats": {
+      "prauc": "PR-AUC، شائع شدہ مقالہ",
+      "praucDetail": "امریکہ کے 678,881 انشورنس کلیمز پر PR-AUC، 0.330 کی بنیادی سطح کے مقابلے میں؛ ROC-AUC 0.865",
+      "cgpa": "ایم ایس اے آئی سی جی پی اے (4.00 میں سے)",
+      "papers": "مقالات اور مسودات",
+      "projects": "تحقیقی پروجیکٹس"
+    }
   },
   "projectsPage": {
     "heading": "پروجیکٹس",
@@ -109,7 +118,10 @@
     "visitSite": "ویب سائٹ دیکھیں",
     "viewRepository": "ریپوزٹری دیکھیں",
     "starsLabel": "ستارے",
-    "roleLabel": "کردار:"
+    "roleLabel": "کردار:",
+    "eyebrow": "پروجیکٹس · کوڈ، ویب سائٹس، طلبہ",
+    "heroTitle": "وہ چیزیں جو میں نے *بنائیں اور جاری کیں۔*",
+    "supervisedLabel": "طلبہ کے پروجیکٹس کی نگرانی"
   },
   "cvPage": {
     "heading": "نصابِ زندگی (CV)",
@@ -117,7 +129,10 @@
     "printCv": "سی وی پرنٹ کریں",
     "thesisLabel": "تھیسس:",
     "courseworkLabel": "کورس ورک:",
-    "verifyCertificate": "سرٹیفکیٹ کی تصدیق کریں"
+    "verifyCertificate": "سرٹیفکیٹ کی تصدیق کریں",
+    "eyebrow": "سی وی",
+    "heroTitle": "عبیداللہ *میاخیل۔*",
+    "recognitionHeading": "اعزازات، گفتگو اور اسناد"
   },
   "contact": {
     "heading": "رابطہ",
