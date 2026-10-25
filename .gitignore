@@ -10,5 +10,7 @@ coverage/
 !.env.example
 .vercel/
 AGENTS.md
-package-lock.json
 bun.lock
+
+# Tool-generated workspace artifacts
+.aistudio/
