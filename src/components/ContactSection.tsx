@@ -12,6 +12,7 @@ import {
   WhatsAppIcon,
 } from './BrandIcons';
 import { Copy, Check, Download, ExternalLink } from 'lucide-react';
+import { TiltCard } from './TiltCard';
 
 export function ContactSection({
   sectionNumber = '06',
@@ -43,9 +44,15 @@ export function ContactSection({
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="py-12 sm:py-16 md:py-24 border-t border-[var(--border)]"
+      className="py-12 sm:py-16 md:py-24 border-t border-[var(--border)] relative"
     >
-      <div className="mx-auto max-w-[1080px] px-4 sm:px-6 lg:px-8 flex flex-col gap-10">
+      {/* Background glow orb */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-12 end-12 w-96 h-96 rounded-full bg-[var(--accent)] opacity-10 blur-3xl"
+      />
+
+      <div className="mx-auto max-w-[1080px] px-4 sm:px-6 lg:px-8 flex flex-col gap-10 relative">
         {/* Numbered Section Header */}
         <div className="space-y-2">
           <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
@@ -53,7 +60,7 @@ export function ContactSection({
           </div>
           <h2
             id="contact-heading"
-            className="text-step-28 sm:text-step-32 font-bold text-[var(--text)]"
+            className="text-step-28 sm:text-step-32 font-bold text-[var(--text)] tracking-tight"
           >
             {t('heading')}
           </h2>
@@ -62,8 +69,12 @@ export function ContactSection({
           </p>
         </div>
 
-        {/* Large Primary Email Line (~32px) with Copy Button + Academic Email */}
-        <div className="p-6 sm:p-8 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-6">
+        {/* 3D Holographic Card for Primary & Academic Email */}
+        <TiltCard
+          maxTilt={5}
+          scale={1.01}
+          className="p-6 sm:p-8 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-lg hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] space-y-6 transition-all duration-300"
+        >
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[var(--border)]">
             <div className="space-y-1">
               <div className="text-step-13 text-[var(--muted)]">
@@ -137,121 +148,194 @@ export function ContactSection({
               )}
             </button>
           </div>
-        </div>
+        </TiltCard>
 
-        {/* Plain Hairline-Divided Channel Rows */}
-        <div className="border-t border-b border-[var(--border)] divide-y divide-[var(--border)]">
+        {/* Interactive 3D Channels Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* WhatsApp */}
-          <div className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div className="flex items-center gap-2.5 text-step-15 font-medium text-[var(--text)]">
-              <WhatsAppIcon size={18} className="text-[var(--accent)]" />
-              <span>{t('whatsappLabel')}</span>
+          <TiltCard
+            maxTilt={5}
+            scale={1.01}
+            className="card-interactive group p-4 sm:p-5 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] flex items-center justify-between gap-3 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="w-10 h-10 rounded-[8px] border border-[var(--border)] bg-[var(--bg)] flex items-center justify-center shrink-0 group-hover:border-[var(--accent)] group-hover:shadow-[0_0_8px_var(--accent)] transition-all">
+                <WhatsAppIcon size={20} className="text-[var(--accent)]" />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-step-15 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                  {t('whatsappLabel')}
+                </span>
+                <span className="text-step-13 text-[var(--muted)] truncate">
+                  {t('chatOnWhatsapp')}
+                </span>
+              </div>
             </div>
             <a
               href={profile.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t('chatOnWhatsapp')}
-              className="editorial-link link-arrow inline-flex items-center gap-1.5 min-h-[44px] text-step-15 font-medium text-[var(--accent)]"
+              className="editorial-link link-arrow inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-step-13 font-medium text-[var(--accent)] hover:border-[var(--accent)] transition-all shrink-0"
             >
               <span>{t('chatOnWhatsapp')}</span>
-              <ExternalLink className="w-4 h-4 rtl-flip" aria-hidden="true" />
+              <ExternalLink className="w-3.5 h-3.5 rtl-flip" aria-hidden="true" />
             </a>
-          </div>
+          </TiltCard>
 
           {/* GitHub */}
-          <div className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div className="flex items-center gap-2.5 text-step-15 font-medium text-[var(--text)]">
-              <GitHubIcon size={18} className="text-[var(--text)]" />
-              <span>{t('githubLabel')}</span>
+          <TiltCard
+            maxTilt={5}
+            scale={1.01}
+            className="card-interactive group p-4 sm:p-5 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] flex items-center justify-between gap-3 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="w-10 h-10 rounded-[8px] border border-[var(--border)] bg-[var(--bg)] flex items-center justify-center shrink-0 group-hover:border-[var(--accent)] group-hover:shadow-[0_0_8px_var(--accent)] transition-all">
+                <GitHubIcon size={20} className="text-[var(--text)] group-hover:text-[var(--accent)] transition-colors" />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-step-15 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                  {t('githubLabel')}
+                </span>
+                <span className="text-step-13 text-[var(--muted)] truncate" dir="ltr">
+                  {profile.githubHandle}
+                </span>
+              </div>
             </div>
             <a
               href={profile.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              dir="ltr"
-              className="editorial-link link-arrow inline-flex items-center gap-1.5 min-h-[44px] text-step-15 font-medium text-[var(--accent)]"
+              className="editorial-link link-arrow inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-step-13 font-medium text-[var(--accent)] hover:border-[var(--accent)] transition-all shrink-0"
             >
-              <span>{profile.githubHandle}</span>
-              <ExternalLink className="w-4 h-4" aria-hidden="true" />
+              <span dir="ltr">{profile.githubHandle}</span>
+              <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
             </a>
-          </div>
+          </TiltCard>
 
           {/* Google Scholar */}
           {profile.scholarUrl ? (
-            <div className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div className="flex items-center gap-2.5 text-step-15 font-medium text-[var(--text)]">
-                <ScholarIcon size={18} className="text-[var(--text)]" />
-                <span>{t('scholarLabel')}</span>
+            <TiltCard
+              maxTilt={5}
+              scale={1.01}
+              className="card-interactive group p-4 sm:p-5 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] flex items-center justify-between gap-3 transition-all duration-300"
+            >
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div className="w-10 h-10 rounded-[8px] border border-[var(--border)] bg-[var(--bg)] flex items-center justify-center shrink-0 group-hover:border-[var(--accent)] group-hover:shadow-[0_0_8px_var(--accent)] transition-all">
+                  <ScholarIcon size={20} className="text-[var(--text)] group-hover:text-[var(--accent)] transition-colors" />
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-step-15 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                    {t('scholarLabel')}
+                  </span>
+                  <span className="text-step-13 text-[var(--muted)] truncate" dir="ltr">
+                    Google Scholar Profile
+                  </span>
+                </div>
               </div>
               <a
                 href={profile.scholarUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                dir="ltr"
-                className="editorial-link link-arrow inline-flex items-center gap-1.5 min-h-[44px] text-step-15 text-[var(--text)] hover:text-[var(--accent)]"
+                className="editorial-link link-arrow inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-step-13 font-medium text-[var(--accent)] hover:border-[var(--accent)] transition-all shrink-0"
               >
-                <span>scholar.google.com/citations?user=JVFkpVgAAAAJ</span>
-                <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                <span>View</span>
+                <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
               </a>
-            </div>
+            </TiltCard>
           ) : null}
 
           {/* ResearchGate */}
           {profile.researchgateUrl ? (
-            <div className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div className="flex items-center gap-2.5 text-step-15 font-medium text-[var(--text)]">
-                <ResearchGateIcon size={18} className="text-[var(--text)]" />
-                <span>ResearchGate</span>
+            <TiltCard
+              maxTilt={5}
+              scale={1.01}
+              className="card-interactive group p-4 sm:p-5 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] flex items-center justify-between gap-3 transition-all duration-300"
+            >
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div className="w-10 h-10 rounded-[8px] border border-[var(--border)] bg-[var(--bg)] flex items-center justify-center shrink-0 group-hover:border-[var(--accent)] group-hover:shadow-[0_0_8px_var(--accent)] transition-all">
+                  <ResearchGateIcon size={20} className="text-[var(--text)] group-hover:text-[var(--accent)] transition-colors" />
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-step-15 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                    ResearchGate
+                  </span>
+                  <span className="text-step-13 text-[var(--muted)] truncate" dir="ltr">
+                    Obaidullah-Miakhil
+                  </span>
+                </div>
               </div>
               <a
                 href={profile.researchgateUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                dir="ltr"
-                className="editorial-link link-arrow inline-flex items-center gap-1.5 min-h-[44px] text-step-15 text-[var(--text)] hover:text-[var(--accent)]"
+                className="editorial-link link-arrow inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-step-13 font-medium text-[var(--accent)] hover:border-[var(--accent)] transition-all shrink-0"
               >
-                <span>researchgate.net/profile/Obaidullah-Miakhil</span>
-                <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                <span>View</span>
+                <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
               </a>
-            </div>
+            </TiltCard>
           ) : null}
 
           {/* LinkedIn */}
-          <div className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div className="flex items-center gap-2.5 text-step-15 font-medium text-[var(--text)]">
-              <LinkedInIcon size={18} className="text-[var(--text)]" />
-              <span>{t('linkedinLabel')}</span>
+          <TiltCard
+            maxTilt={5}
+            scale={1.01}
+            className="card-interactive group p-4 sm:p-5 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] flex items-center justify-between gap-3 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="w-10 h-10 rounded-[8px] border border-[var(--border)] bg-[var(--bg)] flex items-center justify-center shrink-0 group-hover:border-[var(--accent)] group-hover:shadow-[0_0_8px_var(--accent)] transition-all">
+                <LinkedInIcon size={20} className="text-[var(--text)] group-hover:text-[var(--accent)] transition-colors" />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-step-15 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                  {t('linkedinLabel')}
+                </span>
+                <span className="text-step-13 text-[var(--muted)] truncate" dir="ltr">
+                  obaidullah-miakhil
+                </span>
+              </div>
             </div>
             <a
               href={profile.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              dir="ltr"
-              className="editorial-link link-arrow inline-flex items-center gap-1.5 min-h-[44px] text-step-15 text-[var(--text)] hover:text-[var(--accent)]"
+              className="editorial-link link-arrow inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-step-13 font-medium text-[var(--accent)] hover:border-[var(--accent)] transition-all shrink-0"
             >
-              <span>linkedin.com/in/obaidullah-miakhil-b28a16248</span>
-              <ExternalLink className="w-4 h-4" aria-hidden="true" />
+              <span>Connect</span>
+              <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
             </a>
-          </div>
+          </TiltCard>
 
           {/* Hugging Face */}
-          <div className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div className="flex items-center gap-2.5 text-step-15 font-medium text-[var(--text)]">
-              <HuggingFaceIcon size={18} className="text-[var(--text)]" />
-              <span>{t('huggingfaceLabel')}</span>
+          <TiltCard
+            maxTilt={5}
+            scale={1.01}
+            className="card-interactive group p-4 sm:p-5 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] flex items-center justify-between gap-3 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="w-10 h-10 rounded-[8px] border border-[var(--border)] bg-[var(--bg)] flex items-center justify-center shrink-0 group-hover:border-[var(--accent)] group-hover:shadow-[0_0_8px_var(--accent)] transition-all">
+                <HuggingFaceIcon size={20} className="text-[var(--text)] group-hover:text-[var(--accent)] transition-colors" />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-step-15 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                  {t('huggingfaceLabel')}
+                </span>
+                <span className="text-step-13 text-[var(--muted)] truncate" dir="ltr">
+                  Obaidullahmiakhil
+                </span>
+              </div>
             </div>
             <a
               href={profile.huggingfaceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              dir="ltr"
-              className="editorial-link link-arrow inline-flex items-center gap-1.5 min-h-[44px] text-step-15 text-[var(--text)] hover:text-[var(--accent)]"
+              className="editorial-link link-arrow inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-step-13 font-medium text-[var(--accent)] hover:border-[var(--accent)] transition-all shrink-0"
             >
-              <span>huggingface.co/Obaidullahmiakhil</span>
-              <ExternalLink className="w-4 h-4" aria-hidden="true" />
+              <span>Models</span>
+              <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
             </a>
-          </div>
+          </TiltCard>
         </div>
 
         {/* Two CV Download Buttons */}

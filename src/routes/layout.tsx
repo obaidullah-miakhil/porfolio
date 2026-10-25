@@ -8,6 +8,9 @@ import { routing, isRtlLocale } from '@/i18n/routing';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { ScrollProgress } from '@/components/ScrollProgress';
+import { CursorGlow } from '@/components/CursorGlow';
+import { ParticleField } from '@/three/ParticleField';
 import { profile } from '@/content/profile';
 import { getSiteUrl, SEO_KEYWORDS } from '@/lib/seo';
 import { Analytics } from '@vercel/analytics/react';
@@ -94,11 +97,14 @@ export default async function LocaleLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages} locale={locale}>
+            <ScrollProgress />
+            <CursorGlow />
+            <ParticleField />
             <a href="#main-content" className="skip-to-content">
               {tNav('skipToContent')}
             </a>
             <Header />
-            <main id="main-content" className="flex-1" suppressHydrationWarning>
+            <main id="main-content" className="flex-1 content-layer" suppressHydrationWarning>
               {children}
             </main>
             <Footer />

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { getFeaturedPublication } from '@/content/profile';
 import { ExternalLink, Copy, Check } from 'lucide-react';
+import { TiltCard } from './TiltCard';
 
 export function FeaturedPublication() {
   const t = useTranslations('featuredPublication');
@@ -36,7 +37,11 @@ export function FeaturedPublication() {
       className="py-10 sm:py-12 md:py-16 border-b border-[var(--border)]"
     >
       <div className="mx-auto max-w-[1080px] px-4 sm:px-6 lg:px-8">
-        <div className="card-interactive p-6 sm:p-8 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col gap-4">
+        <TiltCard
+          maxTilt={5}
+          scale={1.01}
+          className="card-interactive p-6 sm:p-8 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-md hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] flex flex-col gap-4 transition-all duration-300"
+        >
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="text-step-13 font-semibold text-[var(--accent)]">
               {t('eyebrow')}
@@ -117,7 +122,7 @@ export function FeaturedPublication() {
               )}
             </button>
           </div>
-        </div>
+        </TiltCard>
       </div>
     </section>
   );

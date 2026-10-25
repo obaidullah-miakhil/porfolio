@@ -6,6 +6,7 @@ import { FeaturedPublication } from '@/components/FeaturedPublication';
 import { RepoCard, WebsiteCard } from '@/components/ProjectCards';
 import { ContactSection } from '@/components/ContactSection';
 import { Reveal } from '@/components/Reveal';
+import { TiltCard } from '@/components/TiltCard';
 import { Link } from '@/i18n/routing';
 import { getGitHubRepos } from '@/lib/github';
 import { profile, getRecentExperience } from '@/content/profile';
@@ -188,14 +189,18 @@ export default async function HomePage({
               </Link>
             </div>
 
-            {/* Asymmetric 2-column grid: MS Thesis ICH card on start column + 3D AttentionGrid, stacked research cards on end column */}
+            {/* Asymmetric 2-column grid: MS Thesis ICH card on start column + 3D MoleculeViz, stacked research cards on end column */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
               {primaryResearchProject && (
                 <div className="lg:col-span-6 flex flex-col gap-5">
-                  <article className="card-interactive group p-6 sm:p-7 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex-1 flex flex-col justify-between gap-5">
+                  <TiltCard
+                    maxTilt={5}
+                    scale={1.01}
+                    className="card-interactive group p-6 sm:p-7 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] flex-1 flex flex-col justify-between gap-5 shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] transition-all duration-300"
+                  >
                     <div className="space-y-3">
                       <div className="flex flex-wrap items-center justify-between gap-2 tabular-nums">
-                        <span className="px-2.5 py-0.5 rounded-[4px] border border-[var(--accent)] text-step-13 font-medium text-[var(--accent)]">
+                        <span className="px-2.5 py-0.5 rounded-[4px] border border-[var(--accent)] text-step-13 font-medium text-[var(--accent)] shadow-[0_0_6px_var(--accent)]">
                           MS Thesis · Medical AI
                         </span>
                         <span className="text-step-13 text-[var(--muted)]">
@@ -227,18 +232,20 @@ export default async function HomePage({
                           </span>
                         ))}
                     </div>
-                  </article>
+                  </TiltCard>
 
-                  {/* Scene B — Attention weight grid */}
+                  {/* Scene B — Attention weight grid / Molecule helix */}
                   <SceneGate scene="research" />
                 </div>
               )}
 
               <div className="lg:col-span-6 flex flex-col gap-5">
                 {secondaryResearchProjects.map((proj) => (
-                  <article
+                  <TiltCard
                     key={proj.id}
-                    className="card-interactive group p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex-1 flex flex-col justify-between gap-4"
+                    maxTilt={5}
+                    scale={1.01}
+                    className="card-interactive group p-6 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] flex-1 flex flex-col justify-between gap-4 shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] transition-all duration-300"
                   >
                     <div className="space-y-2">
                       <div className="flex items-baseline justify-between gap-2 tabular-nums">
@@ -264,7 +271,7 @@ export default async function HomePage({
                         </span>
                       ))}
                     </div>
-                  </article>
+                  </TiltCard>
                 ))}
               </div>
             </div>
@@ -295,33 +302,36 @@ export default async function HomePage({
                 </Link>
               </div>
 
-              {/* 2-column hairline rows */}
-              <div className="border-t border-b border-[var(--border)] divide-y divide-[var(--border)]">
+              {/* 3D Pathway Timeline with Glowing Pulse Nodes */}
+              <div className="relative ps-6 sm:ps-8 border-s-2 border-[var(--border)] space-y-8 before:absolute before:top-0 before:bottom-0 before:-start-[2px] before:w-[2px] before:bg-[var(--accent)] before:opacity-75">
                 {recentExperience.map((exp) => (
                   <div
                     key={exp.id}
-                    className="py-5 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline"
+                    className="relative group transition-all"
                   >
-                    <div className="sm:col-span-4 text-step-13 text-[var(--muted)] tabular-nums">
+                    {/* Glowing Milestone Node */}
+                    <div
+                      aria-hidden="true"
+                      className="absolute -start-[31px] sm:-start-[39px] top-1.5 w-3.5 h-3.5 rounded-full bg-[var(--surface)] border-2 border-[var(--accent)] group-hover:scale-125 group-hover:bg-[var(--accent)] group-hover:shadow-[0_0_12px_var(--accent)] transition-all duration-300"
+                    />
+                    <div className="text-step-13 text-[var(--accent)] font-semibold tabular-nums">
                       <bdi>{exp.dates}</bdi>
                     </div>
-                    <div className="sm:col-span-8 space-y-1.5">
-                      <h3 className="text-step-18 font-bold text-[var(--text)] m-0">
-                        <bdi>{exp.role}</bdi>
-                      </h3>
-                      <p className="text-step-13 font-medium text-[var(--accent)] m-0">
-                        <bdi>
-                          {exp.organisation} · {exp.location}
-                        </bdi>
-                      </p>
-                      <ul className="mt-2 space-y-1 text-step-15 text-[var(--text)] list-disc ps-5">
-                        {exp.points.map((pt) => (
-                          <li key={pt}>
-                            <bdi>{pt}</bdi>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    <h3 className="text-step-18 font-bold text-[var(--text)] mt-1 mb-0.5 group-hover:text-[var(--accent)] transition-colors">
+                      <bdi>{exp.role}</bdi>
+                    </h3>
+                    <p className="text-step-13 font-medium text-[var(--muted)] m-0">
+                      <bdi>
+                        {exp.organisation} · {exp.location}
+                      </bdi>
+                    </p>
+                    <ul className="mt-2 space-y-1 text-step-15 text-[var(--text)] list-disc ps-5 leading-relaxed">
+                      {exp.points.map((pt) => (
+                        <li key={pt}>
+                          <bdi>{pt}</bdi>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>
@@ -394,32 +404,39 @@ export default async function HomePage({
               </Link>
             </div>
 
-            {/* Item 1: Bordered GitHub highlight block */}
-            <div className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-wrap items-center justify-between gap-4">
-              <div className="space-y-1">
-                <div className="flex flex-wrap items-center gap-2.5 tabular-nums">
-                  <GitHubIcon size={20} className="text-[var(--text)]" />
-                  <h3 className="text-step-22 font-bold text-[var(--text)]">
-                    {tProjects('githubBlockTitle')}
-                  </h3>
-                  <span className="text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]">
-                    {publicRepoCount} {tProjects('publicReposLabel')}
-                  </span>
-                </div>
-                <p className="text-step-15 text-[var(--muted)] m-0">
-                  {tProjects('githubBlockSubtitle')}
-                </p>
+            {/* 3D Tech Globe Orbit + GitHub Highlight Block */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+              <div className="lg:col-span-5 flex flex-col justify-center">
+                <SceneGate scene="globe" />
               </div>
+              <div className="lg:col-span-7 flex flex-col justify-between">
+                <div className="card-interactive p-6 sm:p-7 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] h-full flex flex-col justify-between gap-4 transition-all duration-300">
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2.5 tabular-nums">
+                      <GitHubIcon size={22} className="text-[var(--accent)]" />
+                      <h3 className="text-step-22 font-bold text-[var(--text)]">
+                        {tProjects('githubBlockTitle')}
+                      </h3>
+                      <span className="text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)] shadow-xs">
+                        {publicRepoCount} {tProjects('publicReposLabel')}
+                      </span>
+                    </div>
+                    <p className="text-step-15 text-[var(--muted)] m-0 leading-relaxed">
+                      {tProjects('githubBlockSubtitle')}
+                    </p>
+                  </div>
 
-              <a
-                href={profile.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-interactive link-arrow inline-flex items-center gap-2 h-11 px-4 rounded-[6px] bg-[var(--accent)] text-[var(--accent-contrast)] text-step-15 font-medium hover:opacity-95"
-              >
-                <span>{tProjects('viewGithubProfile')}</span>
-                <ExternalLink className="w-4 h-4 rtl-flip" />
-              </a>
+                  <a
+                    href={profile.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-interactive link-arrow self-start inline-flex items-center gap-2 h-11 px-5 rounded-[6px] bg-[var(--accent)] text-[var(--accent-contrast)] text-step-15 font-medium hover:opacity-95 shadow-[var(--glow-accent)]"
+                  >
+                    <span>{tProjects('viewGithubProfile')}</span>
+                    <ExternalLink className="w-4 h-4 rtl-flip" />
+                  </a>
+                </div>
+              </div>
             </div>
 
             {/* Items 2, 3, 4: 2 websites with screenshots + 1 ML repo */}
@@ -431,13 +448,13 @@ export default async function HomePage({
             </div>
 
             {/* 150+ Supervised Student Projects Highlight */}
-            <div className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-wrap items-center justify-between gap-4">
+            <div className="card-interactive p-6 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] flex flex-wrap items-center justify-between gap-4 transition-all duration-300">
               <div className="space-y-1 max-w-[650px]">
                 <div className="flex flex-wrap items-center gap-2 tabular-nums">
                   <h3 className="text-step-18 font-bold text-[var(--text)] m-0">
                     150+ supervised student projects
                   </h3>
-                  <span className="px-2.5 py-0.5 rounded-[4px] border border-[var(--accent)] text-[var(--accent)] text-step-13 font-medium">
+                  <span className="px-2.5 py-0.5 rounded-[4px] border border-[var(--accent)] text-[var(--accent)] text-step-13 font-medium shadow-[0_0_6px_var(--accent)]">
                     Live deployed websites
                   </span>
                 </div>
@@ -475,9 +492,11 @@ export default async function HomePage({
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 tabular-nums">
               {profile.education.map((edu) => (
-                <div
+                <TiltCard
                   key={edu.id}
-                  className="card-interactive group p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-3"
+                  maxTilt={6}
+                  scale={1.01}
+                  className="card-interactive group p-6 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] flex flex-col justify-between gap-3 transition-all duration-300"
                 >
                   <div className="space-y-1.5">
                     <span className="text-step-13 text-[var(--accent)] font-semibold">
@@ -497,7 +516,7 @@ export default async function HomePage({
                       <bdi>{edu.gpa}</bdi>
                     </div>
                   )}
-                </div>
+                </TiltCard>
               ))}
             </div>
           </div>

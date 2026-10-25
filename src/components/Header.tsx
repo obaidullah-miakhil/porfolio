@@ -92,7 +92,10 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[var(--bg)] border-b border-[var(--border)] transition-colors duration-200">
+    <header
+      data-scrolled={scrolled ? 'true' : 'false'}
+      className="sticky top-0 z-40 w-full header-glass"
+    >
       <div
         className={`max-w-[1080px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 transition-[height] duration-200 ${
           scrolled ? 'h-[56px]' : 'h-[72px]'
@@ -127,7 +130,7 @@ export function Header() {
                 >
                   <span>{item.label}</span>
                   {isActive ? (
-                    <span className="absolute bottom-1.5 start-0 end-0 h-[2px] bg-[var(--accent)]" />
+                    <span className="absolute bottom-1.5 start-0 end-0 h-[2px] bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
                   ) : null}
                 </Link>
               );
@@ -144,7 +147,7 @@ export function Header() {
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-nav-sheet"
               aria-label={mobileMenuOpen ? t('closeMenu') : t('menu')}
-              className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-[var(--text)] hover:border-[var(--accent)] transition-colors cursor-pointer"
+              className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-[6px] border border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-md text-[var(--text)] hover:border-[var(--accent)] transition-colors cursor-pointer"
             >
               {mobileMenuOpen ? (
                 <X className="w-4 h-4" aria-hidden="true" />
@@ -161,13 +164,13 @@ export function Header() {
         <nav
           id="mobile-nav-sheet"
           aria-label="Mobile navigation"
-          className="md:hidden w-full min-h-[calc(100vh-56px)] bg-[var(--bg)] border-b border-[var(--border)] px-4 py-6"
+          className="md:hidden w-full min-h-[calc(100vh-56px)] mobile-menu-overlay border-b border-[var(--border)] px-4 py-6"
         >
           <ul className="flex flex-col divide-y divide-[var(--border)] m-0 p-0 list-none">
             {navItems.map((item) => {
               const isActive = isNavItemActive(item);
               return (
-                <li key={item.href}>
+                <li key={item.href} className="menu-item">
                   <Link
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}

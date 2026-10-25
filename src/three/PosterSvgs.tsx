@@ -57,6 +57,71 @@ export function FacetedFormPoster() {
   );
 }
 
+export function NeuralNetworkPoster() {
+  const layers = [
+    [60, 110, 160, 210],
+    [40, 80, 120, 160, 200, 240],
+    [30, 65, 100, 135, 170, 205, 240, 275],
+    [40, 80, 120, 160, 200, 240],
+    [80, 140, 200],
+  ];
+  const layerX = [40, 110, 180, 250, 320];
+
+  return (
+    <div
+      aria-hidden="true"
+      data-testid="hero-neural-poster"
+      className="w-full h-full flex items-center justify-center rounded-[12px] border border-[var(--border)] bg-[var(--surface)] select-none overflow-hidden p-4"
+    >
+      <svg
+        viewBox="0 0 360 300"
+        className="w-full h-full max-h-[280px]"
+        aria-hidden="true"
+      >
+        {/* Draw subtle connections */}
+        <g stroke="var(--accent)" strokeOpacity="0.25" strokeWidth="0.8">
+          {layers.slice(0, -1).map((currentLayer, lIdx) =>
+            currentLayer.map((y1, i1) =>
+              layers[lIdx + 1].map((y2, i2) =>
+                (i1 + i2) % 2 === 0 ? (
+                  <line
+                    key={`line-${lIdx}-${i1}-${i2}`}
+                    x1={layerX[lIdx]}
+                    y1={y1}
+                    x2={layerX[lIdx + 1]}
+                    y2={y2}
+                  />
+                ) : null
+              )
+            )
+          )}
+        </g>
+        {/* Draw nodes */}
+        {layers.map((layer, lIdx) =>
+          layer.map((y, nIdx) => (
+            <g key={`node-${lIdx}-${nIdx}`}>
+              <circle
+                cx={layerX[lIdx]}
+                cy={y}
+                r="7"
+                fill="var(--accent)"
+                fillOpacity="0.15"
+              />
+              <circle
+                cx={layerX[lIdx]}
+                cy={y}
+                r="3.5"
+                fill="var(--accent)"
+                fillOpacity="0.85"
+              />
+            </g>
+          ))
+        )}
+      </svg>
+    </div>
+  );
+}
+
 export function AttentionGridPoster() {
   const rows = [
     [0.18, 0.22, 0.3, 0.25, 0.18, 0.15],
@@ -120,6 +185,53 @@ export function AttentionGridPoster() {
             );
           })
         )}
+      </svg>
+    </div>
+  );
+}
+
+export function MoleculePoster() {
+  const steps = 18;
+  return (
+    <div
+      aria-hidden="true"
+      data-testid="research-molecule-poster"
+      className="w-full h-full flex items-center justify-center rounded-[12px] border border-[var(--border)] bg-[var(--surface)] select-none overflow-hidden p-3"
+    >
+      <svg viewBox="0 0 340 180" className="w-full h-full max-h-[170px]" aria-hidden="true">
+        {Array.from({ length: steps }).map((_, i) => {
+          const t = i / (steps - 1);
+          const x = 30 + t * 280;
+          const y1 = 90 + Math.sin(t * Math.PI * 2.5) * 45;
+          const y2 = 90 - Math.sin(t * Math.PI * 2.5) * 45;
+          return (
+            <g key={i}>
+              <line x1={x} y1={y1} x2={x} y2={y2} stroke="var(--border)" strokeWidth="1" strokeOpacity="0.7" />
+              <circle cx={x} cy={y1} r="4" fill="var(--accent)" fillOpacity="0.9" />
+              <circle cx={x} cy={y2} r="4" fill="var(--text)" fillOpacity="0.6" />
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+export function TechGlobePoster() {
+  return (
+    <div
+      aria-hidden="true"
+      data-testid="tech-globe-poster"
+      className="w-full h-full flex items-center justify-center rounded-[12px] border border-[var(--border)] bg-[var(--surface)] select-none overflow-hidden p-4"
+    >
+      <svg viewBox="0 0 200 200" className="w-full h-full max-h-[180px]" aria-hidden="true">
+        <circle cx="100" cy="100" r="70" fill="none" stroke="var(--border)" strokeWidth="1.5" />
+        <ellipse cx="100" cy="100" rx="70" ry="25" fill="none" stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" />
+        <ellipse cx="100" cy="100" rx="25" ry="70" fill="none" stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" />
+        <circle cx="100" cy="30" r="4" fill="var(--accent)" />
+        <circle cx="170" cy="100" r="4" fill="var(--accent)" />
+        <circle cx="100" cy="170" r="4" fill="var(--accent)" />
+        <circle cx="30" cy="100" r="4" fill="var(--accent)" />
       </svg>
     </div>
   );

@@ -11,6 +11,8 @@ import {
   ResearchGateIcon,
 } from './BrandIcons';
 import { SceneGate } from '@/three/SceneGate';
+import { TiltCard } from './TiltCard';
+import { TypewriterText } from './TypewriterText';
 import {
   Download,
   Mail,
@@ -77,12 +79,18 @@ export function Hero() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
           {/* Start side: 7 columns */}
           <div className="md:col-span-7 flex flex-col gap-5 text-start">
-            <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col gap-2.5 relative">
+              {/* Subtle ambient glow blob behind hero */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-16 -start-16 w-80 h-80 rounded-full bg-[var(--accent)] opacity-10 blur-3xl"
+              />
+
               {/* Availability & Specialization Eyebrow */}
               <div className="flex flex-wrap items-center gap-2 text-step-13 text-[var(--muted)]">
-                <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] text-[var(--accent)] font-medium">
+                <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[6px] border border-[var(--glass-border)] bg-[var(--surface)] text-[var(--accent)] font-medium shadow-[var(--glow-accent)]">
                   <span
-                    className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] inline-block shrink-0"
+                    className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] inline-block shrink-0 animate-pulse"
                     aria-hidden="true"
                   />
                   <span>{t('availabilityStatus')}</span>
@@ -92,11 +100,11 @@ export function Hero() {
                 </span>
               </div>
 
-              <h1 className="text-step-h1 font-bold text-[var(--text)]">
+              <h1 className="text-step-h1 font-bold text-[var(--text)] tracking-tight">
                 {profile.name}
               </h1>
-              <p className="text-step-22 font-normal text-[var(--text)] m-0">
-                {t('roleLine')}
+              <p className="text-step-22 font-medium text-[var(--accent)] m-0">
+                <TypewriterText text={t('roleLine')} />
               </p>
               <p className="text-step-15 text-[var(--muted)] m-0">
                 {t('subLine')}
@@ -111,15 +119,15 @@ export function Hero() {
               <div
                 role="group"
                 aria-label={t('viewingAs')}
-                className="inline-flex items-center p-1 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]"
+                className="inline-flex items-center p-1 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] shadow-sm"
               >
                 <button
                   type="button"
                   onClick={() => handleSelectAudience('research')}
                   aria-pressed={audience === 'research'}
-                  className={`btn-interactive min-h-[36px] px-3.5 py-1.5 rounded-[4px] text-step-13 font-medium whitespace-nowrap cursor-pointer ${
+                  className={`btn-interactive min-h-[36px] px-3.5 py-1.5 rounded-[4px] text-step-13 font-medium whitespace-nowrap cursor-pointer transition-all ${
                     audience === 'research'
-                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)]'
+                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-[var(--glow-accent)]'
                       : 'text-[var(--text)] hover:text-[var(--accent)]'
                   }`}
                 >
@@ -129,9 +137,9 @@ export function Hero() {
                   type="button"
                   onClick={() => handleSelectAudience('industry')}
                   aria-pressed={audience === 'industry'}
-                  className={`btn-interactive min-h-[36px] px-3.5 py-1.5 rounded-[4px] text-step-13 font-medium whitespace-nowrap cursor-pointer ${
+                  className={`btn-interactive min-h-[36px] px-3.5 py-1.5 rounded-[4px] text-step-13 font-medium whitespace-nowrap cursor-pointer transition-all ${
                     audience === 'industry'
-                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)]'
+                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-[var(--glow-accent)]'
                       : 'text-[var(--text)] hover:text-[var(--accent)]'
                   }`}
                 >
@@ -160,9 +168,9 @@ export function Hero() {
               </p>
             </div>
 
-            {/* Key Credentials & Medical AI / Supervision Metrics */}
+            {/* Key Credentials & Medical AI / Supervision Metrics with 3D Tilt */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1 tabular-nums">
-              <div className="card-interactive p-3 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1">
+              <TiltCard className="card-interactive p-3 rounded-[8px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1 shadow-sm hover:border-[var(--accent)] hover:shadow-[var(--glow-accent)]">
                 <div className="flex items-center gap-1.5 text-[var(--accent)]">
                   <GraduationCap
                     className="w-3.5 h-3.5 shrink-0"
@@ -175,9 +183,9 @@ export function Hero() {
                 <span className="text-step-13 text-[var(--muted)] truncate">
                   {t('metricCgpaDesc')}
                 </span>
-              </div>
+              </TiltCard>
 
-              <div className="card-interactive p-3 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1">
+              <TiltCard className="card-interactive p-3 rounded-[8px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1 shadow-sm hover:border-[var(--accent)] hover:shadow-[var(--glow-accent)]">
                 <div className="flex items-center gap-1.5 text-[var(--accent)]">
                   <FileText
                     className="w-3.5 h-3.5 shrink-0"
@@ -190,9 +198,9 @@ export function Hero() {
                 <span className="text-step-13 text-[var(--muted)] truncate">
                   {t('metricPaperDesc')}
                 </span>
-              </div>
+              </TiltCard>
 
-              <div className="card-interactive p-3 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1">
+              <TiltCard className="card-interactive p-3 rounded-[8px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1 shadow-sm hover:border-[var(--accent)] hover:shadow-[var(--glow-accent)]">
                 <div className="flex items-center gap-1.5 text-[var(--accent)]">
                   <Brain
                     className="w-3.5 h-3.5 shrink-0"
@@ -205,9 +213,9 @@ export function Hero() {
                 <span className="text-step-13 text-[var(--muted)] truncate">
                   {t('metricMedicalDesc')}
                 </span>
-              </div>
+              </TiltCard>
 
-              <div className="card-interactive p-3 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1">
+              <TiltCard className="card-interactive p-3 rounded-[8px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1 shadow-sm hover:border-[var(--accent)] hover:shadow-[var(--glow-accent)]">
                 <div className="flex items-center gap-1.5 text-[var(--accent)]">
                   <Users
                     className="w-3.5 h-3.5 shrink-0"
@@ -220,7 +228,7 @@ export function Hero() {
                 <span className="text-step-13 text-[var(--muted)] truncate">
                   {t('metricSupervisionDesc')}
                 </span>
-              </div>
+              </TiltCard>
             </div>
 
             {/* Highlight points (ordered by selected audience) */}

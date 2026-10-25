@@ -57,15 +57,17 @@ export function ThemeToggle() {
       onClick={handleToggle}
       aria-label={`${t('theme')}: ${labelMap[currentTheme]}`}
       title={`${t('theme')}: ${labelMap[currentTheme]}`}
-      className="inline-flex items-center justify-center gap-1.5 h-11 min-w-[44px] px-3 rounded-[6px] border border-[var(--border)] bg-transparent text-[var(--text)] hover:border-[var(--accent)] transition-colors text-step-13 whitespace-nowrap shrink-0 cursor-pointer"
+      className="group inline-flex items-center justify-center gap-1.5 h-11 min-w-[44px] px-3 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] hover:border-[var(--accent)] hover:shadow-[var(--glow-accent)] transition-all text-step-13 whitespace-nowrap shrink-0 cursor-pointer"
     >
-      {currentTheme === 'light' ? (
-        <Sun className="w-4 h-4 shrink-0" aria-hidden="true" />
-      ) : currentTheme === 'dark' ? (
-        <Moon className="w-4 h-4 shrink-0" aria-hidden="true" />
-      ) : (
-        <Monitor className="w-4 h-4 shrink-0" aria-hidden="true" />
-      )}
+      <span className="relative flex items-center justify-center transition-transform duration-500 ease-out [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+        {currentTheme === 'light' ? (
+          <Sun className="w-4 h-4 shrink-0 text-amber-500 transition-colors" aria-hidden="true" />
+        ) : currentTheme === 'dark' ? (
+          <Moon className="w-4 h-4 shrink-0 text-[var(--accent)] transition-colors" aria-hidden="true" />
+        ) : (
+          <Monitor className="w-4 h-4 shrink-0 text-[var(--muted)] group-hover:text-[var(--text)] transition-colors" aria-hidden="true" />
+        )}
+      </span>
       <span className="hidden sm:inline">{labelMap[currentTheme]}</span>
     </button>
   );
