@@ -10,7 +10,7 @@ Production-ready personal portfolio website for **Obaidullah Miakhil** (`https:/
 |---|---|---|
 | **Framework** | **Next.js 16.x (App Router), React 19, TypeScript** | Static Site Generation (SSG via `generateStaticParams`), built-in Metadata API, image optimization, native Vercel deployment. |
 | **Styling** | **Tailwind CSS v4** | Strict 7-token CSS variable system (`--bg`, `--surface`, `--text`, `--muted`, `--border`, `--accent`, `--accent-contrast`), flat solid colors, zero gradients. |
-| **3D Engine** | **Three.js via `@react-three/fiber` & `@react-three/drei`** | Procedural geometry (faceted 3D simplex noise-deformed icosahedron on Hero, isometric 14×14 attention grid on Research). Inline SVG posters rendered first in SSR HTML; WebGL gated by capability checks (`deviceMemory <= 4`, `hardwareConcurrency <= 4`, `saveData`, `prefers-reduced-motion`, `< 30 FPS` probe). |
+| **3D Engine** | **Three.js via `@react-three/fiber` & `@react-three/drei`** | Hero: rigged GLB character (`public/models/avatar.glb`) animated in code by `src/three/avatarRig.ts` (relaxed pose, breathing, pointer gaze, blinks, wave on load/click), with a procedural fallback figure. Research: procedural geometry. Inline SVG posters rendered first in SSR HTML; WebGL gated by capability checks (`deviceMemory <= 4`, `hardwareConcurrency <= 4`, `saveData`, `prefers-reduced-motion`, `< 30 FPS` probe). |
 | **Internationalization** | **next-intl** | 4 locales: `en` (default at `/`), `ps` (Pashto at `/ps`), `fa` (Dari/Persian at `/fa`), `ur` (Urdu at `/ur`). Full RTL support via CSS logical properties, per-locale metadata, hreflang alternates. |
 | **Typography** | **Vazirmatn** (SIL OFL) | Single self-hosted variable font for Latin, Pashto, Dari, and Urdu glyphs (`src/fonts/Vazirmatn-Variable.woff2` and TTF weights for OG images). |
 | **Theme** | **next-themes** | `system` default, 3-state toggle (System / Light / Dark) with `ViewTransition` cross-fade, zero flash of unstyled theme. |
@@ -72,6 +72,8 @@ npm run analyze
 All portfolio content lives in a **single source of truth**:
 - **Profile, Publications, Experience, Education, Repositories & Websites**:
   `src/content/profile.ts`
+- **Hero 3D Character**: `public/models/avatar.glb` — a Mixamo / Ready Player Me style skeleton with ARKit face blendshapes. To replace it, compress the new export first:
+  `npx @gltf-transform/cli optimize in.glb public/models/avatar.glb --compress meshopt --simplify false --join false --flatten false --instance false --palette false --texture-compress webp --texture-size 1024`
 - **150+ Supervised Student Projects Cohort**:
   `src/content/supervisedProjects.ts`
 - **Translations & UI Copy**:
