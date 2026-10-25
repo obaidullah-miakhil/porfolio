@@ -70,29 +70,32 @@ export function Hero() {
 
   return (
     <section
-      className="py-8 sm:py-10 md:py-14 border-b border-[var(--border)]"
+      className="py-10 sm:py-14 md:py-20 border-b border-[var(--border)]"
       suppressHydrationWarning
     >
-      <div className="mx-auto max-w-[1160px] px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1080px] px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 items-center">
-          {/* Start side: Typography, Audience Switch, Description, Credentials Grid, CTAs, Links */}
-          <div className="md:col-span-7 flex flex-col gap-4 text-start">
+          {/* Start side: 7 columns */}
+          <div className="md:col-span-7 flex flex-col gap-5 text-start">
             <div className="flex flex-col gap-2.5">
-              {/* Live Availability Badge & Target Specializations */}
-              <div className="flex flex-wrap items-center gap-2">
-                <div className="inline-flex items-center gap-2 self-start px-2.5 py-1 rounded-[4px] border border-[var(--border)] bg-[var(--surface)] text-[11px] font-mono text-[var(--accent)] shadow-xs">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 pulse-dot inline-block shrink-0" aria-hidden="true" />
-                  <span className="font-semibold">{t('availabilityStatus')}</span>
-                </div>
-                <span className="hidden sm:inline-flex items-center text-[11px] font-mono text-[var(--muted)] px-2 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--surface)]">
+              {/* Availability & Specialization Eyebrow */}
+              <div className="flex flex-wrap items-center gap-2 text-step-13 text-[var(--muted)]">
+                <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] text-[var(--accent)] font-medium">
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] inline-block shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span>{t('availabilityStatus')}</span>
+                </span>
+                <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] text-[var(--muted)]">
                   {t('availabilityTarget')}
                 </span>
               </div>
 
-              <h1 className="text-step-h1 font-bold tracking-tight text-[var(--text)]">
+              <h1 className="text-step-h1 font-bold text-[var(--text)]">
                 {profile.name}
               </h1>
-              <p className="text-step-22 font-medium text-[var(--text)] m-0">
+              <p className="text-step-22 font-normal text-[var(--text)] m-0">
                 {t('roleLine')}
               </p>
               <p className="text-step-15 text-[var(--muted)] m-0">
@@ -101,22 +104,22 @@ export function Hero() {
             </div>
 
             {/* Audience Switcher */}
-            <div className="flex flex-wrap items-center gap-3 pt-0.5">
+            <div className="flex flex-wrap items-center gap-3">
               <span className="text-step-13 text-[var(--muted)] font-medium">
                 {t('viewingAs')}
               </span>
               <div
                 role="group"
                 aria-label={t('viewingAs')}
-                className="inline-flex items-center p-0.5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]"
+                className="inline-flex items-center p-1 rounded-[6px] border border-[var(--border)] bg-[var(--surface)]"
               >
                 <button
                   type="button"
                   onClick={() => handleSelectAudience('research')}
                   aria-pressed={audience === 'research'}
-                  className={`btn-interactive px-3 py-1.5 rounded-[6px] text-step-13 font-medium whitespace-nowrap cursor-pointer ${
+                  className={`btn-interactive min-h-[36px] px-3.5 py-1.5 rounded-[4px] text-step-13 font-medium whitespace-nowrap cursor-pointer ${
                     audience === 'research'
-                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-xs'
+                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)]'
                       : 'text-[var(--text)] hover:text-[var(--accent)]'
                   }`}
                 >
@@ -126,9 +129,9 @@ export function Hero() {
                   type="button"
                   onClick={() => handleSelectAudience('industry')}
                   aria-pressed={audience === 'industry'}
-                  className={`btn-interactive px-3 py-1.5 rounded-[6px] text-step-13 font-medium whitespace-nowrap cursor-pointer ${
+                  className={`btn-interactive min-h-[36px] px-3.5 py-1.5 rounded-[4px] text-step-13 font-medium whitespace-nowrap cursor-pointer ${
                     audience === 'industry'
-                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-xs'
+                      ? 'bg-[var(--accent)] text-[var(--accent-contrast)]'
                       : 'text-[var(--text)] hover:text-[var(--accent)]'
                   }`}
                 >
@@ -157,75 +160,87 @@ export function Hero() {
               </p>
             </div>
 
-            {/* Key Credentials & High-Impact Metrics Strip (4 interactive cards) */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1">
-              <div className="card-interactive p-2.5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1 group hover:border-[var(--accent)] transition-colors">
+            {/* Key Credentials & Medical AI / Supervision Metrics */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1 tabular-nums">
+              <div className="card-interactive p-3 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1">
                 <div className="flex items-center gap-1.5 text-[var(--accent)]">
-                  <GraduationCap className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                  <span className="text-[12px] font-bold tracking-tight text-[var(--text)]">
+                  <GraduationCap
+                    className="w-3.5 h-3.5 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span className="text-step-13 font-bold text-[var(--text)]">
                     {t('metricCgpaLabel')}
                   </span>
                 </div>
-                <span className="text-[11px] text-[var(--muted)] line-clamp-1">
+                <span className="text-step-13 text-[var(--muted)] truncate">
                   {t('metricCgpaDesc')}
                 </span>
               </div>
 
-              <div className="card-interactive p-2.5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1 group hover:border-[var(--accent)] transition-colors">
+              <div className="card-interactive p-3 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1">
                 <div className="flex items-center gap-1.5 text-[var(--accent)]">
-                  <FileText className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                  <span className="text-[12px] font-bold tracking-tight text-[var(--text)]">
+                  <FileText
+                    className="w-3.5 h-3.5 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span className="text-step-13 font-bold text-[var(--text)]">
                     {t('metricPaperLabel')}
                   </span>
                 </div>
-                <span className="text-[11px] text-[var(--muted)] line-clamp-1">
+                <span className="text-step-13 text-[var(--muted)] truncate">
                   {t('metricPaperDesc')}
                 </span>
               </div>
 
-              <div className="card-interactive p-2.5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1 group hover:border-[var(--accent)] transition-colors">
+              <div className="card-interactive p-3 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1">
                 <div className="flex items-center gap-1.5 text-[var(--accent)]">
-                  <Brain className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                  <span className="text-[12px] font-bold tracking-tight text-[var(--text)]">
+                  <Brain
+                    className="w-3.5 h-3.5 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span className="text-step-13 font-bold text-[var(--text)]">
                     {t('metricMedicalLabel')}
                   </span>
                 </div>
-                <span className="text-[11px] text-[var(--muted)] line-clamp-1">
+                <span className="text-step-13 text-[var(--muted)] truncate">
                   {t('metricMedicalDesc')}
                 </span>
               </div>
 
-              <div className="card-interactive p-2.5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1 group hover:border-[var(--accent)] transition-colors">
+              <div className="card-interactive p-3 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-1">
                 <div className="flex items-center gap-1.5 text-[var(--accent)]">
-                  <Users className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
-                  <span className="text-[12px] font-bold tracking-tight text-[var(--text)]">
+                  <Users
+                    className="w-3.5 h-3.5 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span className="text-step-13 font-bold text-[var(--text)]">
                     {t('metricSupervisionLabel')}
                   </span>
                 </div>
-                <span className="text-[11px] text-[var(--muted)] line-clamp-1">
+                <span className="text-step-13 text-[var(--muted)] truncate">
                   {t('metricSupervisionDesc')}
                 </span>
               </div>
             </div>
 
             {/* Highlight points (ordered by selected audience) */}
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-step-13 text-[var(--muted)]">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-step-13 text-[var(--muted)] tabular-nums">
               {activeAudienceData.highlights.map((item, idx) => (
                 <React.Fragment key={item}>
                   {idx > 0 && <span aria-hidden="true">·</span>}
-                  <span className="hover:text-[var(--text)] transition-colors duration-150">{item}</span>
+                  <span>{item}</span>
                 </React.Fragment>
               ))}
             </div>
 
-            {/* Primary & Secondary CTAs + Direct Inquire Button */}
+            {/* Primary & Secondary CTAs */}
             <div className="flex flex-wrap items-center gap-3 pt-1">
               <a
                 href={activeAudienceData.primaryCtaHref}
                 download
-                className="btn-interactive group inline-flex items-center gap-2 h-11 px-5 rounded-[6px] bg-[var(--accent)] text-[var(--accent-contrast)] font-medium text-step-15 hover:opacity-95 whitespace-nowrap"
+                className="btn-interactive inline-flex items-center gap-2 h-11 px-5 rounded-[6px] bg-[var(--accent)] text-[var(--accent-contrast)] font-medium text-step-15 hover:opacity-95 whitespace-nowrap"
               >
-                <Download className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-y-0.5" aria-hidden="true" />
+                <Download className="w-4 h-4 shrink-0" aria-hidden="true" />
                 <span>
                   {audience === 'research'
                     ? t('downloadAcademicCv')
@@ -234,81 +249,81 @@ export function Hero() {
               </a>
 
               <a
-                href="#contact"
-                className="btn-interactive group inline-flex items-center gap-1.5 h-11 px-4 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium text-step-15 whitespace-nowrap"
+                href={`mailto:${profile.emailPrimary}`}
+                className="btn-interactive inline-flex items-center gap-2 h-11 px-5 rounded-[6px] border border-[var(--border)] bg-transparent text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium text-step-15 whitespace-nowrap"
               >
-                <span>{t('inquireAvailability')}</span>
-                <ArrowUpRight className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+                <Mail className="w-4 h-4 shrink-0" aria-hidden="true" />
+                <span>{t('emailMe')}</span>
               </a>
 
               <a
-                href={`mailto:${profile.emailPrimary}`}
-                className="btn-interactive group inline-flex items-center gap-2 h-11 px-4 rounded-[6px] border border-[var(--border)] bg-transparent text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium text-step-15 whitespace-nowrap"
+                href="#contact"
+                className="btn-interactive link-arrow inline-flex items-center gap-1.5 h-11 px-4 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium text-step-15 whitespace-nowrap"
               >
-                <Mail className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
-                <span>{t('emailMe')}</span>
+                <span>{t('inquireAvailability')}</span>
+                <ArrowUpRight className="w-4 h-4 shrink-0" aria-hidden="true" />
               </a>
             </div>
 
-          {/* Profile Link Row — GitHub visually emphasised first */}
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-1 text-step-15">
-            <a
-              href={profile.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-medium text-[var(--accent)] hover:underline whitespace-nowrap transition-transform duration-150 hover:-translate-y-0.5"
-            >
-              <GitHubIcon size={18} />
-              <span dir="ltr">{profile.githubHandle}</span>
-            </a>
-
-            <a
-              href={profile.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap transition-transform duration-150 hover:-translate-y-0.5"
-            >
-              <LinkedInIcon size={17} />
-              <span>LinkedIn</span>
-            </a>
-
-            {profile.scholarUrl ? (
+            {/* Profile Link Row — GitHub visually emphasised first */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-1 text-step-15">
               <a
-                href={profile.scholarUrl}
+                href={profile.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap transition-transform duration-150 hover:-translate-y-0.5"
+                className="editorial-link inline-flex items-center gap-2 min-h-[44px] font-medium text-[var(--accent)] whitespace-nowrap"
               >
-                <ScholarIcon size={17} />
-                <span>Google Scholar</span>
+                <GitHubIcon size={18} />
+                <span dir="ltr">{profile.githubHandle}</span>
               </a>
-            ) : null}
 
-            {profile.researchgateUrl ? (
               <a
-                href={profile.researchgateUrl}
+                href={profile.linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap transition-transform duration-150 hover:-translate-y-0.5"
+                className="editorial-link inline-flex items-center gap-1.5 min-h-[44px] text-[var(--text)] hover:text-[var(--accent)] whitespace-nowrap"
               >
-                <ResearchGateIcon size={17} />
-                <span>ResearchGate</span>
+                <LinkedInIcon size={17} />
+                <span>LinkedIn</span>
               </a>
-            ) : null}
 
-            <a
-              href={profile.huggingfaceUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[var(--text)] hover:text-[var(--accent)] hover:underline whitespace-nowrap transition-transform duration-150 hover:-translate-y-0.5"
-            >
-              <HuggingFaceIcon size={17} />
-              <span>Hugging Face</span>
-            </a>
+              {profile.scholarUrl ? (
+                <a
+                  href={profile.scholarUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="editorial-link inline-flex items-center gap-1.5 min-h-[44px] text-[var(--text)] hover:text-[var(--accent)] whitespace-nowrap"
+                >
+                  <ScholarIcon size={17} />
+                  <span>Google Scholar</span>
+                </a>
+              ) : null}
+
+              {profile.researchgateUrl ? (
+                <a
+                  href={profile.researchgateUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="editorial-link inline-flex items-center gap-1.5 min-h-[44px] text-[var(--text)] hover:text-[var(--accent)] whitespace-nowrap"
+                >
+                  <ResearchGateIcon size={17} />
+                  <span>ResearchGate</span>
+                </a>
+              ) : null}
+
+              <a
+                href={profile.huggingfaceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="editorial-link inline-flex items-center gap-1.5 min-h-[44px] text-[var(--text)] hover:text-[var(--accent)] whitespace-nowrap"
+              >
+                <HuggingFaceIcon size={17} />
+                <span>Hugging Face</span>
+              </a>
+            </div>
           </div>
-        </div>
 
-          {/* End side: 3D Hero Object / Poster */}
+          {/* End side: 5 columns 3D Hero Object / Poster */}
           <div className="md:col-span-5 w-full flex items-center justify-center">
             <SceneGate scene="hero" />
           </div>

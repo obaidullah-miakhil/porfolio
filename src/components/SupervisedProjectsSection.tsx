@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-import {
-  profile,
-  type SupervisedStudentProject,
-} from '@/content/profile';
+import { profile } from '@/content/profile';
 import { GitHubIcon, LinkedInIcon } from './BrandIcons';
 import {
   ExternalLink,
@@ -13,12 +10,14 @@ import {
   Users,
   Code2,
   Award,
-  Sparkles,
-  Layers,
   GraduationCap,
 } from 'lucide-react';
 
-export function SupervisedProjectsSection() {
+export function SupervisedProjectsSection({
+  sectionNumber = '03',
+}: {
+  sectionNumber?: string;
+}) {
   const [activeFilter, setActiveFilter] = useState<'all' | 'published'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -58,82 +57,89 @@ export function SupervisedProjectsSection() {
       className="space-y-8 pt-10 border-t border-[var(--border)]"
     >
       {/* Header */}
-      <div className="space-y-3">
-        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[4px] border border-[var(--border)] bg-[var(--surface)] text-[11px] font-mono text-[var(--accent)] shadow-xs">
-          <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" />
-          <span>Mentorship &amp; Academic Supervision · 150+ Projects</span>
+      <div className="space-y-2">
+        <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
+          {sectionNumber}
         </div>
 
-        <h2
-          id="supervised-projects-heading"
-          className="text-step-28 font-bold text-[var(--text)] tracking-tight"
-        >
-          Supervised Student Projects
-        </h2>
+        <div className="flex flex-wrap items-center gap-3">
+          <h2
+            id="supervised-projects-heading"
+            className="text-step-28 font-bold text-[var(--text)]"
+          >
+            Supervised student projects
+          </h2>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] text-step-13 text-[var(--accent)] font-medium tabular-nums">
+            <GraduationCap className="w-3.5 h-3.5" aria-hidden="true" />
+            <span>150+ projects mentored</span>
+          </span>
+        </div>
 
-        <p className="text-step-15 text-[var(--muted)] leading-relaxed max-w-[75ch] m-0">
-          In my teaching experience, I push my students to build and deploy at least one professional, production-ready website or system each semester. Through this hands-on pedagogy, I have supervised <strong>150+ student projects</strong> across diverse subjects and solving different problems. Below is a curated cohort of student projects from the Object-Oriented Programming (OOP) &amp; Software Design lab at PAF-IAST, featuring deployed online applications at the top followed by complete team repositories and professional LinkedIn demonstrations.
+        <p className="text-step-15 text-[var(--muted)] leading-relaxed max-w-[65ch] m-0">
+          Each semester at PAF-IAST, student teams design, build, and deploy
+          full-stack software systems under my lab supervision. Across courses,
+          I have supervised <strong>150+ student projects</strong>. Below is a
+          curated cohort from the Object-Oriented Programming &amp; Software
+          Design lab, with live deployed web applications listed first.
         </p>
       </div>
 
       {/* Metrics Banner */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="card-interactive p-4 sm:p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-1">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 tabular-nums">
+        <div className="card-interactive p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-1">
           <div className="flex items-center gap-2 text-[var(--accent)]">
             <Award className="w-4 h-4" aria-hidden="true" />
-            <span className="text-[11px] font-mono text-[var(--muted)] uppercase tracking-wider">
-              Total Supervised
+            <span className="text-step-13 text-[var(--muted)]">
+              Total supervised
             </span>
           </div>
-          <div className="text-step-28 font-bold text-[var(--text)]">
-            150+
-          </div>
-          <p className="text-[12px] text-[var(--muted)] m-0">
+          <div className="text-step-28 font-bold text-[var(--text)]">150+</div>
+          <p className="text-step-13 text-[var(--muted)] m-0">
             Across multiple semesters &amp; courses
           </p>
         </div>
 
-        <div className="card-interactive p-4 sm:p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-1">
-          <div className="flex items-center gap-2 text-emerald-600">
+        <div className="card-interactive p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-1">
+          <div className="flex items-center gap-2 text-[var(--accent)]">
             <Globe className="w-4 h-4" aria-hidden="true" />
-            <span className="text-[11px] font-mono text-[var(--muted)] uppercase tracking-wider">
-              Live Deployed Sites
+            <span className="text-step-13 text-[var(--muted)]">
+              Live deployed sites
             </span>
           </div>
-          <div className="text-step-28 font-bold text-emerald-600">
+          <div className="text-step-28 font-bold text-[var(--accent)]">
             {publishedCount}
           </div>
-          <p className="text-[12px] text-[var(--muted)] m-0">
-            Production hosted at top of list
+          <p className="text-step-13 text-[var(--muted)] m-0">
+            Hosted in production
           </p>
         </div>
 
-        <div className="card-interactive p-4 sm:p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-1">
+        <div className="card-interactive p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-1">
           <div className="flex items-center gap-2 text-[var(--accent)]">
             <Users className="w-4 h-4" aria-hidden="true" />
-            <span className="text-[11px] font-mono text-[var(--muted)] uppercase tracking-wider">
-              Student Teams
+            <span className="text-step-13 text-[var(--muted)]">
+              Featured cohort
             </span>
           </div>
           <div className="text-step-28 font-bold text-[var(--text)]">
-            17 Groups
+            17 groups
           </div>
-          <p className="text-[12px] text-[var(--muted)] m-0">
-            35+ Supervised engineering students
+          <p className="text-step-13 text-[var(--muted)] m-0">
+            35+ engineering students
           </p>
         </div>
 
-        <div className="card-interactive p-4 sm:p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-1">
+        <div className="card-interactive p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] space-y-1">
           <div className="flex items-center gap-2 text-[var(--accent)]">
             <Code2 className="w-4 h-4" aria-hidden="true" />
-            <span className="text-[11px] font-mono text-[var(--muted)] uppercase tracking-wider">
-              Curriculum Lab
+            <span className="text-step-13 text-[var(--muted)]">
+              Curriculum lab
             </span>
           </div>
           <div className="text-step-22 font-bold text-[var(--text)]">
             OOP &amp; C++
           </div>
-          <p className="text-[12px] text-[var(--muted)] m-0">
+          <p className="text-step-13 text-[var(--muted)] m-0">
             Dept. of Computer Science, PAF-IAST
           </p>
         </div>
@@ -141,47 +147,51 @@ export function SupervisedProjectsSection() {
 
       {/* Filter Tabs & Search Controls */}
       <div className="p-4 sm:p-5 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        {/* Tabs */}
-        <div className="inline-flex items-center p-1 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] self-start">
+        <div className="inline-flex items-center p-1 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] self-start tabular-nums">
           <button
             type="button"
             onClick={() => setActiveFilter('all')}
-            className={`btn-interactive px-3 py-1.5 rounded-[4px] text-step-13 font-medium cursor-pointer transition-colors ${
+            aria-pressed={activeFilter === 'all'}
+            className={`btn-interactive min-h-[38px] px-3.5 py-1.5 rounded-[4px] text-step-13 font-medium cursor-pointer transition-colors ${
               activeFilter === 'all'
-                ? 'bg-[var(--accent)] text-[var(--accent-contrast)] shadow-xs'
+                ? 'bg-[var(--accent)] text-[var(--accent-contrast)]'
                 : 'text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >
-            All Cohort Projects ({projects.length})
+            All cohort projects ({projects.length})
           </button>
           <button
             type="button"
             onClick={() => setActiveFilter('published')}
-            className={`btn-interactive px-3 py-1.5 rounded-[4px] text-step-13 font-medium cursor-pointer transition-colors flex items-center gap-1.5 ${
+            aria-pressed={activeFilter === 'published'}
+            className={`btn-interactive min-h-[38px] px-3.5 py-1.5 rounded-[4px] text-step-13 font-medium cursor-pointer transition-colors flex items-center gap-1.5 ${
               activeFilter === 'published'
-                ? 'bg-emerald-600 text-white shadow-xs'
+                ? 'bg-[var(--accent)] text-[var(--accent-contrast)]'
                 : 'text-[var(--muted)] hover:text-[var(--text)]'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-500 pulse-dot inline-block" aria-hidden="true" />
-            <span>Live Deployed Only ({publishedCount})</span>
+            <span>Live deployed only ({publishedCount})</span>
           </button>
         </div>
 
         {/* Search Input */}
         <div className="relative w-full sm:w-72">
-          <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted)]" aria-hidden="true" />
+          <Search
+            className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted)]"
+            aria-hidden="true"
+          />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search project, student, ID..."
-            className="w-full h-10 ps-9 pe-3 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-step-13 text-[var(--text)] placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--accent)] transition-colors"
+            aria-label="Search supervised student projects"
+            className="w-full h-11 ps-9 pe-3 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-step-13 text-[var(--text)] placeholder:text-[var(--muted)] focus:outline-none focus:border-[var(--accent)] transition-colors"
           />
         </div>
       </div>
 
-      {/* Table / Project Grid */}
+      {/* Hairline-divided Project List */}
       <div className="border border-[var(--border)] rounded-[6px] bg-[var(--surface)] divide-y divide-[var(--border)] overflow-hidden">
         {filteredProjects.length === 0 ? (
           <div className="p-8 text-center text-step-15 text-[var(--muted)]">
@@ -191,27 +201,22 @@ export function SupervisedProjectsSection() {
           filteredProjects.map((proj) => (
             <div
               key={proj.id}
-              className={`p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6 transition-colors duration-200 hover:bg-[var(--bg)]/50 ${
-                proj.isPublished
-                  ? 'border-s-4 border-s-emerald-500'
-                  : 'border-s-4 border-s-transparent'
-              }`}
+              className="p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6 transition-colors duration-200 hover:bg-[var(--bg)]"
             >
-              {/* Left Column: Project Info & Description */}
+              {/* Start Column: Project Info & Description */}
               <div className="space-y-2.5 max-w-[620px]">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]">
+                <div className="flex flex-wrap items-center gap-2 tabular-nums">
+                  <span className="text-step-13 font-mono px-2 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]">
                     {proj.groupLabel}
                   </span>
 
                   {proj.isPublished ? (
-                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px] font-semibold border border-emerald-500/30">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 pulse-dot inline-block" aria-hidden="true" />
-                      <span>Live Deployed</span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[4px] border border-[var(--accent)] text-[var(--accent)] text-step-13 font-medium">
+                      <span>Live deployed</span>
                     </span>
                   ) : null}
 
-                  <span className="text-[12px] text-[var(--muted)]">
+                  <span className="text-step-13 text-[var(--muted)]">
                     {proj.course} · {proj.semester}
                   </span>
                 </div>
@@ -223,7 +228,7 @@ export function SupervisedProjectsSection() {
                         href={proj.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-[var(--accent)] hover:underline transition-colors"
+                        className="editorial-link hover:text-[var(--accent)] transition-colors"
                       >
                         {proj.projectName}
                       </a>
@@ -237,18 +242,16 @@ export function SupervisedProjectsSection() {
                 </div>
 
                 {/* Team Members & IDs */}
-                <div className="pt-1 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-step-13">
-                  <span className="font-medium text-[var(--text)] text-[12px]">
-                    Team Members:
-                  </span>
-                  {proj.members.map((member, idx) => (
+                <div className="pt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-step-13">
+                  <span className="font-medium text-[var(--text)]">Team:</span>
+                  {proj.members.map((member) => (
                     <div
                       key={member.studentId || member.name}
-                      className="inline-flex items-center gap-1.5 text-[var(--text)] text-[12px] bg-[var(--bg)] px-2 py-0.5 rounded-[4px] border border-[var(--border)]"
+                      className="inline-flex items-center gap-1.5 text-[var(--text)] bg-[var(--bg)] px-2.5 py-0.5 rounded-[4px] border border-[var(--border)]"
                     >
                       <span className="font-medium">{member.name}</span>
                       {member.studentId && (
-                        <span className="font-mono text-[11px] text-[var(--muted)]">
+                        <span className="font-mono text-[var(--muted)] tabular-nums">
                           ({member.studentId})
                         </span>
                       )}
@@ -257,7 +260,7 @@ export function SupervisedProjectsSection() {
                           href={member.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          title={`${member.name}'s GitHub`}
+                          title={`${member.name} GitHub`}
                           className="text-[var(--muted)] hover:text-[var(--accent)] transition-colors ms-0.5"
                         >
                           <GitHubIcon size={13} />
@@ -268,8 +271,8 @@ export function SupervisedProjectsSection() {
                           href={member.linkedinUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          title={`${member.name}'s LinkedIn`}
-                          className="text-[var(--muted)] hover:text-[#0077b5] transition-colors"
+                          title={`${member.name} LinkedIn`}
+                          className="text-[var(--muted)] hover:text-[var(--accent)] transition-colors"
                         >
                           <LinkedInIcon size={13} />
                         </a>
@@ -279,17 +282,17 @@ export function SupervisedProjectsSection() {
                 </div>
               </div>
 
-              {/* Right Column: Interactive Action CTAs */}
+              {/* End Column: Action Links */}
               <div className="flex flex-wrap lg:flex-col items-start lg:items-end gap-2.5 shrink-0">
                 {proj.liveUrl ? (
                   <a
                     href={proj.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-interactive inline-flex items-center gap-2 h-9 px-4 rounded-[6px] bg-emerald-600 text-white text-step-13 font-semibold hover:bg-emerald-700 shadow-xs whitespace-nowrap"
+                    className="btn-interactive link-arrow inline-flex items-center gap-2 h-10 px-4 rounded-[6px] bg-[var(--accent)] text-[var(--accent-contrast)] text-step-13 font-medium hover:opacity-95 whitespace-nowrap"
                   >
                     <Globe className="w-3.5 h-3.5" aria-hidden="true" />
-                    <span>Visit Live Website</span>
+                    <span>Visit live website</span>
                     <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
                   </a>
                 ) : null}
@@ -299,7 +302,7 @@ export function SupervisedProjectsSection() {
                     href={proj.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-interactive inline-flex items-center gap-1.5 h-8 px-3 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] text-[12px] font-medium transition-colors whitespace-nowrap"
+                    className="btn-interactive inline-flex items-center gap-1.5 h-9 px-3 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-[var(--text)] hover:border-[var(--accent)] hover:text-[var(--accent)] text-step-13 font-medium transition-colors whitespace-nowrap"
                   >
                     <GitHubIcon size={14} />
                     <span>Repository</span>
@@ -312,10 +315,10 @@ export function SupervisedProjectsSection() {
                     href={proj.linkedinUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-interactive inline-flex items-center gap-1.5 h-8 px-3 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)] hover:border-[#0077b5] hover:text-[#0077b5] text-[12px] font-medium transition-colors whitespace-nowrap"
+                    className="btn-interactive inline-flex items-center gap-1.5 h-9 px-3 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] text-step-13 font-medium transition-colors whitespace-nowrap"
                   >
                     <LinkedInIcon size={13} />
-                    <span>LinkedIn Post</span>
+                    <span>LinkedIn demo</span>
                   </a>
                 ) : null}
               </div>

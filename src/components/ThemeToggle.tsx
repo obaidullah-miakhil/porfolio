@@ -34,7 +34,21 @@ export function ThemeToggle() {
   };
 
   const handleToggle = () => {
-    setTheme(nextTheme());
+    const target = nextTheme();
+    const doc = document as Document & {
+      startViewTransition?: (cb: () => void) => void;
+    };
+    const reducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!reducedMotion && typeof doc.startViewTransition === 'function') {
+      doc.startViewTransition(() => {
+        setTheme(target);
+      });
+    } else {
+      setTheme(target);
+    }
   };
 
   return (
@@ -43,7 +57,7 @@ export function ThemeToggle() {
       onClick={handleToggle}
       aria-label={`${t('theme')}: ${labelMap[currentTheme]}`}
       title={`${t('theme')}: ${labelMap[currentTheme]}`}
-      className="inline-flex items-center gap-1.5 h-9 px-2.5 rounded-[6px] border border-[var(--border)] bg-transparent text-[var(--text)] hover:border-[var(--accent)] transition-colors text-step-13 whitespace-nowrap shrink-0 cursor-pointer"
+      className="inline-flex items-center justify-center gap-1.5 h-11 min-w-[44px] px-3 rounded-[6px] border border-[var(--border)] bg-transparent text-[var(--text)] hover:border-[var(--accent)] transition-colors text-step-13 whitespace-nowrap shrink-0 cursor-pointer"
     >
       {currentTheme === 'light' ? (
         <Sun className="w-4 h-4 shrink-0" aria-hidden="true" />

@@ -184,9 +184,13 @@ async function captureSite(browser, site) {
 
 async function main() {
   console.log('Launching Playwright Chromium browser...');
-  const browser = await chromium.launch({
-    headless: true,
-  });
+  const preinstalledPath =
+    '/ms-playwright/chromium_headless_shell-1247/chrome-headless-shell-linux64/chrome-headless-shell';
+  const browser = await chromium.launch(
+    fs.existsSync(preinstalledPath)
+      ? { headless: true, executablePath: preinstalledPath }
+      : { headless: true }
+  );
 
   try {
     for (const site of SITES) {

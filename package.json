@@ -6,15 +6,19 @@
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "prebuild": "node scripts/sync-locale-routes.mjs",
-    "build": "next build && node scripts/check-no-gradients.mjs",
+    "build": "NODE_ENV=production next build && node scripts/check-no-gradients.mjs",
     "start": "next start -p 3000 -H 0.0.0.0",
     "clean": "rm -rf .next dist",
     "lint": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "check:gradients": "node scripts/check-no-gradients.mjs",
     "check:links": "node scripts/check-links.mjs",
     "test": "tsx --test src/lib/profile.test.ts",
     "screenshots": "node scripts/capture-screenshots.mjs",
-    "analyze": "ANALYZE=true next build"
+    "analyze": "NODE_ENV=production ANALYZE=true next build"
+  },
+  "engines": {
+    "node": "22.x"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

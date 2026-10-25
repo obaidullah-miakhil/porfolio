@@ -4,12 +4,15 @@ import { locales, type Locale } from '@/i18n/routing';
 
 export function getSiteUrl(): string {
   const raw =
-    profile.domain ||
     process.env.NEXT_PUBLIC_SITE_URL ||
-    process.env.APP_URL ||
-    'https://obaidullahmiakhil.com';
+    profile.domain ||
+    'https://obaidullah.online';
   const withProtocol = raw.startsWith('http') ? raw : `https://${raw}`;
   return withProtocol.replace(/\/+$/, '');
+}
+
+export function isProductionEnv(): boolean {
+  return process.env.VERCEL_ENV === 'production';
 }
 
 const OG_LOCALE_MAP: Record<Locale, string> = {
@@ -78,6 +81,9 @@ export function buildPageMetadata({
   const canonical = getLocalizedUrl(locale, pathname);
   const languages = buildLanguageAlternates(pathname);
   const ogLocale = OG_LOCALE_MAP[(locale as Locale) || 'en'] ?? 'en_US';
+  const isProd = isProductionEnv();
+  const gscVerification =
+    process.env.NEXT_PUBLIC_GSC_VERIFICATION || profile.gscToken;
 
   const metadata: Metadata = {
     metadataBase: new URL(siteUrl),
@@ -90,6 +96,9 @@ export function buildPageMetadata({
     keywords: SEO_KEYWORDS,
     authors: [{ name: profile.name, url: siteUrl }],
     creator: profile.name,
+    robots: isProd
+      ? { index: true, follow: true }
+      : { index: false, follow: false },
     alternates: {
       canonical,
       languages,
@@ -112,9 +121,9 @@ export function buildPageMetadata({
     },
   };
 
-  if (profile.gscToken) {
+  if (gscVerification) {
     metadata.verification = {
-      google: profile.gscToken,
+      google: gscVerification,
     };
   }
 
@@ -125,7 +134,7 @@ export function buildHomeJsonLd(locale: string) {
   const siteUrl = getSiteUrl();
   const personId = `${siteUrl}/#person`;
   const websiteId = `${siteUrl}/#website`;
-  const profilePageId = `${ getLocalizedUrl(locale, '') }#profilepage`;
+  const profilePageId = `${getLocalizedUrl(locale, '')}#profilepage`;
 
   const sameAs = [
     profile.githubUrl,
@@ -155,7 +164,7 @@ export function buildHomeJsonLd(locale: string) {
           familyName: profile.familyName,
           jobTitle: profile.roleLine,
           description:
-            'Obaidullah Miakhil is an AI engineer and machine learning researcher specializing in medical diagnosis and medical AI. Prospective PhD candidate in Computer Science (Sept 2027 intake onwards).',
+            'Obaidullah Miakhil is an AI engineer and machine learning researcher working on medical AI, deep learning and NLP. Prospective PhD candidate in Computer Science & Medical AI.',
           image: `${siteUrl}${profile.profilePhoto}`,
           url: siteUrl,
           email: profile.emailPrimary,

@@ -9,8 +9,6 @@
   --border: #E4E3DE;
   --accent: #1E4BD2;
   --accent-contrast: #FFFFFF;
-  --card-shadow-hover: 0 12px 28px -6px rgba(20, 20, 20, 0.08), 0 4px 10px -2px rgba(20, 20, 20, 0.04);
-  --card-border-hover: #CBD5E1;
 }
 
 [data-theme="dark"] {
@@ -21,8 +19,6 @@
   --border: #26272B;
   --accent: #7C9BFF;
   --accent-contrast: #0F1012;
-  --card-shadow-hover: 0 14px 32px -6px rgba(0, 0, 0, 0.55), 0 4px 12px -2px rgba(0, 0, 0, 0.35);
-  --card-border-hover: #3E4249;
 }
 
 @theme {
@@ -48,29 +44,55 @@
 *::after {
   box-sizing: border-box;
   border-color: var(--border);
+  font-family: var(--font-vazirmatn), sans-serif;
+}
+
+::selection {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
 }
 
 html {
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-vazirmatn), sans-serif;
-  font-size: 15px; /* Mobile base */
+  font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg);
 }
 
 @media (min-width: 640px) {
   html {
-    font-size: 15.5px; /* Tablet base */
+    font-size: 15.5px;
   }
 }
 
 @media (min-width: 1024px) {
   html {
-    font-size: 16px; /* Desktop base */
+    font-size: 16px;
   }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent);
 }
 
 body {
@@ -81,6 +103,7 @@ body {
   line-height: 1.6;
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 h1,
@@ -96,253 +119,191 @@ h6 {
   margin: 0;
 }
 
+p {
+  text-wrap: pretty;
+  max-width: 68ch;
+}
+
+/* RTL Typography Rules: zero letter-spacing so Arabic-script joining never breaks, and 1.3 line-height on headings */
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6,
+[dir="rtl"] .text-step-h1,
+[dir="rtl"] .text-step-36,
+[dir="rtl"] .text-step-32,
+[dir="rtl"] .text-step-28,
+[dir="rtl"] .text-step-22,
+[dir="rtl"] .text-step-18 {
+  letter-spacing: 0 !important;
+  line-height: 1.3 !important;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
 /* ==========================================================================
-   Responsive Typography System (Mobile <640px | Tablet 640-1024px | Desktop >1024px)
+   Responsive Typography System (6 Steps: 13, 15, 17, 22, 32, H1)
    ========================================================================== */
 
 /* Step 13: Meta labels, tags, captions */
 .text-step-13 {
-  font-size: 0.75rem; /* 12px mobile */
-  line-height: 1.45;
-}
-@media (min-width: 640px) {
-  .text-step-13 {
-    font-size: 0.8125rem; /* 13px tablet & desktop */
-    line-height: 1.5;
-  }
+  font-size: 0.8125rem;
+  line-height: 1.5;
 }
 
 /* Step 15: Standard body text */
 .text-step-15 {
-  font-size: 0.875rem; /* 14px mobile */
-  line-height: 1.55;
-}
-@media (min-width: 640px) {
-  .text-step-15 {
-    font-size: 0.90625rem; /* 14.5px tablet */
-    line-height: 1.58;
-  }
-}
-@media (min-width: 1024px) {
-  .text-step-15 {
-    font-size: 0.9375rem; /* 15px desktop */
-    line-height: 1.6;
-  }
+  font-size: 0.9375rem;
+  line-height: 1.6;
 }
 
 /* Step 17: Lead summaries & intros */
 .text-step-17 {
-  font-size: 0.9375rem; /* 15px mobile */
-  line-height: 1.55;
-}
-@media (min-width: 640px) {
-  .text-step-17 {
-    font-size: 1rem; /* 16px tablet */
-    line-height: 1.6;
-  }
-}
-@media (min-width: 1024px) {
-  .text-step-17 {
-    font-size: 1.0625rem; /* 17px desktop */
-    line-height: 1.65;
-  }
+  font-size: clamp(0.96875rem, 0.92rem + 0.25vw, 1.0625rem);
+  line-height: 1.6;
 }
 
-/* Step 18: Card subheadings & credentials */
+/* Step 18 / 22: Card subheadings & titles */
 .text-step-18 {
-  font-size: 1rem; /* 16px mobile */
-  line-height: 1.35;
-}
-@media (min-width: 640px) {
-  .text-step-18 {
-    font-size: 1.0625rem; /* 17px tablet */
-  }
-}
-@media (min-width: 1024px) {
-  .text-step-18 {
-    font-size: 1.125rem; /* 18px desktop */
-  }
+  font-size: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem);
+  line-height: 1.3;
 }
 
-/* Step 22: Card titles & project names */
 .text-step-22 {
-  font-size: clamp(1.0625rem, 0.98rem + 0.35vw, 1.1875rem); /* 17-19px mobile */
+  font-size: clamp(1.1875rem, 1.08rem + 0.35vw, 1.375rem);
   line-height: 1.25;
 }
-@media (min-width: 640px) {
-  .text-step-22 {
-    font-size: clamp(1.1875rem, 1.05rem + 0.3vw, 1.3125rem); /* 19-21px tablet */
-  }
-}
-@media (min-width: 1024px) {
-  .text-step-22 {
-    font-size: clamp(1.3125rem, 1.18rem + 0.25vw, 1.4375rem); /* 21-23px desktop */
-  }
-}
 
-/* Step 28: Section headings (About, Research, Experience, Education) */
-.text-step-28 {
-  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.4rem); /* 20-22.4px mobile */
-  line-height: 1.22;
-  letter-spacing: -0.01em;
-}
-@media (min-width: 640px) {
-  .text-step-28 {
-    font-size: clamp(1.4rem, 1.25rem + 0.5vw, 1.625rem); /* 22.4-26px tablet */
-  }
-}
-@media (min-width: 1024px) {
-  .text-step-28 {
-    font-size: clamp(1.625rem, 1.45rem + 0.4vw, 1.875rem); /* 26-30px desktop */
-  }
-}
-
-/* Step 32: Contact & major section titles */
+/* Step 28 / 32: Section headings & major titles */
+.text-step-28,
 .text-step-32 {
-  font-size: clamp(1.375rem, 1.15rem + 1vw, 1.625rem); /* 22-26px mobile */
-  line-height: 1.2;
-}
-@media (min-width: 640px) {
-  .text-step-32 {
-    font-size: clamp(1.625rem, 1.35rem + 0.8vw, 1.875rem); /* 26-30px tablet */
-  }
-}
-@media (min-width: 1024px) {
-  .text-step-32 {
-    font-size: clamp(1.875rem, 1.5rem + 0.6vw, 2.125rem); /* 30-34px desktop */
-  }
-}
-
-/* Step 36: Major Page Titles (/research, /projects, /cv) */
-.text-step-36 {
-  font-size: clamp(1.5rem, 1.25rem + 1.2vw, 1.75rem); /* 24-28px mobile */
+  font-size: clamp(1.5rem, 1.25rem + 0.8vw, 2rem);
   line-height: 1.15;
   letter-spacing: -0.015em;
 }
-@media (min-width: 640px) {
-  .text-step-36 {
-    font-size: clamp(1.75rem, 1.45rem + 1vw, 2.125rem); /* 28-34px tablet */
-  }
-}
-@media (min-width: 1024px) {
-  .text-step-36 {
-    font-size: clamp(2.125rem, 1.75rem + 0.8vw, 2.375rem); /* 34-38px desktop */
-  }
+
+.text-step-36 {
+  font-size: clamp(1.75rem, 1.4rem + 1.1vw, 2.375rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
 }
 
-/* Step H1: Hero Main Name */
+/* Step H1: Hero Main Name — clamp(44px, 7vw, 88px), weight 700, line-height 1.02, letter-spacing -0.02em for Latin */
 .text-step-h1 {
-  font-size: clamp(1.875rem, 1.3rem + 2.8vw, 2.375rem); /* 30-38px mobile */
-  line-height: 1.1;
+  font-size: clamp(44px, 7vw, 88px);
+  font-weight: 700;
+  line-height: 1.02;
   letter-spacing: -0.02em;
 }
-@media (min-width: 640px) {
-  .text-step-h1 {
-    font-size: clamp(2.375rem, 1.8rem + 2vw, 3.125rem); /* 38-50px tablet */
-  }
-}
-@media (min-width: 1024px) {
-  .text-step-h1 {
-    font-size: clamp(3.125rem, 2.2rem + 1.5vw, 3.875rem); /* 50-62px desktop */
-  }
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: -10rem;
+  z-index: 100;
+  padding: 0.625rem 1rem;
+  border-radius: 6px;
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
 }
 
+.skip-to-content:focus {
+  top: 0.75rem;
+}
 
-/* Focus Ring Accessibility */
+/* Focus Ring Accessibility (only permitted shadow/outline) */
 a:focus-visible,
 button:focus-visible,
 select:focus-visible,
+input:focus-visible,
 [tabindex]:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-/* Interactive Card Polish */
+/* Links: 1px underline, text-underline-offset: 3px, thicker underline on hover */
+.link-editorial {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 150ms ease, text-decoration-thickness 150ms ease;
+}
+
+.link-editorial:hover,
+.link-editorial:focus-visible {
+  text-decoration-thickness: 2px;
+}
+
+/* Cards: border changes to --accent on hover/focus. No lift, no shadow. */
 .card-interactive {
-  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 240ms cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 240ms ease;
-  will-change: transform;
+  transition: border-color 150ms ease, background-color 150ms ease;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .card-interactive:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--card-shadow-hover);
-    border-color: var(--card-border-hover);
-  }
+.card-interactive:hover,
+.card-interactive:focus-within {
+  border-color: var(--accent);
 }
 
-.card-interactive:active {
-  transform: translateY(-1px);
-}
-
-/* Interactive Button Micro-animation */
+/* Buttons: 150ms transition; arrow icon nudges 2px toward inline-end on hover (mirrored in RTL) */
 .btn-interactive {
-  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 180ms ease,
-              background-color 180ms ease,
-              border-color 180ms ease,
-              box-shadow 180ms ease;
-  will-change: transform;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease, opacity 150ms ease;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .btn-interactive:hover {
-    transform: translateY(-1px);
-  }
+.btn-arrow {
+  transition: transform 150ms ease;
 }
 
-.btn-interactive:active {
-  transform: scale(0.98);
+.group:hover .btn-arrow,
+.btn-interactive:hover .btn-arrow {
+  transform: translateX(2px);
 }
 
-/* Tag Pill Micro-interaction */
+[dir="rtl"] .group:hover .btn-arrow,
+[dir="rtl"] .btn-interactive:hover .btn-arrow {
+  transform: scaleX(-1) translateX(2px);
+}
+
+/* Tag Outline Label */
 .tag-pill {
-  transition: background-color 180ms ease,
-              border-color 180ms ease,
-              color 180ms ease,
-              transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 150ms ease, color 150ms ease;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .tag-pill:hover {
-    border-color: var(--card-border-hover);
-  }
+/* View Transition API: plain 200ms cross-fade for theme switch */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: ease-out;
 }
 
-/* Pulse indicator dot */
-@keyframes pulse-subtle {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.45;
-    transform: scale(0.85);
-  }
-}
-
-.pulse-dot {
-  animation: pulse-subtle 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Subtle Reveal Transition */
+/* Scroll-in reveal: fade + 8px rise, 250ms, once per element */
 .reveal-section {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 360ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 250ms ease-out, transform 250ms ease-out;
 }
 
 .reveal-section[data-reveal="pending"] {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(8px);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
   }
 
   *,

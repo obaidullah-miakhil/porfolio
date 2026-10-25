@@ -18,7 +18,7 @@ export function RepoCard({ repo }: { repo: EnrichedGitHubRepo }) {
               href={repo.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[var(--accent)] hover:underline transition-colors duration-200"
+              className="editorial-link hover:text-[var(--accent)] transition-colors duration-200"
             >
               {repo.title}
             </a>
@@ -29,7 +29,7 @@ export function RepoCard({ repo }: { repo: EnrichedGitHubRepo }) {
           />
         </div>
 
-        <p className="text-step-13 text-[var(--muted)] m-0">
+        <p className="text-step-13 text-[var(--muted)] m-0 tabular-nums">
           <span>{repo.repoName}</span>
           {repo.date ? (
             <>
@@ -44,41 +44,34 @@ export function RepoCard({ repo }: { repo: EnrichedGitHubRepo }) {
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[var(--border)] text-step-13 text-[var(--muted)]">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[var(--border)] text-step-13 text-[var(--muted)] tabular-nums">
         <div className="flex items-center gap-3">
           <span className="inline-flex items-center gap-1.5 font-medium text-[var(--text)]">
             <span
-              className="w-2.5 h-2.5 rounded-full inline-block"
-              style={{
-                backgroundColor:
-                  repo.language === 'Python'
-                    ? '#3572A5'
-                    : repo.language === 'TypeScript'
-                    ? '#3178C6'
-                    : 'var(--accent)',
-              }}
+              className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] inline-block"
               aria-hidden="true"
             />
             <span>{repo.language}</span>
           </span>
-          {repo.stars > 0 ? (
-            <span className="inline-flex items-center gap-1">
-              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" aria-hidden="true" />
-              <span>
-                {repo.stars} {t('starsLabel')}
-              </span>
+          <span className="inline-flex items-center gap-1">
+            <Star
+              className="w-3.5 h-3.5 text-[var(--accent)]"
+              aria-hidden="true"
+            />
+            <span>
+              {repo.stars} {t('starsLabel')}
             </span>
-          ) : null}
+          </span>
         </div>
 
         <a
           href={repo.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 font-medium text-[var(--accent)] hover:underline whitespace-nowrap"
+          className="editorial-link link-arrow inline-flex items-center gap-1 font-medium text-[var(--accent)] whitespace-nowrap"
         >
           <span>{t('viewRepository')}</span>
-          <ExternalLink className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl-flip" aria-hidden="true" />
+          <ExternalLink className="w-3.5 h-3.5 rtl-flip" aria-hidden="true" />
         </a>
       </div>
     </article>
@@ -90,17 +83,20 @@ export function WebsiteCard({ site }: { site: WebsiteProjectItem }) {
 
   return (
     <article className="card-interactive group rounded-[6px] border border-[var(--border)] bg-[var(--surface)] overflow-hidden flex flex-col justify-between">
-      {/* Browser chrome header bar */}
-      <div className="flex items-center justify-between px-3.5 py-2 bg-[var(--bg)] border-b border-[var(--border)] select-none">
+      {/* 28px Browser chrome header bar drawn with 1px border and three 6px dots in --border */}
+      <div className="h-[28px] flex items-center justify-between px-3 bg-[var(--bg)] border-b border-[var(--border)] select-none">
         <div className="flex items-center gap-1.5" aria-hidden="true">
-          <span className="w-2.5 h-2.5 rounded-full bg-rose-400/80 inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-400/80 inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80 inline-block" />
+          <span className="w-[6px] h-[6px] rounded-full bg-[var(--border)] inline-block" />
+          <span className="w-[6px] h-[6px] rounded-full bg-[var(--border)] inline-block" />
+          <span className="w-[6px] h-[6px] rounded-full bg-[var(--border)] inline-block" />
         </div>
-        <span className="text-step-13 text-[var(--muted)] font-mono text-[11px] truncate max-w-[200px]" dir="ltr">
+        <span
+          className="text-step-13 text-[var(--muted)] font-mono truncate max-w-[200px]"
+          dir="ltr"
+        >
           {site.displayDomain}
         </span>
-        <div className="w-8" aria-hidden="true" />
+        <div className="w-6" aria-hidden="true" />
       </div>
 
       {/* 16:10 aspect ratio screenshot container */}
@@ -109,9 +105,10 @@ export function WebsiteCard({ site }: { site: WebsiteProjectItem }) {
           src={site.desktopImage}
           alt={`Home page of ${site.name}, built by Obaidullah Miakhil`}
           fill
-          sizes="(max-width: 768px) 100vw, 560px"
-          className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          sizes="(max-width: 768px) 100vw, 520px"
+          className="object-cover object-top"
           loading="lazy"
+          referrerPolicy="no-referrer"
         />
       </div>
 
@@ -123,7 +120,7 @@ export function WebsiteCard({ site }: { site: WebsiteProjectItem }) {
                 href={site.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-[var(--accent)] hover:underline transition-colors duration-200"
+                className="editorial-link hover:text-[var(--accent)] transition-colors duration-200"
               >
                 {site.name}
               </a>
@@ -146,10 +143,10 @@ export function WebsiteCard({ site }: { site: WebsiteProjectItem }) {
             href={site.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)] hover:underline whitespace-nowrap"
+            className="editorial-link link-arrow inline-flex items-center gap-1.5 text-step-15 font-medium text-[var(--accent)] whitespace-nowrap"
           >
             <span>{t('visitSite')}</span>
-            <ExternalLink className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl-flip" aria-hidden="true" />
+            <ExternalLink className="w-4 h-4 rtl-flip" aria-hidden="true" />
           </a>
         </div>
       </div>

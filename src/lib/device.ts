@@ -78,6 +78,7 @@ export function shouldSkipWebGL(): boolean {
   try {
     const params = new URLSearchParams(window.location.search);
     if (params.get('poster') === '1') return true;
+    if (params.get('lowmem') === '1') return true;
     if (params.get('force3d') === '1') {
       return !isWebGLAvailable();
     }
@@ -102,15 +103,15 @@ export function shouldSkipWebGL(): boolean {
     return true;
   }
 
-  // 3. Ultra-low device memory (< 2 GB)
-  if (typeof nav.deviceMemory === 'number' && nav.deviceMemory < 2) {
+  // 3. Low device memory (<= 4 GB per spec Section 5)
+  if (typeof nav.deviceMemory === 'number' && nav.deviceMemory <= 4) {
     return true;
   }
 
-  // 4. Ultra-low hardware concurrency (< 2 cores)
+  // 4. Low hardware concurrency (<= 4 cores per spec Section 5)
   if (
     typeof nav.hardwareConcurrency === 'number' &&
-    nav.hardwareConcurrency < 2
+    nav.hardwareConcurrency <= 4
   ) {
     return true;
   }

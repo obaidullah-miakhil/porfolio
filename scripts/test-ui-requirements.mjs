@@ -37,6 +37,7 @@ async function runTests() {
   assert(home.headers['x-content-type-options'] === 'nosniff', 'X-Content-Type-Options: nosniff header present');
   assert(home.headers['referrer-policy'] === 'strict-origin-when-cross-origin', 'Referrer-Policy header present');
   assert(home.headers['permissions-policy'], 'Permissions-Policy header present');
+  assert(!home.headers['x-powered-by'], 'X-Powered-By header disabled');
   assert(home.body.includes('lang="en"'), 'Home page has lang="en"');
   assert(home.body.includes('dir="ltr"'), 'Home page has dir="ltr"');
   assert(home.body.includes('<h1') && home.body.includes('Obaidullah Miakhil</h1>'), 'Home page has single H1 with Obaidullah Miakhil');
@@ -47,15 +48,18 @@ async function runTests() {
   assert(home.body.includes('scholar.google.com/citations?user=JVFkpVgAAAAJ'), 'Google Scholar profile URL present');
   assert(home.body.includes('researchgate.net/profile/Obaidullah-Miakhil'), 'ResearchGate profile URL present');
   assert(home.body.includes('A machine learning framework for predicting healthcare insurance claim denials'), 'Featured publication title present');
+  assert(home.body.includes('Jadoon MM') && home.body.includes('Miakhil O'), 'Featured publication authors in order with Miakhil O');
   assert(home.body.includes('Scopus Q1'), 'Scopus Q1 badge present on featured publication');
   assert(home.body.includes('Peer-reviewed'), 'Peer-reviewed badge present');
   assert(home.body.includes('Open access'), 'Open access badge present');
   assert(home.body.includes('PR-AUC 0.777'), 'PR-AUC metric from paper present');
-  assert(home.body.includes('10.3389/frhs.2026.1927175'), 'DOI link present on publication');
+  assert(home.body.includes('https://doi.org/10.3389/frhs.2026.1927175'), 'DOI link present on publication');
   assert(home.body.includes('obaidullah-miakhil.jpg'), 'Profile photo present in About section');
   assert(home.body.includes('capital-import-export-desktop.webp'), 'Capital Import Export screenshot present');
   assert(home.body.includes('swift-bulk-traders-desktop.webp'), 'Swift Bulk Traders screenshot present');
   assert(home.body.includes('aria-label="Chat on WhatsApp"'), 'Floating WhatsApp button present');
+  assert(!home.body.includes('+92 318'), 'No plain-text phone number rendered on Home page');
+  assert(!home.body.includes('93% accuracy'), 'No "93% accuracy" anywhere on Home page');
   assert(home.body.includes('@type":"ProfilePage"') && home.body.includes('@type":"Person"'), 'JSON-LD ProfilePage & Person graph rendered');
 
   // 2. Research Page
@@ -75,6 +79,7 @@ async function runTests() {
   assert(projects.body.includes('Network-scanner') || projects.body.includes('Network Scanner'), 'Network scanner repo present');
   assert(projects.body.includes('Capital Import Export'), 'Capital Import Export website present');
   assert(projects.body.includes('Swift Bulk Traders'), 'Swift Bulk Traders website present');
+  assert(projects.body.includes('150+'), '150+ supervised student projects section present on /projects');
 
   // 4. CV Page
   const cv = await fetchPage('/cv');
@@ -85,6 +90,7 @@ async function runTests() {
   assert(cv.body.includes('Research Engineer'), 'Experience section present');
   assert(cv.body.includes('Allama Iqbal Scholarship'), 'Awards present');
   assert(cv.body.includes('Google Advanced Data Analytics'), 'Certifications present');
+  assert(!cv.body.includes('+92 318'), 'No plain-text phone number rendered on CV page');
   assert(cv.body.includes('no-print'), 'Print button with no-print class present');
 
   // 5. RTL Locales: Pashto (/ps), Dari (/fa), Urdu (/ur)
@@ -108,16 +114,20 @@ async function runTests() {
   const sitemap = await fetchPage('/sitemap.xml');
   assert(sitemap.statusCode === 200, 'sitemap.xml returns HTTP 200');
   assert(sitemap.body.includes('hreflang="ps"') && sitemap.body.includes('hreflang="fa"') && sitemap.body.includes('hreflang="ur"'), 'sitemap.xml has all hreflang alternates');
+  assert(sitemap.body.includes('https://obaidullah.online'), 'sitemap.xml uses canonical https://obaidullah.online domain');
 
   const robots = await fetchPage('/robots.txt');
   assert(robots.statusCode === 200, 'robots.txt returns HTTP 200');
-  assert(robots.body.includes('Sitemap:'), 'robots.txt references sitemap');
+  assert(robots.body.includes('Sitemap: https://obaidullah.online/sitemap.xml'), 'robots.txt references https://obaidullah.online/sitemap.xml');
 
   const manifest = await fetchPage('/manifest.webmanifest');
   assert(manifest.statusCode === 200, 'manifest.webmanifest returns HTTP 200');
 
   const icon = await fetchPage('/icon');
   assert(icon.statusCode === 200, 'Dynamic /icon returns HTTP 200');
+
+  const iconSvg = await fetchPage('/icon.svg');
+  assert(iconSvg.statusCode === 200, 'Static /icon.svg returns HTTP 200');
 
   console.log('\n========================================');
   console.log('ALL UI & REQUIREMENTS VALIDATIONS PASSED!');

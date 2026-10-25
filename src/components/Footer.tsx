@@ -8,8 +8,8 @@ export function Footer() {
 
   return (
     <footer className="w-full border-t border-[var(--border)] bg-[var(--bg)] py-10 mt-12">
-      <div className="max-w-[1160px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-step-15 text-[var(--text)]">
+      <div className="max-w-[1080px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-step-15 text-[var(--text)] tabular-nums">
           <div>
             <span>© {currentYear} Obaidullah Miakhil</span>
           </div>
@@ -19,7 +19,7 @@ export function Footer() {
               href={profile.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--accent)] hover:underline whitespace-nowrap"
+              className="editorial-link text-[var(--accent)] whitespace-nowrap"
             >
               GitHub
             </a>
@@ -27,7 +27,7 @@ export function Footer() {
               href={profile.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--accent)] hover:underline whitespace-nowrap"
+              className="editorial-link text-[var(--accent)] whitespace-nowrap"
             >
               LinkedIn
             </a>
@@ -35,7 +35,7 @@ export function Footer() {
               href={profile.huggingfaceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--accent)] hover:underline whitespace-nowrap"
+              className="editorial-link text-[var(--accent)] whitespace-nowrap"
             >
               Hugging Face
             </a>
@@ -44,7 +44,7 @@ export function Footer() {
                 href={profile.scholarUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--accent)] hover:underline whitespace-nowrap"
+                className="editorial-link text-[var(--accent)] whitespace-nowrap"
               >
                 Google Scholar
               </a>
@@ -54,14 +54,14 @@ export function Footer() {
                 href={profile.researchgateUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--accent)] hover:underline whitespace-nowrap"
+                className="editorial-link text-[var(--accent)] whitespace-nowrap"
               >
                 ResearchGate
               </a>
             ) : null}
             <a
               href={`mailto:${profile.emailPrimary}`}
-              className="text-[var(--accent)] hover:underline whitespace-nowrap"
+              className="editorial-link text-[var(--accent)] whitespace-nowrap"
             >
               {profile.emailPrimary}
             </a>

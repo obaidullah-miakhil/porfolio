@@ -133,7 +133,6 @@ export const profile = {
   location: 'Islamabad, Pakistan',
   emailPrimary: 'obaidullah.miakhil.khan@gmail.com',
   emailAcademic: 'obaidullah.miakhil@paf-iast.edu.pk',
-  phoneDisplay: '+92 318 9175285',
   whatsappUrl:
     'https://wa.me/923189175285?text=Hi%20Obaidullah%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect.',
   githubUrl: 'https://github.com/obaidullah-miakhil',
@@ -146,9 +145,9 @@ export const profile = {
   researchgateUrl: 'https://www.researchgate.net/profile/Obaidullah-Miakhil',
   // TODO: [PLACEHOLDER: ORCID_URL — optional] — leave empty until provided by owner; UI omits when empty
   orcidUrl: '',
-  // TODO: [PLACEHOLDER: YOUR_DOMAIN]
-  domain: '',
-  // TODO: [PLACEHOLDER: GSC_TOKEN]
+  // Canonical custom domain provided by owner
+  domain: 'https://obaidullah.online',
+  // TODO: [PLACEHOLDER: GSC_TOKEN] — read from NEXT_PUBLIC_GSC_VERIFICATION when set
   gscToken: '',
   profilePhoto: '/images/obaidullah-miakhil.jpg',
   profilePhotoAlt:
@@ -179,32 +178,32 @@ export const profile = {
   audienceContent: {
     research: {
       summary:
-        "I'm an MS Artificial Intelligence researcher at PAF-IAST (CGPA 4.00/4.00) and a Research Engineer at the Sino-Pak Centre of Artificial Intelligence (SPCAI). My research focuses on problem-solving in medical domains and medical diagnosis — developing weakly-supervised and uncertainty-aware deep learning systems for high-stakes medical imaging, and co-authored a Scopus Q1 peer-reviewed publication in Frontiers in Health Services (PR-AUC 0.777). I am actively seeking and available for a PhD position in Computer Science and related fields for the September 2027 intake onwards.",
+        "I'm an MS Artificial Intelligence student at PAF-IAST (CGPA 4.00/4.00) and a research engineer at the Sino-Park Centre of Artificial Intelligence (SPCAI). I build weakly-supervised and uncertainty-aware deep learning systems for medical imaging and clinical diagnosis, co-authored a peer-reviewed Scopus Q1 paper in Frontiers in Health Services (PR-AUC 0.777), and am a prospective PhD candidate in Computer Science, Medical AI, and NLP/LLMs (September 2027 intake onwards).",
       primaryCtaLabelKey: 'downloadAcademicCv',
       primaryCtaHref: '/cv/Obaidullah-Miakhil-Academic-CV.pdf',
       highlights: [
         'MS AI CGPA 4.00/4.00 (PAF-IAST)',
-        'First/co-author in Frontiers in Health Services (Scopus Q1, PR-AUC 0.777)',
+        'Co-author in Frontiers in Health Services (Scopus Q1, PR-AUC 0.777)',
         'Medical AI @ SPCAI (Weakly-supervised CT diagnosis & MC Dropout)',
-        'Available for PhD in Computer Science (Sept 2027 Intake Onwards · Medical Diagnosis Focus)',
+        'Prospective PhD candidate (Sept 2027 intake · Medical AI & NLP/LLMs)',
       ],
     },
     industry: {
       summary:
-        "I'm an AI engineer and machine learning researcher who ships production ML systems end to end: from processing 678,881 insurance-claims records (Scopus Q1, PR-AUC 0.777) and large RSNA DICOM CT scans with calibrated uncertainty to deploying conversational LLMs and web applications. Having supervised 150+ student engineering projects at PAF-IAST, I am actively open and available for AI/ML engineering, applied research, and consulting roles.",
+        "I'm an AI engineer who ships machine learning systems end to end: from processing 678,881 insurance-claims records (Scopus Q1, PR-AUC 0.777) and large RSNA DICOM CT scans with calibrated uncertainty to deploying LLM chatbots and web apps. Having supervised 150+ student engineering projects at PAF-IAST, I'm open to AI/ML engineering and applied research roles.",
       primaryCtaLabelKey: 'downloadResume',
       primaryCtaHref: '/cv/Obaidullah-Miakhil-Resume.pdf',
       highlights: [
         'End-to-end ML systems (678,881 U.S. claim lines, PR-AUC 0.777)',
-        '150+ Supervised Student Engineering & Web Projects',
+        '150+ supervised student engineering & deployed web projects',
         'Large-scale RSNA DICOM CT pipelines & MC Dropout uncertainty',
-        'Actively Available for AI/ML Engineering & Applied Research Roles',
+        'Open to AI/ML engineering & applied research roles',
       ],
     },
   },
 
   researchInterests:
-    'Computer Science and AI researcher with a primary focus on problem-solving in medical domains and medical diagnosis. Hands-on experience developing weakly-supervised deep learning architectures, uncertainty-aware models with clinical safety/abstain policies for CT imaging at SPCAI, and large-scale healthcare data modeling (Frontiers in Health Services, Scopus Q1). Target PhD areas (September 2027 intake onwards): Computer Science and related fields focusing on medical diagnosis, medical imaging AI, weakly-supervised learning, calibrated uncertainty quantification, and trustworthy clinical decision support.',
+    'Multilingual AI researcher (native Pashto and Dari, fluent English and Urdu) focused on medical diagnosis, weakly-supervised deep learning, uncertainty-aware models for high-stakes clinical decision support, and LLM applications. Prospective PhD candidate (September 2027 intake onwards) targeting Computer Science, medical imaging AI, low-resource and multilingual NLP, retrieval-augmented generation, and trustworthy / explainable AI.',
 
   publications: [
     {
@@ -212,13 +211,13 @@ export const profile = {
       title:
         'A machine learning framework for predicting healthcare insurance claim denials',
       authors: [
-        'Jadoon, M. M.',
-        'Miakhil, O.',
-        'Chakari, N. R.',
-        'Qureshi, M. B.',
-        'Ullah, I.',
-        'Ahmed Haider, S.',
-        'Ur Rehman, M.',
+        'Jadoon MM',
+        'Miakhil O',
+        'Chakari NR',
+        'Qureshi MB',
+        'Ullah I',
+        'Ahmed Haider S',
+        'Ur Rehman M',
       ],
       year: '2026',
       venue: 'Frontiers in Health Services',
@@ -259,7 +258,7 @@ export const profile = {
       id: 'stc-rnn-2025',
       title:
         'STC-RNN: Seasonal-Trend-Coupled Recurrent Neural Network for Financial Time-Series Forecasting',
-      authors: ['Miakhil, O.'],
+      authors: ['Miakhil O'],
       year: '2025',
       venue: 'Target: IEEE conference/journal',
       status: 'Under revision',
@@ -271,7 +270,7 @@ export const profile = {
       id: 'ich-ms-thesis',
       title:
         'Weakly-Supervised Localization and Subtype Categorization of Intracranial Hemorrhage: A Two-Stage Cascade Architecture',
-      authors: ['Miakhil, O.'],
+      authors: ['Miakhil O'],
       year: '2026',
       venue: 'MS thesis work, PAF-IAST',
       status: 'In preparation',
@@ -283,7 +282,7 @@ export const profile = {
       id: 'rsna-2026-abstract',
       title:
         'Two-Stage AI System for ICH Detection: Reducing Radiology Turnaround Time from 38 to 21 Minutes',
-      authors: ['Miakhil, O.'],
+      authors: ['Miakhil O'],
       year: '2026',
       venue: 'RSNA 2026 Annual Meeting',
       status: 'Conference abstract (submitted)',
@@ -303,7 +302,6 @@ export const profile = {
         'Two-stage cascade: a binary "gatekeeper" model followed by a subtype specialist. RSNA DICOM preprocessing with HU windowing, patient-level stratified splits, EfficientNet-B2 + BiLSTM, Focal Loss, MC Dropout uncertainty with an abstain policy for clinical safety, Grad-CAM++ localisation evaluated by IoU on the BHX dataset.',
       supervisor: 'Dr. Muhammad Mohsin Khan Jadoon',
       metricsOrMethods: [
-        'Two-stage cascade',
         'EfficientNet-B2 + BiLSTM',
         'MC Dropout uncertainty',
         'Grad-CAM++ localisation',
@@ -319,7 +317,6 @@ export const profile = {
       metricsOrMethods: [
         'KSE-100 & S&P 500',
         'GARCH-ARMA DGP',
-        'Periodogram season detection',
         'Diebold-Mariano / BH-FDR',
       ],
     },
@@ -332,8 +329,7 @@ export const profile = {
         'Became the published Frontiers in Health Services paper; rule-based claim scrubber and integration with a claim-management system.',
       metricsOrMethods: [
         '678,881 U.S. claim lines',
-        'PR-AUC 0.777',
-        'ROC-AUC 0.865',
+        'PR-AUC 0.777 · ROC-AUC 0.865',
         'Rule-based claim scrubber',
       ],
     },
@@ -347,7 +343,6 @@ export const profile = {
       metricsOrMethods: [
         'EfficientNet-B0 + FedProx',
         'PANDA prostate dataset',
-        'Kaggle T4×2',
         'Hugging Face checkpoints',
       ],
     },
@@ -372,7 +367,7 @@ export const profile = {
       dates: 'Jul 2025 – present',
       points: [
         'Teaches labs for Object-Oriented Programming, Data Structures & Algorithms, Introduction to Computer Technology and Artificial Intelligence; runs the AI lab in Python, with students implementing algorithms from first principles.',
-        'Supervised 150+ student semester projects across diverse domains; instituted a rigorous requirement pushing every student team to build, present, and deploy at least one professional live website or software system each semester.',
+        'Supervised 150+ student semester projects across software and AI domains, mentoring every student team to build and deploy live applications.',
       ],
     },
     {

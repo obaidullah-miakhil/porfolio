@@ -8,39 +8,57 @@ import { WhatsAppIcon } from './BrandIcons';
 export function WhatsAppButton() {
   const t = useTranslations('contact');
   const [hiddenByContact, setHiddenByContact] = useState(false);
+  const [hiddenByMobileMenu, setHiddenByMobileMenu] = useState(false);
 
   useEffect(() => {
     const contactEl = document.getElementById('contact');
-    if (!contactEl) {
+    let contactObserver: IntersectionObserver | null = null;
+
+    if (contactEl) {
+      contactObserver = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            setHiddenByContact(entry.isIntersecting);
+          }
+        },
+        { threshold: 0.1 }
+      );
+      contactObserver.observe(contactEl);
+    } else {
       setHiddenByContact(false);
-      return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          setHiddenByContact(entry.isIntersecting);
-        }
-      },
-      { threshold: 0.1 }
-    );
+    const syncMenuAttr = () => {
+      setHiddenByMobileMenu(
+        document.documentElement.getAttribute('data-mobile-menu-open') === 'true'
+      );
+    };
+    syncMenuAttr();
 
-    observer.observe(contactEl);
-    return () => observer.disconnect();
+    const attrObserver = new MutationObserver(syncMenuAttr);
+    attrObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-mobile-menu-open'],
+    });
+
+    return () => {
+      contactObserver?.disconnect();
+      attrObserver.disconnect();
+    };
   }, []);
 
-  if (hiddenByContact) {
+  if (hiddenByContact || hiddenByMobileMenu) {
     return null;
   }
 
   return (
-    <div className="no-print fixed bottom-4 end-4 z-30 group">
+    <div className="no-print fixed bottom-[max(1rem,env(safe-area-inset-bottom))] end-[max(1rem,env(safe-area-inset-right))] z-30 group">
       <a
         href={profile.whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
-        className="w-[52px] h-[52px] rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] flex items-center justify-center border border-[var(--border)] transition-transform hover:scale-105 focus:scale-105"
+        className="w-[52px] h-[52px] rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] flex items-center justify-center border border-[var(--border)] transition-opacity hover:opacity-95 focus:opacity-95"
       >
         <WhatsAppIcon size={24} />
       </a>

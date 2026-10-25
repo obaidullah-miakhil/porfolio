@@ -46,6 +46,13 @@ export async function generateMetadata({
     creator: profile.name,
     publisher: profile.name,
     keywords: SEO_KEYWORDS,
+    icons: {
+      icon: [
+        { url: '/icon.svg', type: 'image/svg+xml' },
+        { url: '/icon', type: 'image/png', sizes: '32x32' },
+      ],
+      apple: [{ url: '/apple-icon', sizes: '180x180', type: 'image/png' }],
+    },
     verification: {
       google: profile.gscToken || undefined,
     },
@@ -76,34 +83,6 @@ export default async function LocaleLayout({
       className={vazirmatn.variable}
       suppressHydrationWarning
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var origSet = Element.prototype.setAttribute;
-                  Element.prototype.setAttribute = function(name, val) {
-                    if (name === 'bis_skin_checked' || (typeof name === 'string' && name.indexOf('bis_') === 0)) return;
-                    return origSet.apply(this, arguments);
-                  };
-                  if (typeof MutationObserver !== 'undefined') {
-                    var obs = new MutationObserver(function(mutations) {
-                      for (var i = 0; i < mutations.length; i++) {
-                        var m = mutations[i];
-                        if (m.type === 'attributes' && m.attributeName && m.attributeName.indexOf('bis_') === 0) {
-                          m.target.removeAttribute(m.attributeName);
-                        }
-                      }
-                    });
-                    obs.observe(document.documentElement, { attributes: true, subtree: true, attributeFilter: ['bis_skin_checked'] });
-                  }
-                } catch(e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
       <body
         className="min-h-screen flex flex-col bg-[var(--bg)] text-[var(--text)] antialiased"
         suppressHydrationWarning

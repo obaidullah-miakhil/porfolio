@@ -13,6 +13,8 @@ const localeDir = path.join(root, 'app', '[locale]');
 const copies = [
   ['src/routes/layout.tsx', path.join(localeDir, 'layout.tsx')],
   ['src/routes/page.tsx', path.join(localeDir, 'page.tsx')],
+  ['src/routes/not-found.tsx', path.join(localeDir, 'not-found.tsx')],
+  ['src/routes/catch-all-page.tsx', path.join(localeDir, '[...rest]', 'page.tsx')],
   ['src/routes/opengraph-image.tsx', path.join(localeDir, 'opengraph-image.tsx')],
   ['src/routes/research-page.tsx', path.join(localeDir, 'research', 'page.tsx')],
   ['src/routes/projects-page.tsx', path.join(localeDir, 'projects', 'page.tsx')],

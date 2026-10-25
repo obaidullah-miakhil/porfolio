@@ -42,7 +42,7 @@ export function SceneGate({ scene }: { scene: SceneType }) {
   const [canvasReady, setCanvasReady] = useState(false);
   const [skippedOrFailed, setSkippedOrFailed] = useState(false);
 
-  // 1. Check capability gate & schedule idle callback
+  // 1. Check capability gate & schedule requestIdleCallback (with 1500ms timeout fallback)
   useEffect(() => {
     if (shouldSkipWebGL()) {
       setSkippedOrFailed(true);
@@ -50,9 +50,31 @@ export function SceneGate({ scene }: { scene: SceneType }) {
     }
 
     let cancelled = false;
+    type IdleWindow = Window & {
+      requestIdleCallback?: (
+        cb: () => void,
+        opts?: { timeout: number }
+      ) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    const win = window as IdleWindow;
+
+    if (typeof win.requestIdleCallback === 'function') {
+      const id = win.requestIdleCallback(
+        () => {
+          if (!cancelled) setIdleReady(true);
+        },
+        { timeout: 1500 }
+      );
+      return () => {
+        cancelled = true;
+        win.cancelIdleCallback?.(id);
+      };
+    }
+
     const timer = window.setTimeout(() => {
       if (!cancelled) setIdleReady(true);
-    }, 80);
+    }, 200);
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
@@ -106,8 +128,8 @@ export function SceneGate({ scene }: { scene: SceneType }) {
 
   const heightClasses =
     scene === 'hero'
-      ? 'w-full h-[320px] sm:h-[360px] md:h-[400px] lg:h-[430px]'
-      : 'w-full h-[180px] sm:h-[220px] md:h-[260px]';
+      ? 'w-full h-[280px] sm:h-[320px] md:h-[360px]'
+      : 'w-full h-[200px] sm:h-[220px] md:h-[240px]';
 
   return (
     <div
