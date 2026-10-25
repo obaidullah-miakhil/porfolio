@@ -1,0 +1,6 @@
+{
+  "summary":  "Implementation plan for integrating the 3D character avatar into the Hero section with full-body standing framing, floor contact shadow, embedded GLB animation playback, mouse parallax tilt, and automatic syncing from src/three/3d_avatar with a 3D character fallback.",
+  "updatedAt":  "2026-10-25T10:38:49.049540198Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}

@@ -57,6 +57,214 @@ export function FacetedFormPoster() {
   );
 }
 
+export function AvatarPoster() {
+  return (
+    <div
+      aria-hidden="true"
+      data-testid="hero-faceted-poster"
+      className="w-full h-full flex items-center justify-center rounded-[12px] border border-[var(--border)] bg-[var(--surface)] select-none overflow-hidden p-4"
+    >
+      <svg
+        viewBox="0 0 320 380"
+        className="w-full h-full max-h-[340px]"
+        aria-hidden="true"
+      >
+        {/* Studio floor contact shadow & pedestal ring */}
+        <ellipse
+          cx="160"
+          cy="340"
+          rx="74"
+          ry="14"
+          fill="var(--text)"
+          fillOpacity="0.1"
+        />
+        <ellipse
+          cx="160"
+          cy="340"
+          rx="84"
+          ry="17"
+          fill="none"
+          stroke="var(--accent)"
+          strokeOpacity="0.32"
+          strokeWidth="1.2"
+          strokeDasharray="4 4"
+        />
+
+        {/* Orbiting AI research nodes */}
+        <g stroke="var(--accent)" strokeOpacity="0.22" strokeWidth="1" fill="none">
+          <ellipse cx="160" cy="148" rx="92" ry="24" />
+        </g>
+        <circle cx="68" cy="148" r="4.5" fill="var(--accent)" fillOpacity="0.85" />
+        <circle cx="252" cy="148" r="4.5" fill="var(--accent)" fillOpacity="0.85" />
+        <circle cx="206" cy="128" r="3.5" fill="var(--accent)" fillOpacity="0.6" />
+
+        {/* Shoes */}
+        <rect
+          x="130"
+          y="324"
+          width="22"
+          height="14"
+          rx="5"
+          fill="var(--text)"
+          fillOpacity="0.82"
+        />
+        <rect
+          x="168"
+          y="324"
+          width="22"
+          height="14"
+          rx="5"
+          fill="var(--text)"
+          fillOpacity="0.82"
+        />
+
+        {/* Tailored Trousers / Legs */}
+        <rect
+          x="133"
+          y="220"
+          width="20"
+          height="108"
+          rx="8"
+          fill="var(--text)"
+          fillOpacity="0.7"
+        />
+        <rect
+          x="167"
+          y="220"
+          width="20"
+          height="108"
+          rx="8"
+          fill="var(--text)"
+          fillOpacity="0.7"
+        />
+
+        {/* Pelvis & Belt */}
+        <rect
+          x="128"
+          y="206"
+          width="64"
+          height="22"
+          rx="6"
+          fill="var(--text)"
+          fillOpacity="0.76"
+        />
+        <rect
+          x="153"
+          y="208"
+          width="14"
+          height="7"
+          rx="2"
+          fill="var(--accent)"
+          fillOpacity="0.9"
+        />
+
+        {/* Blazer Torso & Shoulders */}
+        <rect
+          x="118"
+          y="112"
+          width="84"
+          height="98"
+          rx="16"
+          fill="var(--text)"
+          fillOpacity="0.82"
+        />
+
+        {/* Shirt V-Insert & Accent Tie */}
+        <polygon
+          points="146,114 174,114 160,162"
+          fill="var(--bg)"
+          fillOpacity="0.95"
+        />
+        <polygon
+          points="156,120 164,120 166,158 160,166 154,158"
+          fill="var(--accent)"
+          fillOpacity="0.92"
+        />
+
+        {/* Left & Right Arms */}
+        <rect
+          x="98"
+          y="118"
+          width="18"
+          height="84"
+          rx="9"
+          fill="var(--text)"
+          fillOpacity="0.74"
+        />
+        <circle cx="107" cy="208" r="7.5" fill="var(--muted)" fillOpacity="0.65" />
+
+        <rect
+          x="204"
+          y="118"
+          width="18"
+          height="84"
+          rx="9"
+          fill="var(--text)"
+          fillOpacity="0.74"
+        />
+        <circle cx="213" cy="208" r="7.5" fill="var(--muted)" fillOpacity="0.65" />
+
+        {/* Neck */}
+        <rect
+          x="151"
+          y="96"
+          width="18"
+          height="18"
+          rx="6"
+          fill="var(--muted)"
+          fillOpacity="0.65"
+        />
+
+        {/* Head & Hair Silhouette */}
+        <rect
+          x="136"
+          y="46"
+          width="48"
+          height="54"
+          rx="22"
+          fill="var(--muted)"
+          fillOpacity="0.55"
+        />
+        <path
+          d="M135 66 C135 44, 185 44, 185 66 C185 56, 174 52, 160 52 C146 52, 135 56, 135 66 Z"
+          fill="var(--text)"
+          fillOpacity="0.88"
+        />
+
+        {/* Signature Eyeglasses */}
+        <rect
+          x="142"
+          y="66"
+          width="15"
+          height="10"
+          rx="2.5"
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth="2"
+        />
+        <rect
+          x="163"
+          y="66"
+          width="15"
+          height="10"
+          rx="2.5"
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth="2"
+        />
+        <line
+          x1="157"
+          y1="70"
+          x2="163"
+          y2="70"
+          stroke="var(--accent)"
+          strokeWidth="2"
+        />
+      </svg>
+    </div>
+  );
+}
+
 export function NeuralNetworkPoster() {
   const layers = [
     [60, 110, 160, 210],

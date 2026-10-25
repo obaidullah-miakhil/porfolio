@@ -45,6 +45,33 @@ function ensureLocaleRoutesSynced() {
         }
       }
     }
+
+    // Auto-sync .glb character avatar from src/three/3d_avatar to public/models/3d_avatar.glb if present
+    const avatarSourceCandidates = [
+      path.join(root, 'src', 'three', '3d_avatar'),
+      path.join(root, 'src', 'three', '3d_avatar.glb'),
+    ];
+    for (const candidate of avatarSourceCandidates) {
+      if (!fs.existsSync(candidate)) continue;
+      const stat = fs.statSync(candidate);
+      let glbFile: string | null = null;
+      if (stat.isFile() && candidate.toLowerCase().endsWith('.glb')) {
+        glbFile = candidate;
+      } else if (stat.isDirectory()) {
+        const found = fs
+          .readdirSync(candidate)
+          .find((f) => f.toLowerCase().endsWith('.glb'));
+        if (found) {
+          glbFile = path.join(candidate, found);
+        }
+      }
+      if (glbFile && fs.existsSync(glbFile)) {
+        const destModel = path.join(root, 'public', 'models', '3d_avatar.glb');
+        fs.mkdirSync(path.dirname(destModel), { recursive: true });
+        fs.copyFileSync(glbFile, destModel);
+        break;
+      }
+    }
   } catch {
     // Ignore fs errors in read-only environments
   }
@@ -64,7 +91,7 @@ const cspHeader = `
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob: https:;
   font-src 'self' data:;
-  connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com https://api.github.com;
+  connect-src 'self' blob: data: https://va.vercel-scripts.com https://vitals.vercel-insights.com https://api.github.com;
   frame-ancestors 'none';
   object-src 'none';
   base-uri 'self';

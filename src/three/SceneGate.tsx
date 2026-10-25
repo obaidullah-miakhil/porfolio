@@ -3,9 +3,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { shouldSkipWebGL } from '@/lib/device';
-import { NeuralNetworkPoster, MoleculePoster, TechGlobePoster } from './PosterSvgs';
+import { AvatarPoster, MoleculePoster, TechGlobePoster } from './PosterSvgs';
 
-const NeuralNetworkLazy = dynamic(() => import('./NeuralNetwork'), {
+const Avatar3DLazy = dynamic(() => import('./Avatar3D'), {
   ssr: false,
 });
 
@@ -134,7 +134,7 @@ export function SceneGate({ scene }: { scene: SceneType }) {
 
   const heightClasses =
     scene === 'hero'
-      ? 'w-full h-[300px] sm:h-[350px] md:h-[400px]'
+      ? 'w-full h-[340px] sm:h-[380px] md:h-[430px]'
       : scene === 'globe'
       ? 'w-full h-[260px] sm:h-[300px]'
       : 'w-full h-[220px] sm:h-[250px] md:h-[280px]';
@@ -154,7 +154,7 @@ export function SceneGate({ scene }: { scene: SceneType }) {
         }`}
       >
         {scene === 'hero' ? (
-          <NeuralNetworkPoster />
+          <AvatarPoster />
         ) : scene === 'globe' ? (
           <TechGlobePoster />
         ) : (
@@ -174,7 +174,7 @@ export function SceneGate({ scene }: { scene: SceneType }) {
           }`}
         >
           {scene === 'hero' ? (
-            <NeuralNetworkLazy
+            <Avatar3DLazy
               onReady={() => setCanvasReady(true)}
               onLowFps={() => setSkippedOrFailed(true)}
             />
