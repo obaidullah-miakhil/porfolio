@@ -41,19 +41,19 @@ export default async function OpenGraphImage({
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          backgroundColor: '#FAFAF7',
+          backgroundColor: '#F4F1EA',
           color: '#141414',
           padding: '72px 84px',
           fontFamily: 'Vazirmatn',
-          border: '1px solid #E4E3DE',
+          border: '1px solid #DEDAD0',
         }}
       >
-        {/* Solid Lapis Blue Accent Bar */}
+        {/* Solid signal orange Accent Bar */}
         <div
           style={{
             width: '100%',
             height: 12,
-            backgroundColor: '#1E4BD2',
+            backgroundColor: '#FF4F00',
             borderRadius: 6,
           }}
         />
@@ -82,7 +82,7 @@ export default async function OpenGraphImage({
             style={{
               fontSize: 36,
               fontWeight: 700,
-              color: '#1E4BD2',
+              color: '#FF4F00',
               lineHeight: 1.25,
             }}
           >
@@ -93,7 +93,7 @@ export default async function OpenGraphImage({
             style={{
               fontSize: 24,
               fontWeight: 400,
-              color: '#5C5C58',
+              color: '#5E5B55',
               lineHeight: 1.4,
             }}
           >
@@ -108,10 +108,10 @@ export default async function OpenGraphImage({
             alignItems: 'center',
             justifyContent: 'space-between',
             width: '100%',
-            borderTop: '2px solid #E4E3DE',
+            borderTop: '2px solid #DEDAD0',
             paddingTop: 24,
             fontSize: 22,
-            color: '#5C5C58',
+            color: '#5E5B55',
           }}
         >
           <span>{profile.githubHandle}</span>

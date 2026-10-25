@@ -4,190 +4,77 @@ import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
 import { LocaleSwitcher } from './LocaleSwitcher';
-import { ThemeToggle } from './ThemeToggle';
-import { Menu, X } from 'lucide-react';
 
 export function Header() {
   const t = useTranslations('nav');
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [activeHash, setActiveHash] = useState<string>('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Shrink header from 72px to 56px after 24px scroll
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 24);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileMenuOpen(false);
-    setActiveHash('');
+    setMenuOpen(false);
   }, [pathname]);
 
-  // Close mobile menu on Escape key and sync document attribute for WhatsAppButton
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.documentElement.setAttribute('data-mobile-menu-open', 'true');
-    } else {
-      document.documentElement.removeAttribute('data-mobile-menu-open');
-    }
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && mobileMenuOpen) {
-        setMobileMenuOpen(false);
-      }
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false);
     };
-    window.addEventListener('keydown', onKeyDown);
-    return () => {
-      window.removeEventListener('keydown', onKeyDown);
-      document.documentElement.removeAttribute('data-mobile-menu-open');
-    };
-  }, [mobileMenuOpen]);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [menuOpen]);
 
-  // Highlight active section on homepage via IntersectionObserver
-  useEffect(() => {
-    if (pathname !== '/') return;
-    const sectionIds = ['research', 'projects', 'contact'];
-    const elements = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => Boolean(el));
-
-    if (elements.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveHash(`#${entry.target.id}`);
-          }
-        }
-      },
-      { rootMargin: '-25% 0px -60% 0px', threshold: 0.05 }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [pathname]);
-
-  const navItems = [
-    { href: '/research', hash: '#research', label: t('research') },
-    { href: '/projects', hash: '#projects', label: t('projects') },
-    { href: '/cv', hash: '', label: t('cv') },
-    { href: '/#contact', hash: '#contact', label: t('contact') },
+  const items = [
+    { href: '/research', label: t('research') },
+    { href: '/projects', label: t('projects') },
+    { href: '/cv', label: t('cv') },
+    { href: '/#contact', label: t('contact') },
   ];
 
-  const isNavItemActive = (item: (typeof navItems)[number]) => {
-    if (item.href === '/#contact') {
-      return pathname === '/' && activeHash === '#contact';
-    }
-    if (pathname === item.href) return true;
-    if (pathname === '/' && item.hash && activeHash === item.hash) return true;
-    return false;
-  };
+  const links = items.map((item) => (
+    <Link
+      key={item.href}
+      href={item.href}
+      aria-current={pathname === item.href ? 'page' : undefined}
+      onClick={() => setMenuOpen(false)}
+      className="nav-link text-[15px]"
+    >
+      {item.label}
+    </Link>
+  ));
 
   return (
-    <header
-      data-scrolled={scrolled ? 'true' : 'false'}
-      className="sticky top-0 z-40 w-full header-glass"
-    >
-      <div
-        className={`max-w-[1080px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 transition-[height] duration-200 ${
-          scrolled ? 'h-[56px]' : 'h-[72px]'
-        }`}
-      >
-        {/* Start side: wordmark */}
-        <Link
-          href="/"
-          className="inline-flex items-center min-h-[44px] text-step-17 font-bold text-[var(--text)] hover:text-[var(--accent)] transition-colors duration-200 whitespace-nowrap shrink-0"
-        >
-          Obaidullah Miakhil
+    <header className="site-header">
+      <div className="h-full px-[4vw] flex items-center justify-between gap-6">
+        <Link href="/" className="text-[17px] font-semibold tracking-[-0.02em] text-[var(--text)] no-underline">
+          Obaidullah Miakhil<span className="text-[var(--accent)]">.</span>
         </Link>
 
-        {/* End side: nav + language switcher + theme toggle */}
-        <div className="flex items-center gap-2 sm:gap-5">
-          <nav
-            aria-label="Primary"
-            className="hidden md:flex items-center gap-6 text-step-15"
-          >
-            {navItems.map((item) => {
-              const isActive = isNavItemActive(item);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  aria-current={isActive ? 'page' : undefined}
-                  className={`relative inline-flex items-center min-h-[44px] whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-[var(--accent)] ${
-                    isActive
-                      ? 'text-[var(--accent)] font-semibold'
-                      : 'text-[var(--text)]'
-                  }`}
-                >
-                  <span>{item.label}</span>
-                  {isActive ? (
-                    <span className="absolute bottom-1.5 start-0 end-0 h-[2px] bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
-                  ) : null}
-                </Link>
-              );
-            })}
+        <div className="flex items-center gap-7">
+          <nav aria-label="Primary" className="hidden md:flex items-center gap-7">
+            {links}
           </nav>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <LocaleSwitcher />
-            <ThemeToggle />
-
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen((prev) => !prev)}
-              aria-expanded={mobileMenuOpen}
-              aria-controls="mobile-nav-sheet"
-              aria-label={mobileMenuOpen ? t('closeMenu') : t('menu')}
-              className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-[6px] border border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-md text-[var(--text)] hover:border-[var(--accent)] transition-colors cursor-pointer"
-            >
-              {mobileMenuOpen ? (
-                <X className="w-4 h-4" aria-hidden="true" />
-              ) : (
-                <Menu className="w-4 h-4" aria-hidden="true" />
-              )}
-            </button>
-          </div>
+          <LocaleSwitcher />
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
+            className="md:hidden font-mono text-[12px] uppercase tracking-[0.06em] h-11 px-1 text-[var(--text)] cursor-pointer"
+          >
+            {menuOpen ? t('closeMenu') : t('menu')}
+          </button>
         </div>
       </div>
 
-      {/* Mobile full-height sheet */}
-      {mobileMenuOpen && (
+      {menuOpen ? (
         <nav
-          id="mobile-nav-sheet"
-          aria-label="Mobile navigation"
-          className="md:hidden w-full min-h-[calc(100vh-56px)] mobile-menu-overlay border-b border-[var(--border)] px-4 py-6"
+          id="mobile-nav"
+          aria-label="Mobile"
+          className="md:hidden absolute inset-x-0 top-[var(--header-h)] h-[calc(100svh-var(--header-h))] bg-[var(--bg)] px-[6vw] py-8 flex flex-col gap-6 text-[28px] font-semibold tracking-[-0.02em] z-50"
         >
-          <ul className="flex flex-col divide-y divide-[var(--border)] m-0 p-0 list-none">
-            {navItems.map((item) => {
-              const isActive = isNavItemActive(item);
-              return (
-                <li key={item.href} className="menu-item">
-                  <Link
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center min-h-[48px] py-3 text-step-18 transition-colors ${
-                      isActive
-                        ? 'text-[var(--accent)] font-semibold underline'
-                        : 'text-[var(--text)] hover:text-[var(--accent)]'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          {links}
         </nav>
-      )}
+      ) : null}
     </header>
   );
 }

@@ -22,12 +22,12 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#FAFAF7',
-          color: '#1E4BD2',
+          backgroundColor: '#FF4F00',
+          color: '#141413',
           fontSize: 16,
           fontWeight: 700,
           fontFamily: 'Vazirmatn',
-          border: '2px solid #1E4BD2',
+          border: '2px solid #FF4F00',
           borderRadius: 6,
         }}
       >

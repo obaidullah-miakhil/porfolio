@@ -3,21 +3,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { shouldSkipWebGL } from '@/lib/device';
-import { AvatarPoster, MoleculePoster, TechGlobePoster } from './PosterSvgs';
-
-const Avatar3DLazy = dynamic(() => import('./Avatar3D'), {
-  ssr: false,
-});
+import { MoleculePoster } from './PosterSvgs';
 
 const MoleculeVizLazy = dynamic(() => import('./MoleculeViz'), {
   ssr: false,
 });
 
-const TechGlobeLazy = dynamic(() => import('./TechGlobe'), {
-  ssr: false,
-});
-
-export type SceneType = 'hero' | 'research' | 'globe';
+export type SceneType = 'research';
 
 // Global single-canvas coordinator so never more than one WebGL canvas is mounted at a time
 let currentActiveScene: SceneType | null = null;
@@ -26,12 +18,8 @@ const visibleScenes = new Set<SceneType>();
 
 function updateActiveScene() {
   let nextScene: SceneType | null = null;
-  if (visibleScenes.has('hero')) {
-    nextScene = 'hero';
-  } else if (visibleScenes.has('research')) {
+  if (visibleScenes.has('research')) {
     nextScene = 'research';
-  } else if (visibleScenes.has('globe')) {
-    nextScene = 'globe';
   }
 
   if (nextScene !== currentActiveScene) {
@@ -132,12 +120,7 @@ export function SceneGate({ scene }: { scene: SceneType }) {
     }
   }, [shouldMountCanvas]);
 
-  const heightClasses =
-    scene === 'hero'
-      ? 'w-full h-[340px] sm:h-[380px] md:h-[430px]'
-      : scene === 'globe'
-      ? 'w-full h-[260px] sm:h-[300px]'
-      : 'w-full h-[220px] sm:h-[250px] md:h-[280px]';
+  const heightClasses = 'w-full h-[220px] sm:h-[250px] md:h-[280px]';
 
   return (
     <div
@@ -153,42 +136,20 @@ export function SceneGate({ scene }: { scene: SceneType }) {
           canvasReady && shouldMountCanvas ? 'opacity-0' : 'opacity-100'
         }`}
       >
-        {scene === 'hero' ? (
-          <AvatarPoster />
-        ) : scene === 'globe' ? (
-          <TechGlobePoster />
-        ) : (
-          <MoleculePoster />
-        )}
+        <MoleculePoster />
       </div>
 
       {/* Lazily loaded 3D WebGL Canvas cross-fades over the poster */}
       {shouldMountCanvas ? (
         <div
-          className={`absolute inset-0 rounded-[12px] ${
-            scene === 'hero'
-              ? 'bg-transparent'
-              : 'border border-[var(--border)] bg-[var(--surface)]'
-          } transition-opacity duration-300 ${
+          className={`absolute inset-0 rounded-[12px] border border-[var(--border)] bg-[var(--surface)] transition-opacity duration-300 ${
             canvasReady ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          {scene === 'hero' ? (
-            <Avatar3DLazy
-              onReady={() => setCanvasReady(true)}
-              onLowFps={() => setSkippedOrFailed(true)}
-            />
-          ) : scene === 'globe' ? (
-            <TechGlobeLazy
-              onReady={() => setCanvasReady(true)}
-              onLowFps={() => setSkippedOrFailed(true)}
-            />
-          ) : (
-            <MoleculeVizLazy
-              onReady={() => setCanvasReady(true)}
-              onLowFps={() => setSkippedOrFailed(true)}
-            />
-          )}
+          <MoleculeVizLazy
+            onReady={() => setCanvasReady(true)}
+            onLowFps={() => setSkippedOrFailed(true)}
+          />
         </div>
       ) : null}
     </div>

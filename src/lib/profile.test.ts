@@ -98,8 +98,8 @@ test('JSON-LD builders generate valid ProfilePage, Person, WebSite, and Scholarl
   assert.equal(researchLd.author.length, 7);
 });
 
-test('readThemeTokenColors returns default Lapis Blue palette in SSR/Node', () => {
+test('readThemeTokenColors returns the default paper and signal-orange palette in SSR/Node', () => {
   const colors = readThemeTokenColors();
-  assert.equal(colors.bg, '#FAFAF7');
-  assert.equal(colors.accent, '#1E4BD2');
+  assert.equal(colors.bg, '#F4F1EA');
+  assert.equal(colors.accent, '#FF4F00');
 });

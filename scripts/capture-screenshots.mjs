@@ -111,10 +111,10 @@ async function captureSite(browser, site) {
             <svg width="1440" height="900" xmlns="http://www.w3.org/2000/svg">
               <rect width="1440" height="60" fill="#141414"/>
               <text x="40" y="38" fill="#FFFFFF" font-family="sans-serif" font-size="20" font-weight="bold">${site.name}</text>
-              <rect x="40" y="100" width="1360" height="400" fill="#FFFFFF" stroke="#E4E3DE" stroke-width="2" rx="6"/>
+              <rect x="40" y="100" width="1360" height="400" fill="#FFFFFF" stroke="#DEDAD0" stroke-width="2" rx="6"/>
               <text x="80" y="220" fill="#141414" font-family="sans-serif" font-size="36" font-weight="bold">${site.name}</text>
-              <text x="80" y="270" fill="#5C5C58" font-family="sans-serif" font-size="20">Built &amp; maintained by Obaidullah Miakhil</text>
-              <rect x="80" y="320" width="160" height="44" fill="#1E4BD2" rx="6"/>
+              <text x="80" y="270" fill="#5E5B55" font-family="sans-serif" font-size="20">Built &amp; maintained by Obaidullah Miakhil</text>
+              <rect x="80" y="320" width="160" height="44" fill="#FF4F00" rx="6"/>
               <text x="110" y="348" fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold">Visit Website</text>
             </svg>
           `),
@@ -142,10 +142,10 @@ async function captureSite(browser, site) {
             <svg width="390" height="844" xmlns="http://www.w3.org/2000/svg">
               <rect width="390" height="54" fill="#141414"/>
               <text x="20" y="34" fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="bold">${site.name}</text>
-              <rect x="20" y="80" width="350" height="300" fill="#FFFFFF" stroke="#E4E3DE" stroke-width="2" rx="6"/>
+              <rect x="20" y="80" width="350" height="300" fill="#FFFFFF" stroke="#DEDAD0" stroke-width="2" rx="6"/>
               <text x="36" y="160" fill="#141414" font-family="sans-serif" font-size="22" font-weight="bold">${site.name}</text>
-              <text x="36" y="200" fill="#5C5C58" font-family="sans-serif" font-size="14">Built by Obaidullah Miakhil</text>
-              <rect x="36" y="240" width="140" height="40" fill="#1E4BD2" rx="6"/>
+              <text x="36" y="200" fill="#5E5B55" font-family="sans-serif" font-size="14">Built by Obaidullah Miakhil</text>
+              <rect x="36" y="240" width="140" height="40" fill="#FF4F00" rx="6"/>
               <text x="56" y="265" fill="#FFFFFF" font-family="sans-serif" font-size="14" font-weight="bold">Visit Website</text>
             </svg>
           `),

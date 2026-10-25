@@ -1,19 +1,14 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
+import React from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Hero } from '@/components/Hero';
-import { FeaturedPublication } from '@/components/FeaturedPublication';
-import { RepoCard, WebsiteCard } from '@/components/ProjectCards';
-import { ContactSection } from '@/components/ContactSection';
-import { Reveal } from '@/components/Reveal';
-import { TiltCard } from '@/components/TiltCard';
+import { ArrowRight, ArrowUpRight, Download } from 'lucide-react';
 import { Link } from '@/i18n/routing';
-import { getGitHubRepos } from '@/lib/github';
-import { profile, getRecentExperience } from '@/content/profile';
+import { profile, getFeaturedPublication } from '@/content/profile';
 import { buildPageMetadata, buildHomeJsonLd } from '@/lib/seo';
-import { GitHubIcon } from '@/components/BrandIcons';
-import { SceneGate } from '@/three/SceneGate';
-import { ArrowRight, ExternalLink } from 'lucide-react';
+import { StoryStage } from '@/components/story/StoryStage';
+import { Words } from '@/components/story/Words';
+import { CountUp } from '@/components/story/CountUp';
+import type { StoryChapterMeta } from '@/components/story/storyState';
 
 export async function generateMetadata({
   params,
@@ -31,6 +26,52 @@ export async function generateMetadata({
   });
 }
 
+// The order of the walk; see docs/STORY.md
+const CHAPTERS = [
+  { id: 'intro', pose: 'wave' },
+  { id: 'roots', pose: 'think' },
+  { id: 'border', pose: 'proud' },
+  { id: 'paper', pose: 'point' },
+  { id: 'question', pose: 'present' },
+  { id: 'teaching', pose: 'explain' },
+  { id: 'building', pose: 'type' },
+  { id: 'next', pose: 'wave' },
+] as const satisfies readonly Omit<StoryChapterMeta, 'label'>[];
+
+type ChapterId = (typeof CHAPTERS)[number]['id'];
+
+function Chapter({
+  id,
+  index,
+  marker,
+  place,
+  children,
+}: {
+  id: ChapterId;
+  index: number;
+  marker: string;
+  place: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section id={id} data-chapter={index} className="chapter" aria-labelledby={`${id}-title`}>
+      <div className="chapter-marker" aria-hidden="true">
+        <strong>{marker}</strong>
+        <span>{place}</span>
+      </div>
+      <div className="chapter-body">{children}</div>
+    </section>
+  );
+}
+
+function Rise({ order, children }: { order: number; children: React.ReactNode }) {
+  return (
+    <div className="rise" style={{ '--d': order } as React.CSSProperties}>
+      {children}
+    </div>
+  );
+}
+
 export default async function HomePage({
   params,
 }: {
@@ -39,492 +80,217 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const tAbout = await getTranslations({ locale, namespace: 'about' });
-  const tSections = await getTranslations({ locale, namespace: 'sections' });
-  const tProjects = await getTranslations({ locale, namespace: 'projectsPage' });
-  const { repos, publicRepoCount } = await getGitHubRepos();
-  const recentExperience = getRecentExperience(5);
+  const t = await getTranslations({ locale, namespace: 'story' });
+  const paper = getFeaturedPublication();
   const jsonLd = buildHomeJsonLd(locale);
-  const selectedMlRepo = repos[0];
+  const internships = profile.experience.filter((e) => /intern/i.test(e.role)).length;
+  const index = (id: ChapterId) => CHAPTERS.findIndex((c) => c.id === id);
 
-  const primaryResearchProject = profile.researchProjects[0];
-  const secondaryResearchProjects = profile.researchProjects.slice(1);
+  const chapters: StoryChapterMeta[] = CHAPTERS.map((c) => ({
+    ...c,
+    label: t(`${c.id}.label`),
+  }));
+
+  const head = (id: ChapterId) => (
+    <>
+      <p className="chapter-eyebrow" dir="auto">{t(`${id}.eyebrow`)}</p>
+      <h2 id={`${id}-title`} className="chapter-title" dir="auto">
+        <Words text={t(`${id}.title`)} />
+      </h2>
+    </>
+  );
+
+  const builds = [
+    { key: 'chatbot', href: null },
+    { key: 'emotion', href: profile.githubProjects[0].url },
+    { key: 'federated', href: profile.huggingfaceUrl },
+    { key: 'websites', href: profile.websitesBuilt[0].url },
+  ] as const satisfies readonly { key: string; href: string | null }[];
 
   return (
-    <div className="space-y-16 sm:space-y-20 pb-16" suppressHydrationWarning>
+    <>
       <script
         id="home-jsonld"
         type="application/ld+json"
-        suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <h1 className="sr-only">
+        {profile.name} — {profile.roleLine}
+      </h1>
 
-      {/* Hero + Audience Switcher + 3D Faceted Icosahedron */}
-      <Hero />
+      <StoryStage chapters={chapters} railLabel={t('railLabel')}>
+        <Chapter id="intro" index={0} marker={t('intro.marker')} place={t('intro.place')}>
+          {head('intro')}
+          <Rise order={0}>
+            <p className="chapter-text" dir="auto">{t('intro.text')}</p>
+          </Rise>
+          <Rise order={1}>
+            <p className="story-hint" dir="auto">
+              <i aria-hidden="true" />
+              {t('scrollHint')}
+            </p>
+          </Rise>
+        </Chapter>
 
-      {/* Featured Publication */}
-      <FeaturedPublication />
-
-      {/* 01 About — square profile photo (6px radius) + two short paragraphs + facts list */}
-      <section className="mx-auto max-w-[1080px] px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <div className="pt-10 border-t border-[var(--border)] space-y-6">
-            <div className="space-y-1">
-              <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
-                01
-              </div>
-              <h2 className="text-step-28 font-bold text-[var(--text)]">
-                {tAbout('title')}
-              </h2>
+        <Chapter id="roots" index={index('roots')} marker={t('roots.marker')} place={t('roots.place')}>
+          {head('roots')}
+          <Rise order={0}>
+            <p className="chapter-text" dir="auto">{t('roots.text')}</p>
+          </Rise>
+          <Rise order={1}>
+            <div className="chapter-stat">
+              <CountUp value={profile.education[2].gpa ?? ''} chapter={index('roots')} />
+              <span className="chapter-stat-caption" dir="auto">{t('roots.statCaption')}</span>
             </div>
+          </Rise>
+        </Chapter>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              <div className="lg:col-span-8 flex flex-col sm:flex-row items-start gap-6">
-                <div className="card-interactive relative w-36 h-36 sm:w-44 sm:h-44 aspect-square shrink-0 rounded-[6px] border border-[var(--border)] overflow-hidden bg-[var(--surface)]">
-                  <Image
-                    src={profile.profilePhoto}
-                    alt={profile.profilePhotoAlt}
-                    fill
-                    sizes="(max-width: 640px) 144px, 176px"
-                    className="object-cover object-top"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-
-                <div className="space-y-4">
-                  <p className="text-step-15 text-[var(--text)] leading-relaxed max-w-[65ch] m-0">
-                    {tAbout('paragraph1')}
-                  </p>
-                  <p className="text-step-15 text-[var(--text)] leading-relaxed max-w-[65ch] m-0">
-                    {tAbout('paragraph2')}
-                  </p>
-                </div>
-              </div>
-
-              <div
-                className="card-interactive lg:col-span-4 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] p-6 space-y-3.5 self-start tabular-nums"
-                suppressHydrationWarning
-              >
-                <div suppressHydrationWarning>
-                  <div className="text-step-13 text-[var(--muted)]">
-                    {tAbout('factLocationLabel')}
-                  </div>
-                  <div className="text-step-15 font-medium text-[var(--text)]">
-                    {tAbout('factLocationValue')}
-                  </div>
-                </div>
-                <div
-                  className="border-t border-[var(--border)] pt-3"
-                  suppressHydrationWarning
-                >
-                  <div className="text-step-13 text-[var(--muted)]">
-                    {tAbout('factLanguagesLabel')}
-                  </div>
-                  <div className="text-step-15 font-medium text-[var(--text)]">
-                    {tAbout('factLanguagesValue')}
-                  </div>
-                </div>
-                <div
-                  className="border-t border-[var(--border)] pt-3"
-                  suppressHydrationWarning
-                >
-                  <div className="text-step-13 text-[var(--muted)]">
-                    {tAbout('factCredentialsLabel')}
-                  </div>
-                  <div className="text-step-15 font-medium text-[var(--text)]">
-                    {tAbout('factCredentialsValue')}
-                  </div>
-                </div>
-                <div
-                  className="border-t border-[var(--border)] pt-3"
-                  suppressHydrationWarning
-                >
-                  <div className="text-step-13 text-[var(--muted)]">
-                    {tAbout('factMentorshipLabel')}
-                  </div>
-                  <div className="text-step-15 font-medium text-[var(--text)]">
-                    {tAbout('factMentorshipValue')}
-                  </div>
-                </div>
-                <div
-                  className="border-t border-[var(--border)] pt-3"
-                  suppressHydrationWarning
-                >
-                  <div className="text-step-13 text-[var(--muted)]">
-                    {tAbout('factOpenToLabel')}
-                  </div>
-                  <div className="text-step-15 font-semibold text-[var(--accent)]">
-                    {tAbout('factOpenToValue')}
-                  </div>
-                </div>
-              </div>
+        <Chapter id="border" index={index('border')} marker={t('border.marker')} place={t('border.place')}>
+          {head('border')}
+          <Rise order={0}>
+            <p className="chapter-text" dir="auto">{t('border.text')}</p>
+          </Rise>
+          <Rise order={1}>
+            <p className="chapter-text chapter-text-extra" dir="auto">{t('border.extra')}</p>
+          </Rise>
+          <Rise order={2}>
+            <div className="chapter-stat">
+              <CountUp value={String(internships)} chapter={index('border')} duration={900} />
+              <span className="chapter-stat-caption" dir="auto">{t('border.statCaption')}</span>
             </div>
-          </div>
-        </Reveal>
-      </section>
+          </Rise>
+        </Chapter>
 
-      {/* 02 Research Projects (Asymmetric 2-column layout + 3D AttentionGrid) */}
-      <section
-        id="research"
-        className="mx-auto max-w-[1080px] px-4 sm:px-6 lg:px-8"
-      >
-        <Reveal>
-          <div className="pt-10 border-t border-[var(--border)] space-y-6">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <div className="space-y-1">
-                <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
-                  02
-                </div>
-                <h2 className="text-step-28 font-bold text-[var(--text)]">
-                  {tSections('research')}
-                </h2>
-              </div>
-              <Link
-                href="/research"
-                className="editorial-link link-arrow inline-flex items-center gap-1.5 min-h-[44px] text-step-15 font-medium text-[var(--accent)]"
-              >
-                <span>{tSections('allResearch')}</span>
-                <ArrowRight className="w-4 h-4 rtl-flip" />
+        <Chapter id="paper" index={index('paper')} marker={t('paper.marker')} place={t('paper.place')}>
+          {head('paper')}
+          <Rise order={0}>
+            <p className="chapter-text" dir="auto">{t('paper.text')}</p>
+          </Rise>
+          <Rise order={1}>
+            <div className="chapter-stat">
+              <CountUp value="0.777" chapter={index('paper')} />
+              <span className="chapter-stat-caption" dir="auto">{t('paper.statCaption')}</span>
+            </div>
+          </Rise>
+          <Rise order={2}>
+            <div className="chapter-links">
+              <a className="btn-primary" href={paper.url} target="_blank" rel="noopener noreferrer">
+                {t('paper.cta')}
+                <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+              </a>
+              <span className="chapter-stat-caption hide-mobile">doi:{paper.doi}</span>
+            </div>
+          </Rise>
+        </Chapter>
+
+        <Chapter id="question" index={index('question')} marker={t('question.marker')} place={t('question.place')}>
+          {head('question')}
+          <Rise order={0}>
+            <p className="chapter-text" dir="auto">{t('question.text')}</p>
+          </Rise>
+          <Rise order={1}>
+            <div className="chapter-stat">
+              <CountUp value="21" from={38} chapter={index('question')} duration={1800} />
+              <span className="chapter-stat-caption" dir="auto">{t('question.statCaption')}</span>
+            </div>
+          </Rise>
+          <Rise order={2}>
+            <div className="chapter-links">
+              <Link className="text-link link-arrow" href="/research">
+                {t('question.cta')} <ArrowRight className="inline w-4 h-4 rtl-flip" aria-hidden="true" />
               </Link>
             </div>
+          </Rise>
+        </Chapter>
 
-            {/* Asymmetric 2-column grid: MS Thesis ICH card on start column + 3D MoleculeViz, stacked research cards on end column */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-              {primaryResearchProject && (
-                <div className="lg:col-span-6 flex flex-col gap-5">
-                  <TiltCard
-                    maxTilt={5}
-                    scale={1.01}
-                    className="card-interactive group p-6 sm:p-7 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] flex-1 flex flex-col justify-between gap-5 shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] transition-all duration-300"
-                  >
-                    <div className="space-y-3">
-                      <div className="flex flex-wrap items-center justify-between gap-2 tabular-nums">
-                        <span className="px-2.5 py-0.5 rounded-[4px] border border-[var(--accent)] text-step-13 font-medium text-[var(--accent)] shadow-[0_0_6px_var(--accent)]">
-                          MS Thesis · Medical AI
-                        </span>
-                        <span className="text-step-13 text-[var(--muted)]">
-                          <bdi>{primaryResearchProject.period}</bdi>
-                        </span>
-                      </div>
-                      <h3 className="text-step-22 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-200">
-                        <bdi>{primaryResearchProject.title}</bdi>
-                      </h3>
-                      {primaryResearchProject.supervisor && (
-                        <p className="text-step-13 text-[var(--muted)] m-0">
-                          Supervisor: <bdi>{primaryResearchProject.supervisor}</bdi>
-                        </p>
-                      )}
-                      <p className="text-step-15 text-[var(--text)] leading-relaxed m-0">
-                        <bdi>{primaryResearchProject.description}</bdi>
-                      </p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 pt-3 border-t border-[var(--border)] tabular-nums">
-                      {primaryResearchProject.metricsOrMethods
-                        .slice(0, 3)
-                        .map((m) => (
-                          <span
-                            key={m}
-                            className="text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
-                          >
-                            <bdi>{m}</bdi>
-                          </span>
-                        ))}
-                    </div>
-                  </TiltCard>
-
-                  {/* Scene B — Attention weight grid / Molecule helix */}
-                  <SceneGate scene="research" />
-                </div>
-              )}
-
-              <div className="lg:col-span-6 flex flex-col gap-5">
-                {secondaryResearchProjects.map((proj) => (
-                  <TiltCard
-                    key={proj.id}
-                    maxTilt={5}
-                    scale={1.01}
-                    className="card-interactive group p-6 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] flex-1 flex flex-col justify-between gap-4 shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] transition-all duration-300"
-                  >
-                    <div className="space-y-2">
-                      <div className="flex items-baseline justify-between gap-2 tabular-nums">
-                        <h3 className="text-step-22 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-200">
-                          <bdi>{proj.title}</bdi>
-                        </h3>
-                        <span className="text-step-13 text-[var(--muted)] shrink-0">
-                          <bdi>{proj.period}</bdi>
-                        </span>
-                      </div>
-                      <p className="text-step-15 text-[var(--text)] leading-relaxed m-0">
-                        <bdi>{proj.description}</bdi>
-                      </p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 pt-3 border-t border-[var(--border)] tabular-nums">
-                      {proj.metricsOrMethods.slice(0, 3).map((m) => (
-                        <span
-                          key={m}
-                          className="text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)]"
-                        >
-                          <bdi>{m}</bdi>
-                        </span>
-                      ))}
-                    </div>
-                  </TiltCard>
-                ))}
-              </div>
+        <Chapter id="teaching" index={index('teaching')} marker={t('teaching.marker')} place={t('teaching.place')}>
+          {head('teaching')}
+          <Rise order={0}>
+            <p className="chapter-text" dir="auto">{t('teaching.text')}</p>
+          </Rise>
+          <Rise order={1}>
+            <p className="chapter-text chapter-text-extra" dir="auto">{t('teaching.extra')}</p>
+          </Rise>
+          <Rise order={2}>
+            <div className="chapter-stat">
+              <CountUp value={profile.supervisedProjectsTotal} chapter={index('teaching')} />
+              <span className="chapter-stat-caption" dir="auto">{t('teaching.statCaption')}</span>
             </div>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* 03 Recent Experience (2-column hairline rows, no cards) + Teaching & Mentorship */}
-      <section className="mx-auto max-w-[1080px] px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <div className="pt-10 border-t border-[var(--border)] grid grid-cols-1 lg:grid-cols-12 gap-10">
-            <div className="lg:col-span-8 space-y-6">
-              <div className="flex items-end justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
-                    03
-                  </div>
-                  <h2 className="text-step-28 font-bold text-[var(--text)]">
-                    {tSections('experience')}
-                  </h2>
-                </div>
-                <Link
-                  href="/cv"
-                  className="editorial-link link-arrow inline-flex items-center gap-1.5 min-h-[44px] text-step-15 font-medium text-[var(--accent)]"
-                >
-                  <span>{tSections('fullCv')}</span>
-                  <ArrowRight className="w-4 h-4 rtl-flip" />
-                </Link>
-              </div>
-
-              {/* 3D Pathway Timeline with Glowing Pulse Nodes */}
-              <div className="relative ps-6 sm:ps-8 border-s-2 border-[var(--border)] space-y-8 before:absolute before:top-0 before:bottom-0 before:-start-[2px] before:w-[2px] before:bg-[var(--accent)] before:opacity-75">
-                {recentExperience.map((exp) => (
-                  <div
-                    key={exp.id}
-                    className="relative group transition-all"
-                  >
-                    {/* Glowing Milestone Node */}
-                    <div
-                      aria-hidden="true"
-                      className="absolute -start-[31px] sm:-start-[39px] top-1.5 w-3.5 h-3.5 rounded-full bg-[var(--surface)] border-2 border-[var(--accent)] group-hover:scale-125 group-hover:bg-[var(--accent)] group-hover:shadow-[0_0_12px_var(--accent)] transition-all duration-300"
-                    />
-                    <div className="text-step-13 text-[var(--accent)] font-semibold tabular-nums">
-                      <bdi>{exp.dates}</bdi>
-                    </div>
-                    <h3 className="text-step-18 font-bold text-[var(--text)] mt-1 mb-0.5 group-hover:text-[var(--accent)] transition-colors">
-                      <bdi>{exp.role}</bdi>
-                    </h3>
-                    <p className="text-step-13 font-medium text-[var(--muted)] m-0">
-                      <bdi>
-                        {exp.organisation} · {exp.location}
-                      </bdi>
-                    </p>
-                    <ul className="mt-2 space-y-1 text-step-15 text-[var(--text)] list-disc ps-5 leading-relaxed">
-                      {exp.points.map((pt) => (
-                        <li key={pt}>
-                          <bdi>{pt}</bdi>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="lg:col-span-4 space-y-6">
-              <div className="space-y-1">
-                <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
-                  &nbsp;
-                </div>
-                <h2 className="text-step-28 font-bold text-[var(--text)]">
-                  {tSections('teaching')}
-                </h2>
-              </div>
-
-              <div className="card-interactive p-6 rounded-[6px] border border-[var(--border)] bg-[var(--surface)] flex flex-col justify-between gap-5">
-                <ul className="space-y-3 text-step-15 text-[var(--text)] list-disc ps-5">
-                  {profile.teachingAndService.map((item) => (
-                    <li key={item}>
-                      <bdi>{item}</bdi>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="pt-4 border-t border-[var(--border)] tabular-nums">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-step-13 text-[var(--muted)]">
-                      Supervised projects:
-                    </span>
-                    <span className="text-step-13 font-bold text-[var(--accent)]">
-                      150+ projects
-                    </span>
-                  </div>
-                  <Link
-                    href="/projects#supervised-projects"
-                    className="editorial-link link-arrow mt-2 inline-flex items-center gap-1.5 min-h-[44px] text-step-13 font-medium text-[var(--accent)]"
-                  >
-                    <span>View supervised student cohort</span>
-                    <ArrowRight className="w-3.5 h-3.5 rtl-flip" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* 04 Selected Projects — GitHub highlight block + 2 websites with screenshots + 1 ML repo + 150+ Supervised Student Projects */}
-      <section
-        id="projects"
-        className="mx-auto max-w-[1080px] px-4 sm:px-6 lg:px-8"
-      >
-        <Reveal>
-          <div className="pt-10 border-t border-[var(--border)] space-y-6">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <div className="space-y-1">
-                <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
-                  04
-                </div>
-                <h2 className="text-step-28 font-bold text-[var(--text)]">
-                  {tSections('projects')}
-                </h2>
-              </div>
-              <Link
-                href="/projects"
-                className="editorial-link link-arrow inline-flex items-center gap-1.5 min-h-[44px] text-step-15 font-medium text-[var(--accent)]"
-              >
-                <span>{tSections('allProjects')}</span>
-                <ArrowRight className="w-4 h-4 rtl-flip" />
+          </Rise>
+          <Rise order={3}>
+            <div className="chapter-links">
+              <Link className="text-link link-arrow" href="/projects">
+                {t('teaching.cta')} <ArrowRight className="inline w-4 h-4 rtl-flip" aria-hidden="true" />
               </Link>
             </div>
+          </Rise>
+        </Chapter>
 
-            {/* 3D Tech Globe Orbit + GitHub Highlight Block */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-              <div className="lg:col-span-5 flex flex-col justify-center">
-                <SceneGate scene="globe" />
-              </div>
-              <div className="lg:col-span-7 flex flex-col justify-between">
-                <div className="card-interactive p-6 sm:p-7 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] h-full flex flex-col justify-between gap-4 transition-all duration-300">
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap items-center gap-2.5 tabular-nums">
-                      <GitHubIcon size={22} className="text-[var(--accent)]" />
-                      <h3 className="text-step-22 font-bold text-[var(--text)]">
-                        {tProjects('githubBlockTitle')}
-                      </h3>
-                      <span className="text-step-13 px-2.5 py-0.5 rounded-[4px] border border-[var(--border)] bg-[var(--bg)] text-[var(--muted)] shadow-xs">
-                        {publicRepoCount} {tProjects('publicReposLabel')}
-                      </span>
-                    </div>
-                    <p className="text-step-15 text-[var(--muted)] m-0 leading-relaxed">
-                      {tProjects('githubBlockSubtitle')}
-                    </p>
-                  </div>
-
-                  <a
-                    href={profile.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-interactive link-arrow self-start inline-flex items-center gap-2 h-11 px-5 rounded-[6px] bg-[var(--accent)] text-[var(--accent-contrast)] text-step-15 font-medium hover:opacity-95 shadow-[var(--glow-accent)]"
-                  >
-                    <span>{tProjects('viewGithubProfile')}</span>
-                    <ExternalLink className="w-4 h-4 rtl-flip" />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Items 2, 3, 4: 2 websites with screenshots + 1 ML repo */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {profile.websitesBuilt.map((site) => (
-                <WebsiteCard key={site.slug} site={site} />
+        <Chapter id="building" index={index('building')} marker={t('building.marker')} place={t('building.place')}>
+          {head('building')}
+          <Rise order={0}>
+            <ul className="build-list">
+              {builds.map((item, i) => (
+                <li key={item.key}>
+                  <span className="mono">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 dir="auto">{t(`building.items.${item.key}.title`)}</h3>
+                  <p dir="auto">{t(`building.items.${item.key}.text`)}</p>
+                  {item.href ? (
+                    <a href={item.href} target="_blank" rel="noopener noreferrer" aria-label={t(`building.items.${item.key}.title`)}>
+                      ↗
+                    </a>
+                  ) : null}
+                </li>
               ))}
-              {selectedMlRepo && <RepoCard repo={selectedMlRepo} />}
-            </div>
-
-            {/* 150+ Supervised Student Projects Highlight */}
-            <div className="card-interactive p-6 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] flex flex-wrap items-center justify-between gap-4 transition-all duration-300">
-              <div className="space-y-1 max-w-[650px]">
-                <div className="flex flex-wrap items-center gap-2 tabular-nums">
-                  <h3 className="text-step-18 font-bold text-[var(--text)] m-0">
-                    150+ supervised student projects
-                  </h3>
-                  <span className="px-2.5 py-0.5 rounded-[4px] border border-[var(--accent)] text-[var(--accent)] text-step-13 font-medium shadow-[0_0_6px_var(--accent)]">
-                    Live deployed websites
-                  </span>
-                </div>
-                <p className="text-step-13 text-[var(--muted)] m-0 leading-relaxed">
-                  Every semester, student engineering teams build and deploy
-                  full-stack websites, GUI tools, and software platforms under
-                  my supervision at PAF-IAST.
-                </p>
-              </div>
-
-              <Link
-                href="/projects#supervised-projects"
-                className="btn-interactive link-arrow inline-flex items-center gap-1.5 h-11 px-4 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-[var(--accent)] font-medium text-step-13 hover:border-[var(--accent)] whitespace-nowrap"
-              >
-                <span>Explore student projects</span>
-                <ArrowRight className="w-3.5 h-3.5 rtl-flip" />
+            </ul>
+          </Rise>
+          <Rise order={1}>
+            <div className="chapter-links">
+              <Link className="text-link link-arrow" href="/projects">
+                {t('building.cta')} <ArrowRight className="inline w-4 h-4 rtl-flip" aria-hidden="true" />
               </Link>
+              <a className="text-link" href={profile.githubUrl} target="_blank" rel="noopener noreferrer">
+                GitHub
+              </a>
             </div>
-          </div>
-        </Reveal>
-      </section>
+          </Rise>
+        </Chapter>
 
-      {/* 05 Education */}
-      <section className="mx-auto max-w-[1080px] px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <div className="pt-10 border-t border-[var(--border)] space-y-6">
-            <div className="space-y-1">
-              <div className="text-step-13 font-mono text-[var(--muted)] tabular-nums">
-                05
-              </div>
-              <h2 className="text-step-28 font-bold text-[var(--text)]">
-                {tSections('education')}
-              </h2>
+        <Chapter id="next" index={index('next')} marker={t('next.marker')} place={t('next.place')}>
+          <span id="contact" aria-hidden="true" />
+          {head('next')}
+          <Rise order={0}>
+            <p className="chapter-text" dir="auto">{t('next.text')}</p>
+          </Rise>
+          <Rise order={1}>
+            <a className="contact-email" href={`mailto:${profile.emailPrimary}`}>
+              {profile.emailPrimary}
+            </a>
+          </Rise>
+          <Rise order={2}>
+            <div className="chapter-links">
+              <a className="btn-primary" href={profile.academicCvPath} download>
+                <Download className="w-4 h-4" aria-hidden="true" />
+                {t('next.academicCv')}
+              </a>
+              <a className="btn-quiet" href={profile.resumePath} download>
+                {t('next.resume')}
+              </a>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 tabular-nums">
-              {profile.education.map((edu) => (
-                <TiltCard
-                  key={edu.id}
-                  maxTilt={6}
-                  scale={1.01}
-                  className="card-interactive group p-6 rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-sm hover:shadow-[var(--glow-accent)] hover:border-[var(--accent)] flex flex-col justify-between gap-3 transition-all duration-300"
-                >
-                  <div className="space-y-1.5">
-                    <span className="text-step-13 text-[var(--accent)] font-semibold">
-                      <bdi>{edu.dates}</bdi>
-                    </span>
-                    <h3 className="text-step-18 font-bold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors duration-200">
-                      <bdi>{edu.degree}</bdi>
-                    </h3>
-                    <p className="text-step-13 text-[var(--muted)] m-0">
-                      <bdi>
-                        {edu.institution} · {edu.location}
-                      </bdi>
-                    </p>
-                  </div>
-                  {edu.gpa && (
-                    <div className="pt-3 border-t border-[var(--border)] text-step-13 font-medium text-[var(--text)]">
-                      <bdi>{edu.gpa}</bdi>
-                    </div>
-                  )}
-                </TiltCard>
-              ))}
+          </Rise>
+          <Rise order={3}>
+            <div className="chapter-links">
+              <a className="text-link" href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a className="text-link" href={profile.scholarUrl} target="_blank" rel="noopener noreferrer">Scholar</a>
+              <a className="text-link" href={profile.githubUrl} target="_blank" rel="noopener noreferrer">GitHub</a>
+              <a className="text-link" href={profile.whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp</a>
             </div>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* 06 Contact */}
-      <ContactSection sectionNumber="06" />
-    </div>
+          </Rise>
+          <Rise order={4}>
+            <p className="chapter-stat-caption hide-mobile" dir="auto">{t('next.thanks')}</p>
+          </Rise>
+        </Chapter>
+      </StoryStage>
+    </>
   );
 }

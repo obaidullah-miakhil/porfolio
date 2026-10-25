@@ -9,8 +9,8 @@ export default function manifest(): MetadataRoute.Manifest {
       'Obaidullah Miakhil is an AI engineer and machine learning researcher working on medical AI, deep learning and NLP. Open to PhD and AI/ML roles.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#FAFAF7',
-    theme_color: '#1E4BD2',
+    background_color: '#F4F1EA',
+    theme_color: '#FF4F00',
     icons: [
       {
         src: '/icon',

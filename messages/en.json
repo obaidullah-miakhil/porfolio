@@ -140,5 +140,104 @@
     "heading": "Page not found",
     "body": "The page you requested does not exist.",
     "backHome": "Back to home"
+  },
+  "story": {
+    "railLabel": "Chapters",
+    "scrollHint": "Scroll to walk with me",
+    "intro": {
+      "label": "Hello",
+      "marker": "Now",
+      "place": "Islamabad, Pakistan",
+      "eyebrow": "AI engineer · ML researcher",
+      "title": "Hi. I'm *Obaidullah.*",
+      "text": "I build machine learning for medicine, and I teach people to build. This is the short version of how I got here. Scroll, and I'll walk you through it."
+    },
+    "roots": {
+      "label": "Roots",
+      "marker": "2019",
+      "place": "Jalalabad",
+      "eyebrow": "2019 · Jalalabad, Afghanistan",
+      "title": "It started with *an exam.*",
+      "text": "I finished high school at Taayef Private High School, then sat the Kankor, Afghanistan's national university entrance exam. My result placed me in Computer Science.",
+      "statCaption": "High school result, 2019"
+    },
+    "border": {
+      "label": "Scholarship",
+      "marker": "2021",
+      "place": "Haripur",
+      "eyebrow": "2021 · Haripur, Pakistan",
+      "title": "Then a scholarship took me *across a border.*",
+      "text": "The HEC Allama Iqbal Scholarship, won through a competitive exam, brought me to PAF-IAST for a B.S. in Computer Science. I spent the breaks writing real software: a customised Moodle, an LMS on SQL Server, a hospital management system in ASP.NET.",
+      "extra": "In 2023 I won the university's Robo Tech 01 robotics competition.",
+      "statCaption": "Internships before I graduated"
+    },
+    "paper": {
+      "label": "First paper",
+      "marker": "2024",
+      "place": "First dataset",
+      "eyebrow": "2024 → 2026 · Cube Healthcare, then Frontiers",
+      "title": "My first real dataset: *678,881 insurance claims.*",
+      "text": "At Cube Healthcare (remote, Michigan) I modelled why U.S. insurance claims get denied. It became my BS thesis, and in October 2026 a peer-reviewed paper in Frontiers in Health Services (Scopus Q1).",
+      "statCaption": "PR-AUC, against a no-skill baseline of 0.330",
+      "cta": "Read the paper"
+    },
+    "question": {
+      "label": "The question",
+      "marker": "2025",
+      "place": "The question",
+      "eyebrow": "2025 → now · M.S. AI, PAF-IAST & SPCAI",
+      "title": "Can a model spot a brain bleed, and *say when it isn't sure?*",
+      "text": "That's my M.S. thesis (CGPA 4.00/4.00) and my work as a research engineer at SPCAI. A gatekeeper model flags intracranial hemorrhage on RSNA CT scans, a specialist names the subtype, and MC Dropout uncertainty lets it abstain instead of guessing.",
+      "statCaption": "Minutes of radiology turnaround, down from 38 (RSNA 2026 abstract, submitted)",
+      "cta": "All research"
+    },
+    "teaching": {
+      "label": "Teaching",
+      "marker": "2025",
+      "place": "The lab",
+      "eyebrow": "2025 → now · Lab engineer, PAF-IAST",
+      "title": "Along the way, *I started teaching.*",
+      "text": "I teach OOP, data structures and AI labs, where students implement algorithms from first principles. Every team I supervise ships a live app.",
+      "extra": "In 2026 I also ran a 144-hour Power BI workshop for 50+ graduates at KPITB.",
+      "statCaption": "Student projects supervised",
+      "cta": "See the student projects"
+    },
+    "building": {
+      "label": "Building",
+      "marker": "Always",
+      "place": "The workbench",
+      "eyebrow": "Always · Things I've built",
+      "title": "I still build *things people use.*",
+      "cta": "All projects",
+      "items": {
+        "chatbot": {
+          "title": "Admissions chatbot",
+          "text": "An LLM that answers university admission questions end to end (SPCAI, 2025)."
+        },
+        "emotion": {
+          "title": "Emotion detector",
+          "text": "Real-time facial emotion detection from a webcam, Flask back end."
+        },
+        "federated": {
+          "title": "Federated Gleason grading",
+          "text": "EfficientNet-B0 with FedProx on the PANDA prostate dataset."
+        },
+        "websites": {
+          "title": "Two client websites",
+          "text": "Capital Import Export and Swift Bulk Traders: layout, UI and upkeep."
+        }
+      }
+    },
+    "next": {
+      "label": "Next",
+      "marker": "2027",
+      "place": "What's next",
+      "eyebrow": "September 2027 · What's next",
+      "title": "Next: *a PhD.*",
+      "text": "I'm looking for a PhD in Computer Science from September 2027: medical AI, trustworthy deep learning and multilingual NLP. I'm also open to AI/ML engineering roles. I speak Pashto, Dari, English and Urdu.",
+      "thanks": "Thanks for walking with me.",
+      "academicCv": "Academic CV",
+      "resume": "Résumé"
+    }
   }
 }

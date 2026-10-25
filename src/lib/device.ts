@@ -8,12 +8,12 @@ export interface ThemeColors {
 }
 
 const DEFAULT_LIGHT_COLORS: ThemeColors = {
-  bg: '#FAFAF7',
-  surface: '#FFFFFF',
-  text: '#141414',
-  muted: '#5C5C58',
-  border: '#E4E3DE',
-  accent: '#1E4BD2',
+  bg: '#F4F1EA',
+  surface: '#FBFAF6',
+  text: '#141413',
+  muted: '#5E5B55',
+  border: '#DEDAD0',
+  accent: '#FF4F00',
 };
 
 let cachedSoftwareGl: boolean | null = null;
@@ -70,6 +70,26 @@ export function isWebGLAvailable(): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * Lighter gate for the story character: it carries the home page, so only skip
+ * it when the device asks to save data, is very low on memory, or has no WebGL.
+ */
+export function shouldSkipStoryAvatar(): boolean {
+  if (typeof window === 'undefined') return true;
+  const nav = navigator as Navigator & {
+    connection?: { saveData?: boolean };
+    deviceMemory?: number;
+  };
+  try {
+    if (new URLSearchParams(window.location.search).get('poster') === '1') return true;
+  } catch {
+    // Ignore URL parse error
+  }
+  if (nav.connection?.saveData === true) return true;
+  if (typeof nav.deviceMemory === 'number' && nav.deviceMemory < 2) return true;
+  return !isWebGLAvailable();
 }
 
 export function shouldSkipWebGL(): boolean {

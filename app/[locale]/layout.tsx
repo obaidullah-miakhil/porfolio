@@ -2,15 +2,10 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
-import { ThemeProvider } from 'next-themes';
 import { notFound } from 'next/navigation';
 import { routing, isRtlLocale } from '@/i18n/routing';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { ScrollProgress } from '@/components/ScrollProgress';
-import { CursorGlow } from '@/components/CursorGlow';
-import { ParticleField } from '@/three/ParticleField';
 import { profile } from '@/content/profile';
 import { getSiteUrl, SEO_KEYWORDS } from '@/lib/seo';
 import { Analytics } from '@vercel/analytics/react';
@@ -21,6 +16,22 @@ const vazirmatn = localFont({
   src: '../../src/fonts/Vazirmatn-Variable.woff2',
   variable: '--font-vazirmatn',
   weight: '100 900',
+  display: 'swap',
+});
+
+const bricolage = localFont({
+  src: '../../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-opsz-normal.woff2',
+  variable: '--font-bricolage',
+  weight: '200 800',
+  display: 'swap',
+});
+
+const plexMono = localFont({
+  src: [
+    { path: '../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2', weight: '400' },
+    { path: '../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2', weight: '500' },
+  ],
+  variable: '--font-plex-mono',
   display: 'swap',
 });
 
@@ -83,36 +94,25 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={dir}
-      className={vazirmatn.variable}
+      className={`${vazirmatn.variable} ${bricolage.variable} ${plexMono.variable}`}
       suppressHydrationWarning
     >
       <body
         className="min-h-screen flex flex-col bg-[var(--bg)] text-[var(--text)] antialiased"
         suppressHydrationWarning
       >
-        <ThemeProvider
-          attribute="data-theme"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextIntlClientProvider messages={messages} locale={locale}>
-            <ScrollProgress />
-            <CursorGlow />
-            <ParticleField />
-            <a href="#main-content" className="skip-to-content">
-              {tNav('skipToContent')}
-            </a>
-            <Header />
-            <main id="main-content" className="flex-1 content-layer" suppressHydrationWarning>
-              {children}
-            </main>
-            <Footer />
-            <WhatsAppButton />
-            <Analytics />
-            <SpeedInsights />
-          </NextIntlClientProvider>
-        </ThemeProvider>
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          <a href="#main-content" className="skip-to-content">
+            {tNav('skipToContent')}
+          </a>
+          <Header />
+          <main id="main-content" className="flex-1" suppressHydrationWarning>
+            {children}
+          </main>
+          <Footer />
+          <Analytics />
+          <SpeedInsights />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

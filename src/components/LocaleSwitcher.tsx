@@ -9,7 +9,6 @@ import {
   useRouter,
   type Locale,
 } from '@/i18n/routing';
-import { Globe } from 'lucide-react';
 
 export function LocaleSwitcher() {
   const locale = useLocale() as Locale;
@@ -32,16 +31,12 @@ export function LocaleSwitcher() {
 
   return (
     <div className="relative inline-flex items-center shrink-0">
-      <Globe
-        className="w-4 h-4 text-[var(--muted)] pointer-events-none absolute start-3"
-        aria-hidden="true"
-      />
       <select
         aria-label={t('language')}
         value={locale}
         disabled={isPending}
         onChange={handleLocaleChange}
-        className="h-11 min-w-[44px] ps-8 pe-7 rounded-[6px] border border-[var(--border)] bg-[var(--bg)] text-[var(--text)] hover:border-[var(--accent)] transition-colors text-step-13 appearance-none cursor-pointer"
+        className="h-11 ps-0 pe-5 bg-transparent text-[var(--text)] font-mono text-[12px] uppercase tracking-[0.06em] appearance-none cursor-pointer"
       >
         {locales.map((loc) => (
           <option key={loc} value={loc}>
@@ -51,7 +46,7 @@ export function LocaleSwitcher() {
       </select>
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute end-2.5 text-[var(--muted)] text-step-13"
+        className="pointer-events-none absolute end-0 text-[var(--muted)] text-[11px]"
       >
         ▾
       </span>

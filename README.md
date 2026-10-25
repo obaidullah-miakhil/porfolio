@@ -12,8 +12,7 @@ Production-ready personal portfolio website for **Obaidullah Miakhil** (`https:/
 | **Styling** | **Tailwind CSS v4** | Strict 7-token CSS variable system (`--bg`, `--surface`, `--text`, `--muted`, `--border`, `--accent`, `--accent-contrast`), flat solid colors, zero gradients. |
 | **3D Engine** | **Three.js via `@react-three/fiber` & `@react-three/drei`** | Hero: rigged GLB character (`public/models/avatar.glb`) animated in code by `src/three/avatarRig.ts` (relaxed pose, breathing, pointer gaze, blinks, wave on load/click), with a procedural fallback figure. Research: procedural geometry. Inline SVG posters rendered first in SSR HTML; WebGL gated by capability checks (`deviceMemory <= 4`, `hardwareConcurrency <= 4`, `saveData`, `prefers-reduced-motion`, `< 30 FPS` probe). |
 | **Internationalization** | **next-intl** | 4 locales: `en` (default at `/`), `ps` (Pashto at `/ps`), `fa` (Dari/Persian at `/fa`), `ur` (Urdu at `/ur`). Full RTL support via CSS logical properties, per-locale metadata, hreflang alternates. |
-| **Typography** | **Vazirmatn** (SIL OFL) | Single self-hosted variable font for Latin, Pashto, Dari, and Urdu glyphs (`src/fonts/Vazirmatn-Variable.woff2` and TTF weights for OG images). |
-| **Theme** | **next-themes** | `system` default, 3-state toggle (System / Light / Dark) with `ViewTransition` cross-fade, zero flash of unstyled theme. |
+| **Typography** | **Bricolage Grotesque, IBM Plex Mono, Vazirmatn** (SIL OFL) | Self-hosted. Vazirmatn covers Pashto, Dari and Urdu glyphs and the OG images. |
 | **Analytics** | **@vercel/analytics & @vercel/speed-insights** | Lightweight Vercel-native telemetry. |
 
 ---
@@ -21,9 +20,8 @@ Production-ready personal portfolio website for **Obaidullah Miakhil** (`https:/
 ## 2. Hard Design Constraints Verified
 
 - **Zero Gradients**: Strictly enforced via `scripts/check-no-gradients.mjs`, verifying that the substring `gradient` does not exist anywhere in `src/`, `app/`, or built CSS outputs.
-- **Single Lapis Blue Accent & 7-Token Palette**:
-  - Light mode (`:root`): `--bg: #FAFAF7`, `--surface: #FFFFFF`, `--text: #141414`, `--muted: #5C5C58`, `--border: #E4E3DE`, `--accent: #1E4BD2`, `--accent-contrast: #FFFFFF`.
-  - Dark mode (`[data-theme="dark"]`): `--bg: #0F1012`, `--surface: #16171A`, `--text: #EDEDEA`, `--muted: #A3A39E`, `--border: #26272B`, `--accent: #7C9BFF`, `--accent-contrast: #0F1012`.
+- **One signal colour on paper** (`src/styles/globals.css`): `--bg #F4F1EA`, `--surface #FBFAF6`, `--text #141413`, `--muted #5E5B55`, `--border #DEDAD0`, `--accent #FF4F00` (fills, large type, the timeline) and `--accent-ink #B93A00` (small accent text, AA contrast). Single light theme. Type: Bricolage Grotesque + IBM Plex Mono (self-hosted via `@fontsource`), Vazirmatn for RTL locales.
+- **Home page is a scroll story**: see `docs/STORY.md`. Vertical scroll drives a horizontal walk (`src/components/story/StoryStage.tsx`); the 3D character (`src/three/StoryAvatar.tsx` + `avatarRig.ts`) walks between chapters and plays one gesture per chapter. Story copy lives under `story` in `messages/en.json`; other locales fall back to English until translated.
 - **Motion & Accessibility**: All CSS transitions respect `prefers-reduced-motion: reduce`. Directional arrows mirror in RTL (`.rtl-flip` / `.rtl-mirror`), while brand icons and 3D scenes maintain orientation.
 
 ---

@@ -22,12 +22,12 @@ export default function AppleIcon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#FAFAF7',
-          color: '#1E4BD2',
+          backgroundColor: '#FF4F00',
+          color: '#141413',
           fontSize: 82,
           fontWeight: 700,
           fontFamily: 'Vazirmatn',
-          border: '8px solid #1E4BD2',
+          border: '8px solid #141413',
           borderRadius: 24,
         }}
       >
