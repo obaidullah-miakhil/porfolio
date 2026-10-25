@@ -10,6 +10,10 @@ const SCROLL_PER_CHAPTER = 1.25;
 const DWELL = 0.4;
 /** How close to a stop (in chapters) counts as "arrived". */
 const ARRIVE = 0.16;
+/** Seconds standing still at a stop before the scroll cue comes back. */
+const CUE_IDLE = 6;
+/** Smallest scale a chapter card may shrink to so it fits its screen. */
+const MIN_CARD_SCALE = 0.72;
 
 const ENABLE_SCRIPT = `try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('story-js')}catch(e){}`;
 
@@ -28,18 +32,22 @@ function toPosition(raw: number, last: number) {
 export function StoryStage({
   chapters,
   railLabel,
+  cueLabels,
   children,
 }: {
   chapters: StoryChapterMeta[];
   railLabel: string;
+  cueLabels: { scroll: string; swipe: string };
   children: React.ReactNode;
 }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const fillRef = useRef<HTMLDivElement | null>(null);
+  const cueRef = useRef<HTMLDivElement | null>(null);
   const gotoRef = useRef<(index: number, smooth?: boolean) => void>(() => {});
   const [enabled, setEnabled] = useState(false);
   const [current, setCurrent] = useState(0);
+  const [touch, setTouch] = useState(false);
   const count = chapters.length;
 
   // Horizontal mode only when motion is welcome; otherwise chapters stack
@@ -47,6 +55,7 @@ export function StoryStage({
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     document.documentElement.classList.add('story-js');
     setEnabled(true);
+    setTouch(window.matchMedia('(pointer: coarse)').matches);
     return () => document.documentElement.classList.remove('story-js');
   }, []);
 
@@ -63,14 +72,34 @@ export function StoryStage({
     let lastTime = performance.now();
     let frame = 0;
     let shown = -2;
+    let lastMove = performance.now();
+    let lastRaw = -1;
+    let cueVisible = false;
+    const ambient = document.querySelector<HTMLElement>('.ambient');
 
     storyState.direction = document.documentElement.dir === 'rtl' ? -1 : 1;
+
+    // Shrink a card (CSS zoom) when its content is taller than the space it has
+    const fitCards = () => {
+      for (const panel of panels) {
+        const body = panel.querySelector<HTMLElement>('.chapter-body');
+        const card = panel.querySelector<HTMLElement>('.chapter-card');
+        if (!body || !card) continue;
+        card.style.removeProperty('zoom');
+        const available = body.clientHeight;
+        const needed = card.scrollHeight;
+        if (available > 0 && needed > available) {
+          card.style.setProperty('zoom', String(Math.max(MIN_CARD_SCALE, (available / needed) * 0.98)));
+        }
+      }
+    };
 
     const measure = () => {
       const vh = window.innerHeight;
       distance = vh * SCROLL_PER_CHAPTER;
       root.style.setProperty('--story-height', `${vh + last * distance}px`);
       top = root.getBoundingClientRect().top + window.scrollY;
+      fitCards();
     };
 
     const markActive = (index: number) => {
@@ -95,6 +124,18 @@ export function StoryStage({
       storyState.speed += (speed - storyState.speed) * (1 - Math.exp(-10 * dt));
 
       track.style.transform = `translate3d(${-position * 100 * storyState.direction}vw,0,0)`;
+      // The blurred shapes behind the glass drift slower than the track
+      ambient?.style.setProperty('--p', position.toFixed(4));
+
+      // Scroll cue: shown at the start, and again after idling at a stop
+      if (Math.abs(raw - lastRaw) > 0.0005) lastMove = now;
+      lastRaw = raw;
+      const idle = (now - lastMove) / 1000;
+      const showCue = position < 0.05 || (idle > CUE_IDLE && Math.round(position) < last);
+      if (showCue !== cueVisible && cueRef.current) {
+        cueVisible = showCue;
+        cueRef.current.toggleAttribute('data-visible', showCue);
+      }
       if (fillRef.current) fillRef.current.style.transform = `scaleX(${last ? position / last : 1})`;
 
       const nearest = Math.round(position);
@@ -147,6 +188,7 @@ export function StoryStage({
     };
 
     measure();
+    document.fonts?.ready.then(measure).catch(() => {});
     const initial = indexFromHash(window.location.hash);
     if (initial > 0) gotoRef.current(initial, false);
 
@@ -161,8 +203,12 @@ export function StoryStage({
       document.removeEventListener('click', onClick, true);
       window.removeEventListener('keydown', onKey);
       root.style.removeProperty('--story-height');
+      ambient?.style.removeProperty('--p');
       track.style.transform = '';
-      panels.forEach((panel) => panel.removeAttribute('data-active'));
+      panels.forEach((panel) => {
+        panel.removeAttribute('data-active');
+        panel.querySelector<HTMLElement>('.chapter-card')?.style.removeProperty('zoom');
+      });
     };
   }, [enabled, count, chapters]);
 
@@ -181,6 +227,10 @@ export function StoryStage({
         </div>
         <div className="story-character" aria-hidden="true">
           {enabled ? <StoryCharacter chapters={chapters} /> : null}
+        </div>
+        <div ref={cueRef} className="story-cue" aria-hidden="true">
+          <span className={touch ? 'story-cue-swipe' : 'story-cue-mouse'} />
+          {touch ? cueLabels.swipe : cueLabels.scroll}
         </div>
         <nav className="story-rail" aria-label={railLabel}>
           <div className="story-rail-line" aria-hidden="true">

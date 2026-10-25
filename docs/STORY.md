@@ -30,6 +30,16 @@ sections.
   chapter arrives, and each chapter's one key number counts up. Nothing loops
   in the background for show; the only ambient touch is his gaze gently
   following the visitor's cursor.
+- **Glass over warm light.** Chapter cards, the header, the timeline labels
+  and the chapter rail are frosted glass. Behind them, a few large blurred
+  shapes in the same oranges and sand drift slower than the walk, so the
+  glass always has something to frost and the page gains depth.
+- **Fits every screen.** The character's canvas sits between the header and
+  the ground line so he's never cropped. Cards that would overflow a short
+  screen scale down (CSS `zoom`, to 0.72× at most) instead of spilling.
+- **A cue to scroll.** A small glass pill ("Scroll to explore" with a mouse,
+  or "Swipe up to explore" on touch screens) shows at the start and comes
+  back after six idle seconds at a stop.
 - **Landscape.** Vertical scroll drives a horizontal journey. Left/right
   arrow keys and the chapter rail at the bottom jump between stops.
 - **Still readable without the show.** Without JavaScript or with reduced

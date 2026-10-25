@@ -102,6 +102,13 @@ export default async function LocaleLayout({
         suppressHydrationWarning
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
+          {/* Soft shapes behind the glass; the home story drifts them as you walk */}
+          <div className="ambient" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
           <a href="#main-content" className="skip-to-content">
             {tNav('skipToContent')}
           </a>

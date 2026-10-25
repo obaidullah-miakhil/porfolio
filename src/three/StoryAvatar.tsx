@@ -188,6 +188,7 @@ export default function StoryAvatar({
         camera={{ position: [0, CAMERA_Y, CAMERA_Z], fov: CAMERA_FOV }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         onCreated={({ camera }) => camera.lookAt(0, CAMERA_Y, 0)}
+        style={{ pointerEvents: 'none' }}
       >
         <Character poses={poses} onLoaded={() => setLoaded(true)} onFail={onFail} />
       </Canvas>

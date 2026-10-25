@@ -59,7 +59,9 @@ function Chapter({
         <strong>{marker}</strong>
         <span>{place}</span>
       </div>
-      <div className="chapter-body">{children}</div>
+      <div className="chapter-body">
+        <div className="chapter-card">{children}</div>
+      </div>
     </section>
   );
 }
@@ -118,17 +120,15 @@ export default async function HomePage({
         {profile.name} — {profile.roleLine}
       </h1>
 
-      <StoryStage chapters={chapters} railLabel={t('railLabel')}>
+      <StoryStage
+        chapters={chapters}
+        railLabel={t('railLabel')}
+        cueLabels={{ scroll: t('scrollCue'), swipe: t('swipeCue') }}
+      >
         <Chapter id="intro" index={0} marker={t('intro.marker')} place={t('intro.place')}>
           {head('intro')}
           <Rise order={0}>
             <p className="chapter-text" dir="auto">{t('intro.text')}</p>
-          </Rise>
-          <Rise order={1}>
-            <p className="story-hint" dir="auto">
-              <i aria-hidden="true" />
-              {t('scrollHint')}
-            </p>
           </Rise>
         </Chapter>
 
