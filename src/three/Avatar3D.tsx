@@ -4,11 +4,14 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { detectSoftwareWebGL, readThemeTokenColors } from '@/lib/device';
+import { AvatarRig } from './avatarRig';
 
 const FLOOR_Y = -1.08;
 const TARGET_AVATAR_HEIGHT = 2.1;
+const AVATAR_MODEL_URL = '/models/avatar.glb';
 const MAX_BODY_YAW_RAD = (18 * Math.PI) / 180;
 const MAX_BODY_PITCH_RAD = (6 * Math.PI) / 180;
 const MAX_HEAD_YAW_RAD = (22 * Math.PI) / 180;
@@ -393,22 +396,20 @@ function ProceduralStandingAvatar({
 function AvatarScene({
   pointerRef,
   scrollRef,
+  waveRequestRef,
   onReady,
   onLowFps,
 }: {
   pointerRef: React.MutableRefObject<{ x: number; y: number }>;
   scrollRef: React.MutableRefObject<number>;
+  waveRequestRef: React.MutableRefObject<boolean>;
   onReady?: () => void;
   onLowFps?: () => void;
 }) {
   const rootGroupRef = useRef<THREE.Group | null>(null);
   const glbContainerRef = useRef<THREE.Group | null>(null);
   const mixerRef = useRef<THREE.AnimationMixer | null>(null);
-  const glbHeadBoneRef = useRef<{
-    bone: THREE.Object3D;
-    baseX: number;
-    baseY: number;
-  } | null>(null);
+  const rigRef = useRef<AvatarRig | null>(null);
 
   const [glbLoadedScene, setGlbLoadedScene] = useState<THREE.Group | null>(null);
   const [accentColor, setAccentColor] = useState<string>('#1E4BD2');
@@ -495,97 +496,67 @@ function AvatarScene({
     return () => observer.disconnect();
   }, [ringMat, invalidate]);
 
-  // Fetch & parse synced .glb model from /api/avatar-model (returns 200 with GLB binary or 204 if not uploaded yet)
+  // Load the character model from /public/models (404 keeps the procedural fallback)
   useEffect(() => {
     let cancelled = false;
     let currentMixer: THREE.AnimationMixer | null = null;
 
-    async function loadAvatarGlb() {
-      try {
-        const res = await fetch('/api/avatar-model', { cache: 'no-store' });
-        if (cancelled || res.status !== 200) {
-          return;
-        }
-        const buffer = await res.arrayBuffer();
-        if (cancelled || buffer.byteLength < 12) {
-          return;
-        }
+    const loader = new GLTFLoader();
+    loader.setMeshoptDecoder(MeshoptDecoder);
+    loader.load(
+      AVATAR_MODEL_URL,
+      (gltf) => {
+        if (cancelled) return;
+        const model = gltf.scene;
 
-        const loader = new GLTFLoader();
-        loader.parse(
-          buffer,
-          '',
-          (gltf) => {
-            if (cancelled) return;
-            const model = gltf.scene;
-
-            // Normalize bounding box so the full-body character stands flush on FLOOR_Y (-1.08)
-            model.updateMatrixWorld(true);
-            const rawBox = new THREE.Box3().setFromObject(model);
-            const rawSize = rawBox.getSize(new THREE.Vector3());
-            const maxDim = Math.max(rawSize.x, rawSize.y, rawSize.z, 0.001);
-            const scaleFactor = TARGET_AVATAR_HEIGHT / maxDim;
-            model.scale.setScalar(scaleFactor);
-
-            model.updateMatrixWorld(true);
-            const scaledBox = new THREE.Box3().setFromObject(model);
-            const scaledCenter = scaledBox.getCenter(new THREE.Vector3());
-
-            model.position.x = -scaledCenter.x;
-            model.position.z = -scaledCenter.z;
-            model.position.y = FLOOR_Y - scaledBox.min.y;
-
-            let discoveredHead: THREE.Object3D | null = null;
-            model.traverse((child) => {
-              if ((child as THREE.Mesh).isMesh) {
-                const mesh = child as THREE.Mesh;
-                mesh.castShadow = true;
-                mesh.receiveShadow = true;
-                mesh.frustumCulled = false;
-              }
-              if (
-                !discoveredHead &&
-                /head|neck/i.test(child.name) &&
-                (child as THREE.Bone).isBone
-              ) {
-                discoveredHead = child;
-              }
-            });
-
-            if (discoveredHead) {
-              const boneObj = discoveredHead as THREE.Object3D;
-              glbHeadBoneRef.current = {
-                bone: boneObj,
-                baseX: boneObj.rotation.x,
-                baseY: boneObj.rotation.y,
-              };
-            }
-
-            if (gltf.animations && gltf.animations.length > 0) {
-              currentMixer = new THREE.AnimationMixer(model);
-              const preferredClip =
-                gltf.animations.find((clip) =>
-                  /idle|stand|wave|greet|breathe/i.test(clip.name)
-                ) || gltf.animations[0];
-
-              const action = currentMixer.clipAction(preferredClip);
-              action.play();
-              mixerRef.current = currentMixer;
-            }
-
-            setGlbLoadedScene(model);
-            invalidate();
-          },
-          () => {
-            // Keep procedural 3D character fallback if GLB parsing fails
+        // Embedded clips win; otherwise drive the skeleton procedurally
+        if (gltf.animations.length > 0) {
+          currentMixer = new THREE.AnimationMixer(model);
+          const preferredClip =
+            gltf.animations.find((clip) =>
+              /idle|stand|wave|greet|breathe/i.test(clip.name)
+            ) || gltf.animations[0];
+          currentMixer.clipAction(preferredClip).play();
+          mixerRef.current = currentMixer;
+        } else {
+          const rig = new AvatarRig(model);
+          if (rig.isSupported) {
+            rigRef.current = rig;
+            waveRequestRef.current = true;
           }
-        );
-      } catch {
-        // Keep procedural 3D character fallback on offline/error
-      }
-    }
+        }
 
-    loadAvatarGlb();
+        // Scale to TARGET_AVATAR_HEIGHT and stand the character flush on FLOOR_Y
+        model.updateMatrixWorld(true);
+        const rawSize = new THREE.Box3()
+          .setFromObject(model)
+          .getSize(new THREE.Vector3());
+        model.scale.setScalar(TARGET_AVATAR_HEIGHT / Math.max(rawSize.y, 0.001));
+
+        model.updateMatrixWorld(true);
+        const scaledBox = new THREE.Box3().setFromObject(model);
+        const scaledCenter = scaledBox.getCenter(new THREE.Vector3());
+        model.position.x = -scaledCenter.x;
+        model.position.z = -scaledCenter.z;
+        model.position.y = FLOOR_Y - scaledBox.min.y;
+
+        model.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const mesh = child as THREE.Mesh;
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            mesh.frustumCulled = false;
+          }
+        });
+
+        setGlbLoadedScene(model);
+        invalidate();
+      },
+      undefined,
+      () => {
+        // Keep procedural 3D character fallback if the model is missing or fails to parse
+      }
+    );
 
     return () => {
       cancelled = true;
@@ -593,9 +564,9 @@ function AvatarScene({
         currentMixer.stopAllAction();
       }
       mixerRef.current = null;
-      glbHeadBoneRef.current = null;
+      rigRef.current = null;
     };
-  }, [invalidate]);
+  }, [invalidate, waveRequestRef]);
 
   // Demand-driven frame scheduler + visibility listener
   useEffect(() => {
@@ -666,31 +637,27 @@ function AvatarScene({
       mixerRef.current.update(clampedDelta);
     }
 
-    // 2. Apply subtle pointer gaze on GLB head bone if present
-    if (glbHeadBoneRef.current) {
-      const { bone, baseX, baseY } = glbHeadBoneRef.current;
-      const targetHeadY = baseY + pointerRef.current.x * (MAX_HEAD_YAW_RAD * 0.65);
-      const targetHeadX = baseX + pointerRef.current.y * (MAX_HEAD_PITCH_RAD * 0.65);
-      bone.rotation.y = THREE.MathUtils.damp(
-        bone.rotation.y,
-        targetHeadY,
-        5,
-        clampedDelta
-      );
-      bone.rotation.x = THREE.MathUtils.damp(
-        bone.rotation.x,
-        targetHeadX,
-        5,
-        clampedDelta
-      );
+    // 2. Drive the procedural rig (pose, breathing, gaze, blinks, wave)
+    if (rigRef.current) {
+      const t = state.clock.getElapsedTime();
+      if (waveRequestRef.current) {
+        waveRequestRef.current = false;
+        rigRef.current.wave(t + 0.4);
+      }
+      rigRef.current.update(t, clampedDelta, pointerRef.current);
     }
 
     // 3. Apply damped mouse parallax tilt to the full-body character group
     if (rootGroupRef.current) {
       const t = state.clock.getElapsedTime();
-      const idleSwayY = Math.sin(t * 0.65) * 0.08;
-      const targetYaw = pointerRef.current.x * MAX_BODY_YAW_RAD + idleSwayY;
-      const targetPitch = pointerRef.current.y * MAX_BODY_PITCH_RAD;
+      // The rig turns head and eyes itself, so the whole body only turns slightly
+      const bodyFactor = rigRef.current ? 0.45 : 1;
+      const idleSwayY = Math.sin(t * 0.65) * 0.08 * bodyFactor;
+      const targetYaw =
+        pointerRef.current.x * MAX_BODY_YAW_RAD * bodyFactor + idleSwayY;
+      const targetPitch = rigRef.current
+        ? 0
+        : pointerRef.current.y * MAX_BODY_PITCH_RAD;
 
       rootGroupRef.current.rotation.y = THREE.MathUtils.damp(
         rootGroupRef.current.rotation.y,
@@ -766,6 +733,7 @@ export default function Avatar3D({
 }) {
   const pointerRef = useRef({ x: 0, y: 0 });
   const scrollRef = useRef(0);
+  const waveRequestRef = useRef(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -799,6 +767,9 @@ export default function Avatar3D({
       data-testid="hero-avatar-canvas-wrapper"
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
+      onClick={() => {
+        waveRequestRef.current = true;
+      }}
       className="relative w-full h-full rounded-[12px] border border-[var(--glass-border)] bg-[var(--surface)] shadow-[var(--glow-accent)] overflow-hidden transition-all duration-300"
     >
       <Canvas
@@ -816,6 +787,7 @@ export default function Avatar3D({
         <AvatarScene
           pointerRef={pointerRef}
           scrollRef={scrollRef}
+          waveRequestRef={waveRequestRef}
           onReady={onReady}
           onLowFps={onLowFps}
         />
