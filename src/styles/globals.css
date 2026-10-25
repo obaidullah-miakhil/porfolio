@@ -564,6 +564,17 @@ html.story-js .chapter-marker {
   text-align: center;
 }
 
+/* Arabic-script labels read better in Vazirmatn than in the Latin mono face */
+[dir="rtl"] .chapter-eyebrow,
+[dir="rtl"] .chapter-stat-caption,
+[dir="rtl"] .chapter-marker,
+[dir="rtl"] .story-rail button,
+[dir="rtl"] .story-cue {
+  font-family: var(--font-vazirmatn), sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 [dir="rtl"] .chapter-marker {
   transform: translateX(50%);
 }
@@ -820,6 +831,9 @@ html.story-js .story-cue[data-visible] {
   letter-spacing: -0.04em;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
+  /* Keep "150+" and "92.98%" in reading order inside right-to-left text */
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 .chapter-stat-caption {

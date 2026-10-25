@@ -45,7 +45,7 @@ export function Header() {
   return (
     <header className="site-header">
       <div className="h-full px-[4vw] flex items-center justify-between gap-6">
-        <Link href="/" className="text-[17px] font-semibold tracking-[-0.02em] text-[var(--text)] no-underline">
+        <Link href="/" dir="ltr" className="text-[17px] font-semibold tracking-[-0.02em] text-[var(--text)] no-underline">
           Obaidullah Miakhil<span className="text-[var(--accent)]">.</span>
         </Link>
 
